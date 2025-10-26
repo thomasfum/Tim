@@ -49,12 +49,32 @@ function AllImagesLoaded(json)
 		{
 			if(part.appearance==undefined)
 			{
-				//dupliquer en width
-				console.log(part.width+" / "+Images[result+"_0"].width);
-				//dupliquer en height
-				console.log(part.height+" / "+Images[result+"_0"].height);
-				
-				ctx.drawImage(Images[result+"_0"], part.pos_x, part.pos_y);
+				if(part.width>Images[result+"_0"].width)
+				{
+					//dupliquer en width
+					console.log("w:"+part.width+" / "+Images[result+"_0"].width);
+					for (let index = 0; index < part.width/Images[result+"_0"].width; ++index) 
+					{
+						if(index==0)
+							ctx.drawImage(Images[result+"_0"], part.pos_x+Images[result+"_0"].width*index, part.pos_y);
+						else
+							ctx.drawImage(Images[result+"_1"], part.pos_x+Images[result+"_0"].width*index, part.pos_y);
+					}
+				}else
+				if(part.height>Images[result+"_0"].height)
+				{
+					//dupliquer en height
+					console.log("h:"+part.height+" / "+Images[result+"_0"].height);
+					for (let index = 0; index < part.height/Images[result+"_0"].height; ++index) 
+					{
+						if(index==0)
+							ctx.drawImage(Images[result+"_4"], part.pos_x, part.pos_y+Images[result+"_0"].height*index);
+						else
+							ctx.drawImage(Images[result+"_5"], part.pos_x, part.pos_y+Images[result+"_0"].height*index);
+					}
+				}
+				else
+					ctx.drawImage(Images[result+"_0"], part.pos_x, part.pos_y);
 			}
 			else
 			{
