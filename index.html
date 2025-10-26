@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>TIM</h1>
+
+
+<p id="title"></p>
+<p id="goal"></p>
+<canvas id="myCanvas" width="578" height="369" style="border:1px solid grey"></canvas>
+
+
+<script>
+//0,162,162
+//https://www.vogons.org/viewtopic.php?p=1089143#p1089143
+//https://codeberg.org/knt47/timgres
+//https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Level_Format
+
+
+const Images={};
+let NBImagesToLoad=0;
+let NBImagesLoaded=0;
+
+const files={"0":1,
+			 "1":8,
+			 "2":4,
+			 "5":35,
+			 "6":2,
+			 "8":1,
+			 "9":1,
+			 "46":8,
+			 "47":4,
+			 "48":8
+
+};
+
+
+function AllImagesLoaded(json)
+{
+	console.log("All images loaded: "+NBImagesLoaded) ;
+	
+	
+	json.Parts.forEach(part => {
+		let start=part.name.indexOf('(');
+		let end=part.name.indexOf(')');
+		let result = part.name.substring(start+1, end);
+		console.log(part);
+		if(part.in_partsbin==0)
+		{
+			if(part.appearance==undefined)
+			{
+				//dupliquer en width
+				console.log(part.width+" / "+Images[result+"_0"].width);
+				//dupliquer en height
+				console.log(part.height+" / "+Images[result+"_0"].height);
+				
+				ctx.drawImage(Images[result+"_0"], part.pos_x, part.pos_y);
+			}
+			else
+			{
+				let start=part.appearance.indexOf('(');
+				let end=part.appearance.indexOf(')');
+				let subResult = part.appearance.substring(start+1, end);
+				console.log(result+"_"+subResult);
+				ctx.drawImage(Images[result+"_"+subResult], part.pos_x, part.pos_y);
+			}
+		}
+	});
+	
+		
+}
+
+function loadImage(filename,json)
+{
+	NBImagesToLoad++;
+	console.log("load: "+filename) ;
+	Images[filename] = new Image();  
+		  Images[filename].src = './images/'+filename+".png";  
+		  Images[filename].onload = () => {  
+			NBImagesLoaded++;
+			if(NBImagesLoaded==NBImagesToLoad)
+				AllImagesLoaded(json);
+		  };
+}			
+
+function ReadJson(json)
+{
+	//console.log(json);
+	document.getElementById("title").innerHTML = json.Title;
+	document.getElementById("goal").innerHTML = json.Goal;
+	NBImagesToLoad=0;
+	NBImagesLoaded=0;
+	json.Parts.forEach(part => {
+		let start=part.name.indexOf('(');
+		let end=part.name.indexOf(')');
+		let result = part.name.substring(start+1, end);
+		//console.log(part.name +" =>"+result+":"+files[result]) ;
+		for (let index = 0; index < files[result]; ++index) 
+		{
+			let filename=result+"_"+index;
+			//console.log("imag="+Images[filename]);
+			if(Images[filename]==undefined)
+			{
+				Images[filename]=0;
+				loadImage(filename,json);
+			}
+		}
+	});
+}
+
+	const c = document.getElementById("myCanvas");
+	const ctx = c.getContext("2d");
+	ctx.fillStyle = "rgba(0,162,162,255)";
+	ctx.fillRect(0, 0, c.width, c.height);
+	
+	fetch('./levels/level1.json')
+		.then((response) => response.json())
+		.then((json) => ReadJson(json));
+
+</script>
+
+</body>
+</html> 
