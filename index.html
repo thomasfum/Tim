@@ -17,6 +17,10 @@
 //https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Level_Format
 
 
+
+//reste swap
+// reste milieu 1-2
+
 const Images={};
 let NBImagesToLoad=0;
 let NBImagesLoaded=0;
@@ -57,6 +61,8 @@ function AllImagesLoaded(json)
 					{
 						if(index==0)
 							ctx.drawImage(Images[result+"_0"], part.pos_x+Images[result+"_0"].width*index, part.pos_y);
+						else if(index==part.width/Images[result+"_0"].width-1)
+							ctx.drawImage(Images[result+"_3"], part.pos_x+Images[result+"_0"].width*index, part.pos_y);
 						else
 							ctx.drawImage(Images[result+"_1"], part.pos_x+Images[result+"_0"].width*index, part.pos_y);
 					}
@@ -69,6 +75,8 @@ function AllImagesLoaded(json)
 					{
 						if(index==0)
 							ctx.drawImage(Images[result+"_4"], part.pos_x, part.pos_y+Images[result+"_0"].height*index);
+						else if(index==part.height/Images[result+"_0"].height-1)
+							ctx.drawImage(Images[result+"_7"], part.pos_x, part.pos_y+Images[result+"_0"].height*index);
 						else
 							ctx.drawImage(Images[result+"_5"], part.pos_x, part.pos_y+Images[result+"_0"].height*index);
 					}
