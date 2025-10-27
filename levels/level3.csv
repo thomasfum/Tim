@@ -1,0 +1,24 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Reggae (1004) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 13 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 150 bonus_2: 150 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1004 num_parts_fixed: 8 num_parts_moving: 5 num_parts_partsbin: 5
+Title,TUTORIAL:  BELLOWS AND BALLOONS
+Goal,You must pop all the balloons.
+"Part 0, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 56 width: 48 height: 16 
+"Part 1, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 280 pos_y: 72 width: 40 height: 35 
+"Part 2, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 168 width: 48 height: 16 
+"Part 3, Bellows (16)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 65 pos_y: 185 width: 64 height: 48 orientation: right (0)
+"Part 4, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 248 width: 64 height: 16 
+"Part 5, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 40 width: 48 height: 32 orientation: right (0)
+"Part 6, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 5 connected_part_2: 1
+"Part 7, Scrissors (37)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 182 pos_y: 191 width: 40 height: 34 orientation: left (1)
+"Part 8, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 320 pos_y: 72 width: 32 height: 48 
+"Part 9, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 138 pos_y: 184 width: 32 height: 48 
+"Part 10, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 264 width: 32 height: 48 
+"Part 11, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 69 pos_y: 161 width: 16 height: 15 
+"Part 12, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 276 pos_y: 16 width: 24 height: 23 
+"Part 13, Basketball (9)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 399 pos_y: 27 width: 32 height: 32 
+"Part 14, Tennis ball (44)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 459 pos_y: 227 width: 16 height: 15 
+"Part 15, Bellows (16)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 390 pos_y: 141 width: 64 height: 48 orientation: right (0)
+"Part 16, Bellows (16)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 411 pos_y: 260 width: 64 height: 48 orientation: right (0)
+"Part 17, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 303 pos_y: 270 width: 40 height: 34 orientation: right (0)
