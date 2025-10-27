@@ -8,11 +8,11 @@
 
 <p id="title"></p>
 <p id="goal"></p>
-<canvas id="myCanvas" width="578" height="369" style="border:1px solid grey"></canvas>
+<canvas id="myCanvas" width="678" height="369" style="border:1px solid grey"></canvas>
 </br>
-<input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson);" />
+<input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson,true);" />
 <input id="runButton" type="button" value="Run" onclick="run();" />
-
+<script src="matter_0.20.0.js"></script>
 <script>
 //0,162,162
 //https://www.vogons.org/viewtopic.php?p=1089143#p1089143
@@ -23,9 +23,23 @@
 
 
 let Images={};
+let partsbin={};
 let NBImagesToLoad=0;
 let NBImagesLoaded=0;
 let LevelJson;
+let DraggingObject=undefined;
+
+
+let 	
+		Bodies = Matter.Bodies,
+		Body = Matter.Body,
+		Engine = Matter.Engine,
+		Events = Matter.Events,
+		Render = Matter.Render,
+		Runner = Matter.Runner,
+		Composite = Matter.Composite,
+		World = Matter.World;
+		
 const files={"0":1,
 			 "1":8,
 			 "2":4,
@@ -38,201 +52,400 @@ const files={"0":1,
 			 "48":8
 
 };
-function flipHorizontally(img,x,y){
-	console.log("fliiiiip horizontally");
-    // move to x + img's width
-    ctx.translate(x+img.width,y);
 
-    // scaleX by -1; this "trick" flips horizontally
-    ctx.scale(-1,1);
-    
-    // draw the img
-    // no need for x,y since we've already translated
-    ctx.drawImage(img,0,0);
-    
-    // always clean up -- reset transformations to default
-    ctx.setTransform(1,0,0,1,0,0);
-}
+	const playgroundWidth=578;
+	const playgroundHeight=369;
+	const playgroundOffsetX=0;
+	const playgroundOffsetY=0;
+	
+	
+	
+	const canvas = document.getElementById("myCanvas");
+	canvas.onmousedown = MouseClickDown;
+	canvas.onmouseup = MouseClickUp;
+	const ctx = canvas.getContext("2d");
+	const engine = Engine.create();
+	var render = Render.create({
+		  engine, 
+		  canvas: canvas,
+		  options: {
+			wireframes: false,
+			background: "rgba(0,162,162,255)",
+			width: canvas.width,
+			height: canvas.height,
+			pixelRatio:  window.devicePixelRatio // here
+		  }
+		}); 
 
-function flipVertically(img,x,y){
+	const world = engine.world;
 
-	//console.log("fliiiiip vertically");
-    // move to y + img's height
-    ctx.translate(x,y+img.height);
 
-    // scaleY by -1; this "trick" flips vertically
-    ctx.scale(1,-1);
-    
-    // draw the img
-    // no need for x,y since we've already translated
-    ctx.drawImage(img,0,0);
-    
-    // always clean up -- reset transformations to default
-    ctx.setTransform(1,0,0,1,0,0);
-}
+	function flipHorizontally(img,x,y){
+		console.log("fliiiiip horizontally");
+		// move to x + img's width
+		ctx.translate(x+img.width,y);
 
-function drawImage(img,x,y,flipV){
+		// scaleX by -1; this "trick" flips horizontally
+		ctx.scale(-1,1);
+		
+		// draw the img
+		// no need for x,y since we've already translated
+		ctx.drawImage(img,0,0);
+		
+		// always clean up -- reset transformations to default
+		ctx.setTransform(1,0,0,1,0,0);
+	}
 
-	if(flipV==0)
-		ctx.drawImage(img, x, y);
-	else
-		flipVertically(img, x, y);
+	function flipVertically(img,x,y){
 
-}
+		//console.log("fliiiiip vertically");
+		// move to y + img's height
+		ctx.translate(x,y+img.height);
 
-function AllImagesLoaded(json)
-{
-	console.log("All images loaded: "+NBImagesLoaded) ;
-	refresh(json);
-}
-function refresh(json)
-{
-	json.Parts.forEach(part => {
-		let start=part.name.indexOf('(');
-		let end=part.name.indexOf(')');
-		let result = part.name.substring(start+1, end);
-		//console.log(part);
-		if(part.in_partsbin==0)
+		// scaleY by -1; this "trick" flips vertically
+		ctx.scale(1,-1);
+		
+		// draw the img
+		// no need for x,y since we've already translated
+		ctx.drawImage(img,0,0);
+		
+		// always clean up -- reset transformations to default
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+
+	function drawImage(img,x,y,flipV){
+
+		if(flipV==0)
+			ctx.drawImage(img, x, y);
+		else
+			flipVertically(img, x, y);
+
+	}
+
+	function AllImagesLoaded(json)
+	{
+		console.log("All images loaded: "+NBImagesLoaded) ;
+		refresh(json,true);
+	}
+	function refresh(json, allObjects)
+	{
+		if(allObjects==true)
 		{
-			let flipH=0;
-			let flipV=0;
-			if(part.direction_r_to_l!=undefined)
+			ctx.fillStyle = "rgba(0,162,162,255)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+		}
+		partsbin={};
+		let partsbinPosY=0;
+		json.Parts.forEach(part => {
+			//console.log(part);
+			if(part.in_partsbin==0)
 			{
-				let start=part.direction_r_to_l.indexOf('(');
-				let end=part.direction_r_to_l.indexOf(')');
-				flipV = part.direction_r_to_l.substring(start+1, end);
-				//console.log("flipV="+flipV);
-								
+			
+				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
+				{
+				
+					let flipH=0;
+					let flipV=0;
+					if(part.direction_r_to_l!=undefined)
+					{
+						let start=part.direction_r_to_l.indexOf('(');
+						let end=part.direction_r_to_l.indexOf(')');
+						flipV = part.direction_r_to_l.substring(start+1, end);
+						//console.log("flipV="+flipV);
+										
+					}
+					if(part.appearance==undefined)
+					{
+						if((part.width>Images[part.TimType+"_0"].width)&&(part.size==undefined))
+						{
+							//dupliquer en width
+							if(part.no==20)
+								console.log("w:"+part.width+" / "+Images[part.TimType+"_0"].width);
+							for (let index = 0; index < part.width/Images[part.TimType+"_0"].width; ++index) 
+							{
+								if(index==0)
+									drawImage(Images[part.TimType+"_0"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+								else if(index==part.width/Images[part.TimType+"_0"].width-1)
+									drawImage(Images[part.TimType+"_3"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+								else
+								{
+									if(index%2==0)
+										drawImage(Images[part.TimType+"_1"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+									else
+										drawImage(Images[part.TimType+"_2"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+								}
+							}
+						}
+						else if((part.height>Images[part.TimType+"_0"].height)&&(part.size==undefined))
+						{
+
+							//dupliquer en height
+							//console.log("h:"+part.height+" / "+Images[part.TimType+"_0"].height);
+							for (let index = 0; index < part.height/Images[part.TimType+"_0"].height; ++index) 
+							{
+								if(index==0)
+									drawImage(Images[part.TimType+"_4"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+								else if(index==part.height/Images[part.TimType+"_0"].height-1)
+									drawImage(Images[part.TimType+"_7"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+								else
+								{
+									if(index%2==0)
+										drawImage(Images[part.TimType+"_5"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+									else
+										drawImage(Images[part.TimType+"_6"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+								}
+							}
+						}
+						else
+						{
+
+							drawImage(Images[part.TimType+"_0"], part.pos_x, part.pos_y,flipV);
+						}
+					}
+					else
+					{
+						let start=part.appearance.indexOf('(');
+						let end=part.appearance.indexOf(')');
+						let subResult = part.appearance.substring(start+1, end);
+						//console.log(part.TimType+"_"+subResult);
+						drawImage(Images[part.TimType+"_"+subResult], part.pos_x, part.pos_y,flipV);	
+					}
+				}
+			}else//part.in_partsbin==1
+			{
+				part.canBeDragged=1;
+				if(partsbin[part.TimType]==undefined)
+				{
+					partsbin[part.TimType]={};
+					partsbin[part.TimType].count=1;
+					part.pos_x=playgroundOffsetX+playgroundWidth+40-part.width/2;
+					part.pos_y=playgroundOffsetY+partsbinPosY+30;
+					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+40;
+					partsbin[part.TimType].pos_y=part.pos_y;
+					partsbin[part.TimType].height=part.height;
+					drawImage(Images[part.TimType+"_0"],part.pos_x, part.pos_y,0);	
+					partsbinPosY+=part.height;
+					partsbinPosY+=30;
+				}
+				else
+					partsbin[part.TimType].count++;
 			}
-			if(part.appearance==undefined)
+		});
+		
+		//display number in bin
+		for(var key in partsbin)
+		{
+			
+			ctx.font = "10px Arial";
+			ctx.fillStyle = "purple";
+			if (partsbin.hasOwnProperty(key))
 			{
-				if(part.width>Images[result+"_0"].width)
+				var value=partsbin[key];
+				//console.log(key+" = ",value);
+				ctx.fillText(value.count,value.pos_x,value.pos_y+value.height+15);
+			}
+		}
+		
+	}
+
+	function loadImage(filename,json,part)
+	{
+		NBImagesToLoad++;
+		//console.log("load: "+filename) ;
+		Images[filename] = new Image();  
+		part.Images[filename]=Images[filename];
+		Images[filename].src = './images/'+filename+".png";  
+		Images[filename].onload = () => {  
+			NBImagesLoaded++;
+		
+			if(NBImagesLoaded==NBImagesToLoad)
+				AllImagesLoaded(json);
+		};
+	}			
+
+	function ReadJson(json)
+	{
+		LevelJson=json;
+		//console.log(json);
+		document.getElementById("title").innerHTML = json.Title;
+		document.getElementById("goal").innerHTML = json.Goal;
+		NBImagesToLoad=0;
+		NBImagesLoaded=0;
+		Images={};
+		partsbin={};
+		json.Parts.forEach(part => {
+			let start=part.name.indexOf('(');
+			let end=part.name.indexOf(')');
+			let result = part.name.substring(start+1, end);
+			part.TimType=result;
+			part.movingObj=undefined;
+			part.Images={};
+			//console.log(part.name +" =>"+result+":"+files[result]) ;
+			console.log(part);
+			for (let index = 0; index < files[result]; ++index) 
+			{
+				let filename=result+"_"+index;
+				//console.log("imag="+Images[filename]);
+				if(Images[filename]==undefined)
 				{
-					//dupliquer en width
-					//console.log("w:"+part.width+" / "+Images[result+"_0"].width);
-					for (let index = 0; index < part.width/Images[result+"_0"].width; ++index) 
-					{
-						if(index==0)
-							drawImage(Images[result+"_0"], part.pos_x+Images[result+"_0"].width*index, part.pos_y,flipV);
-						else if(index==part.width/Images[result+"_0"].width-1)
-							drawImage(Images[result+"_3"], part.pos_x+Images[result+"_0"].width*index, part.pos_y,flipV);
-						else
-						{
-							if(index%2==0)
-								drawImage(Images[result+"_1"], part.pos_x+Images[result+"_0"].width*index, part.pos_y,flipV);
-							else
-								drawImage(Images[result+"_2"], part.pos_x+Images[result+"_0"].width*index, part.pos_y,flipV);
-						}
-					}
-				}else
-				if(part.height>Images[result+"_0"].height)
+					Images[filename]=0;
+					loadImage(filename,json,part);
+				}
+				else
+					part.Images[filename]=Images[filename];
+			}
+		});
+	}
+
+
+
+	function LoadLevel(level)
+	{
+		console.log("loading level "+level);
+		
+		ctx.fillStyle = "rgba(0,162,162,255)";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		
+		fetch('./levels/level'+level+'.json')
+			.then((response) => response.json())
+			.then((json) => ReadJson(json));
+	}
+
+	function loadLevelClicked()
+	{
+		let l=document.getElementById("levelInput").value;
+		LoadLevel(l);
+	}
+
+
+	//--------------------------------------------------
+	// beforeRender
+	//--------------------------------------------------
+	Events.on(render, "beforeRender", (event) => {
+		
+	//console.log("beforeRender");
+
+	});
+	//--------------------------------------------------
+	// afterRender
+	//--------------------------------------------------
+	Events.on(render, "afterRender", (event) => {
+		
+	//console.log("afterRender");
+	refresh(LevelJson, false);
+	});
+
+	//--------------------------------------------------
+	// collision
+	//--------------------------------------------------
+	Events.on(engine,"collisionStart", (event) => {
+	  event.pairs.forEach((collision) => {
+		  
+		console.log("Collision Parts No: "+collision.bodyA.TimNo +" - "+ collision.bodyB.TimNo);
+
+		});
+		
+	});
+	//--------------------------------------------------
+	// run
+	//--------------------------------------------------
+	function run()
+	{
+		console.log("run!");
+		
+		//clean the World
+		
+		const allBody= [];
+		engine.world.bodies.forEach((body)=>{
+			if((body.isStatic==false)&&(body.isSleeping == false))
+			{
+				allBody.push(body);
+			}
+		});
+		World.remove(world, allBody);
+		
+		
+
+		LevelJson.Parts.forEach(part => {
+			let start=part.name.indexOf('(');
+			let end=part.name.indexOf(')');
+			let result = part.name.substring(start+1, end);
+			
+			if(part.in_partsbin==0)
+			{
+				//console.log(part);
+				if(part.is_moving)
 				{
-					//dupliquer en height
-					//console.log("h:"+part.height+" / "+Images[result+"_0"].height);
-					for (let index = 0; index < part.height/Images[result+"_0"].height; ++index) 
-					{
-						if(index==0)
-							drawImage(Images[result+"_4"], part.pos_x, part.pos_y+Images[result+"_0"].height*index,flipV);
-						else if(index==part.height/Images[result+"_0"].height-1)
-							drawImage(Images[result+"_7"], part.pos_x, part.pos_y+Images[result+"_0"].height*index,flipV);
-						else
-						{
-							if(index%2==0)
-								drawImage(Images[result+"_5"], part.pos_x, part.pos_y+Images[result+"_0"].height*index,flipV);
-							else
-								drawImage(Images[result+"_6"], part.pos_x, part.pos_y+Images[result+"_0"].height*index,flipV);
-						}
-					}
+					var movingObj = Bodies.circle(part.pos_x+part.Images[part.TimType+"_0"].width/2, part.pos_y+part.Images[part.TimType+"_0"].height/2,  part.Images[part.TimType+"_0"].width/2, {
+						TimNo: part.no,
+						isSleeping: false,
+						isStatic: false,
+						render: {
+						  sprite: { texture: part.Images[part.TimType+"_0"].src/*, 
+						  xScale: ratio,
+						  yScale: ratio,
+						  */
+						  }
+						  }
+						  });
+					  World.add(world, [movingObj]);
+					  part.movingObj=movingObj;
 				}
 				else
 				{
-					drawImage(Images[result+"_0"], part.pos_x, part.pos_y,flipV);
+					var staticObj = Bodies.rectangle(part.pos_x+part.width/2,part.pos_y+part.height/2, part.width, part.height, {
+						isStatic: true, 
+						TimNo: part.no,
+						render: { fillStyle: "rgba(0, 0, 255, 0)" }
+						});
+					World.add(world, [staticObj]);
 				}
 			}
-			else
+		});
+		Render.run(render);
+		Runner.run(Matter.Runner.create(), engine);
+	}
+	
+
+	function MouseClickUp(e){
+		canvas.onmousemove = null;
+		DraggingObject=undefined;
+		document.getElementById("myCanvas").style.cursor="";
+	}
+	
+	function MouseClickDown(e){
+	  Xclick=e.pageX-canvas.offsetLeft;
+	  Yclick=e.pageY-canvas.offsetTop;
+	  // On ne lance le déplacement onmousemove que si
+	  // le click est dans l'objet
+		LevelJson.Parts.forEach(part => {
+			if(part.canBeDragged==1)
 			{
-				let start=part.appearance.indexOf('(');
-				let end=part.appearance.indexOf(')');
-				let subResult = part.appearance.substring(start+1, end);
-				//console.log(result+"_"+subResult);
-				drawImage(Images[result+"_"+subResult], part.pos_x, part.pos_y,flipV);	
+				if((Xclick>part.pos_x)&&(Xclick<part.pos_x+part.width)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+part.height))
+				{
+					document.getElementById("myCanvas").style.cursor="grabbing";
+					canvas.onmousemove = Move;
+					console.log("Drag "+part.no);
+					DraggingObject=part;
+					if(part.in_partsbin==1)
+					{
+						part.in_partsbin=0;
+						console.log("drag=",part);
+					}
+				}
 			}
-		}
-	});
-	
-		
-}
+		});	
 
-function loadImage(filename,json)
-{
-	NBImagesToLoad++;
-	//console.log("load: "+filename) ;
-	Images[filename] = new Image();  
-		  Images[filename].src = './images/'+filename+".png";  
-		  Images[filename].onload = () => {  
-			NBImagesLoaded++;
-			if(NBImagesLoaded==NBImagesToLoad)
-				AllImagesLoaded(json);
-		  };
-}			
+	}
+	function Move(e)
+	{
+//	  console.log(DraggingObject);
+	  DraggingObject.pos_x=e.pageX-canvas.offsetLeft-DraggingObject.width/2;
+	  DraggingObject.pos_y=e.pageY-canvas.offsetTop-DraggingObject.height/2;
+	  refresh(LevelJson,true);
+	}
 
-function ReadJson(json)
-{
-	LevelJson=json;
-	//console.log(json);
-	document.getElementById("title").innerHTML = json.Title;
-	document.getElementById("goal").innerHTML = json.Goal;
-	NBImagesToLoad=0;
-	NBImagesLoaded=0;
-	Images={};
-	json.Parts.forEach(part => {
-		let start=part.name.indexOf('(');
-		let end=part.name.indexOf(')');
-		let result = part.name.substring(start+1, end);
-		//console.log(part.name +" =>"+result+":"+files[result]) ;
-		for (let index = 0; index < files[result]; ++index) 
-		{
-			let filename=result+"_"+index;
-			//console.log("imag="+Images[filename]);
-			if(Images[filename]==undefined)
-			{
-				Images[filename]=0;
-				loadImage(filename,json);
-			}
-		}
-	});
-}
-
-
-
-function LoadLevel(level)
-{
-	console.log("loading level "+level);
-	ctx.fillStyle = "rgba(0,162,162,255)";
-	ctx.fillRect(0, 0, c.width, c.height);
-	
-	fetch('./levels/level'+level+'.json')
-		.then((response) => response.json())
-		.then((json) => ReadJson(json));
-}
-
-function loadLevelClicked()
-{
-	let l=document.getElementById("levelInput").value;
-	LoadLevel(l);
-}
-
-function run()
-{
-	console.log("run!");
-}
-
-	const c = document.getElementById("myCanvas");
-	const ctx = c.getContext("2d");
-	
-	
 	LoadLevel(1);
-	
 </script>
 
 </body>
