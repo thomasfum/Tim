@@ -1,0 +1,33 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Music 1005 (1005) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 21 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 250 bonus_2: 250 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1005 num_parts_fixed: 16 num_parts_moving: 5 num_parts_partsbin: 6
+Title,TUTORIAL:  DOING SOME BLASTING
+Goal,Your goal is to push both plungers down and set off the dynamite.  Make sure your explode all dynamite that is on the playfield.
+"Part 0, Dynamite with plunger (22)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 139 pos_y: 80 width: 135 height: 48 orientation: dynamites left (1)
+"Part 1, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 72 width: 112 height: 16 
+"Part 2, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 120 width: 48 height: 16 
+"Part 3, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 168 width: 48 height: 16 
+"Part 4, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 216 width: 48 height: 16 
+"Part 5, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 264 width: 48 height: 16 
+"Part 6, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 88 width: 16 height: 208 
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 88 width: 16 height: 224 
+"Part 8, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 312 width: 112 height: 16 
+"Part 9, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 385 pos_y: 298 width: 64 height: 31 orientation: left (1)
+"Part 10, Dynamite with plunger (22)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 369 pos_y: 121 width: 135 height: 48 orientation: dynamites right (0)
+"Part 11, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 72 width: 48 height: 32 direction_r_to_l: top-down (0) size: 2
+"Part 12, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 104 width: 16 height: 80 
+"Part 13, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 104 width: 112 height: 16 
+"Part 14, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 168 width: 160 height: 16 
+"Part 15, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 504 pos_y: 40 width: 16 height: 128 
+"Part 16, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 41 pos_y: 284 width: 48 height: 28 orientation: fuse right (0)
+"Part 17, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 75 pos_y: 236 width: 48 height: 28 orientation: fuse right (0)
+"Part 18, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 72 width: 32 height: 32 
+"Part 19, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 65 pos_y: 40 width: 32 height: 32 
+"Part 20, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 426 pos_y: 50 width: 24 height: 23 
+"Part 21, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 456 pos_y: 216 width: 80 height: 36 appearance: bottom-up (0)
+"Part 22, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 23, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 510 pos_y: 276 width: 16 height: 16 appearance: right (3)
+"Part 24, Dynamite (19)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 42 pos_y: 92 width: 48 height: 28 orientation: fuse right (0)
+"Part 25, Dynamite (19)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 73 pos_y: 140 width: 48 height: 28 orientation: fuse right (0)
+"Part 26, Dynamite (19)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 41 pos_y: 188 width: 48 height: 28 orientation: fuse right (0)
