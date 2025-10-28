@@ -1,0 +1,30 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Western (1007)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 18,"count_moving": 1,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 180,"bonus_2": 260,"pressure": 66,"gravity": 272,"unknown_8": -8,"unkonwn_10": -8,"music": 1007,"num_parts_fixed": 17,"num_parts_moving": 1,"num_parts_partsbin": 3},
+"Title": "TUTORIAL:  BRIDGING THE GAP",
+"Goal": "The basketball must cross all the gaps.  To solve this puzzle you must connect two of the teeter-totters with a rope passing through the pulleys.  You must also stretch an incline smaller to fill in one of the gaps.",
+"Parts":[
+{"no": 0,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 536,"pos_y": 200,"width": 16,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 0},
+{"no": 1,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 296,"width": 16,"height": 16,"appearance": "bottom (0)"},
+{"no": 2,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 520,"pos_y": 216,"width": 16,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 0},
+{"no": 3,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 488,"pos_y": 232,"width": 32,"height": 16 },
+{"no": 4,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 472,"pos_y": 216,"width": 16,"height": 32,"direction_r_to_l": "top-down (0)","size": 0},
+{"no": 5,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 440,"pos_y": 216,"width": 32,"height": 16 },
+{"no": 6,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 360,"pos_y": 184,"width": 80,"height": 36,"appearance": "top-down (2)"},
+{"no": 7,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 328,"pos_y": 216,"width": 32,"height": 16 },
+{"no": 8,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 296,"pos_y": 200,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 9,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 184,"width": 32,"height": 16 },
+{"no": 10,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 120,"pos_y": 184,"width": 32,"height": 16 },
+{"no": 11,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 88,"pos_y": 168,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 12,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 56,"pos_y": 152,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 13,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 136,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 14,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 6,"connected_part_2": 15},
+{"no": 15,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 472,"pos_y": 120,"width": 80,"height": 36,"appearance": "top-down (2)"},
+{"no": 16,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 344,"pos_y": 296,"width": 16,"height": 16,"appearance": "bottom (0)"},
+{"no": 17,"name": "Basketball (9)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 21,"pos_y": 102,"width": 32,"height": 32 },
+{"no": 18,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 152,"pos_y": 152,"width": 80,"height": 36,"appearance": "top-down (2)"},
+{"no": 19,"name": "Rope (10)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0 },
+{"no": 20,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 232,"pos_y": 232,"width": 48,"height": 32,"direction_r_to_l": "top-down (0)","size": 2}
+]
+}

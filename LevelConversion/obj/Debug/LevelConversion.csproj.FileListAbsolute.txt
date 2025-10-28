@@ -1,0 +1,11 @@
+C:\Thomas_perso\Tim\LevelConversion\bin\Debug\LevelConversion.exe.config
+C:\Thomas_perso\Tim\LevelConversion\bin\Debug\LevelConversion.exe
+C:\Thomas_perso\Tim\LevelConversion\bin\Debug\LevelConversion.pdb
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelConversion.csproj.AssemblyReference.cache
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelConversion.csproj.CoreCompileInputs.cache
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelConversion.exe
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelConversion.pdb
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelConversion.exe.config
+C:\Thomas_perso\Tim\LevelConversion\bin\Debug\Newtonsoft.Json.dll
+C:\Thomas_perso\Tim\LevelConversion\bin\Debug\Newtonsoft.Json.xml
+C:\Thomas_perso\Tim\LevelConversion\obj\Debug\LevelCon.4F243DFD.Up2Date

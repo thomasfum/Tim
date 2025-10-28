@@ -1,0 +1,33 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Romantic (1014) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 20 count_moving: 3 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 270 bonus_2: 400 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1014 num_parts_fixed: 17 num_parts_moving: 3 num_parts_partsbin: 7
+Title,TUTORIAL:  PUTTING THE GEARS IN MOTION
+Goal,Your goal is to make all the gears on screen turn.  Shining light on the solar panel will make the electric plug active.
+"Part 0, Electric engine (50)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 280 width: 56 height: 47 orientation: right (1)
+"Part 1, Solar panels (38)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 152 width: 72 height: 32 
+"Part 2, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 504 pos_y: 296 width: 40 height: 35 connected_part_1: 3
+"Part 3, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 296 width: 40 height: 35 connected_part_1: 15
+"Part 4, Solar panels (38)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 56 width: 72 height: 32 
+"Part 5, Rope (10)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 16 connected_part_2: 6
+"Part 6, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 280 width: 80 height: 36 appearance: top-down (2)
+"Part 7, Conveyor belt (5)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 136 width: 80 height: 16 appearance: Length 5 (21)
+"Part 8, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 136 width: 64 height: 16 
+"Part 9, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 120 width: 16 height: 32 
+"Part 10, Windmill (40)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 271 pos_y: 186 width: 40 height: 48 orientation: clockwise (0)
+"Part 11, Conveyor belt (5)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 232 width: 48 height: 16 appearance: Length 3 (7)
+"Part 12, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 216 width: 16 height: 48 
+"Part 13, Solar panels (38)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 264 width: 72 height: 32 connected_part_1: 0
+"Part 14, Light bulb (29)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 231 pos_y: 266 width: 32 height: 38 appearance: bulb bottom (2)
+"Part 15, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 296 width: 40 height: 35 
+"Part 16, Light bulb (29)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 37 pos_y: 67 width: 32 height: 54 appearance: bulb top (0)
+"Part 17, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 159 pos_y: 184 width: 40 height: 48 
+"Part 18, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 130 width: 32 height: 32 
+"Part 19, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 171 pos_y: 113 width: 24 height: 23 
+"Part 20, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 21, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 22, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 23, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 24, Electric fan (24)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 454 pos_y: 227 width: 32 height: 32 orientation: right (0)
+"Part 25, Electric engine (50)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 152 pos_y: 40 width: 56 height: 47 orientation: left (0)
+"Part 26, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 316 pos_y: 156 width: 32 height: 17 orientation: right (0)
