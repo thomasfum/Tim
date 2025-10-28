@@ -156,50 +156,48 @@ const files={"0":1,
 					}
 					if(part.appearance==undefined)
 					{
-						if((part.width>Images[part.TimType+"_0"].width)&&(part.size==undefined))
+						if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 						{
 							//dupliquer en width
-							if(part.no==20)
-								console.log("w:"+part.width+" / "+Images[part.TimType+"_0"].width);
-							for (let index = 0; index < part.width/Images[part.TimType+"_0"].width; ++index) 
+							for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
 							{
 								if(index==0)
-									drawImage(Images[part.TimType+"_0"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
-								else if(index==part.width/Images[part.TimType+"_0"].width-1)
-									drawImage(Images[part.TimType+"_3"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+									drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV);
+								else if(index==part.width/Images[part.TimType+"-0"].width-1)
+									drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV);
 								else
 								{
 									if(index%2==0)
-										drawImage(Images[part.TimType+"_1"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+										drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV);
 									else
-										drawImage(Images[part.TimType+"_2"], part.pos_x+Images[part.TimType+"_0"].width*index, part.pos_y,flipV);
+										drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV);
 								}
 							}
 						}
-						else if((part.height>Images[part.TimType+"_0"].height)&&(part.size==undefined))
+						else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
 						{
 
 							//dupliquer en height
-							//console.log("h:"+part.height+" / "+Images[part.TimType+"_0"].height);
-							for (let index = 0; index < part.height/Images[part.TimType+"_0"].height; ++index) 
+							//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
+							for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
 							{
 								if(index==0)
-									drawImage(Images[part.TimType+"_4"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
-								else if(index==part.height/Images[part.TimType+"_0"].height-1)
-									drawImage(Images[part.TimType+"_7"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+									drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV);
+								else if(index==part.height/Images[part.TimType+"-0"].height-1)
+									drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV);
 								else
 								{
 									if(index%2==0)
-										drawImage(Images[part.TimType+"_5"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+										drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV);
 									else
-										drawImage(Images[part.TimType+"_6"], part.pos_x, part.pos_y+Images[part.TimType+"_0"].height*index,flipV);
+										drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV);
 								}
 							}
 						}
 						else
 						{
 
-							drawImage(Images[part.TimType+"_0"], part.pos_x, part.pos_y,flipV);
+							drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,flipV);
 						}
 					}
 					else
@@ -208,7 +206,7 @@ const files={"0":1,
 						let end=part.appearance.indexOf(')');
 						let subResult = part.appearance.substring(start+1, end);
 						//console.log(part.TimType+"_"+subResult);
-						drawImage(Images[part.TimType+"_"+subResult], part.pos_x, part.pos_y,flipV);	
+						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV);	
 					}
 				}
 			}else//part.in_partsbin==1
@@ -223,7 +221,7 @@ const files={"0":1,
 					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+40;
 					partsbin[part.TimType].pos_y=part.pos_y;
 					partsbin[part.TimType].height=part.height;
-					drawImage(Images[part.TimType+"_0"],part.pos_x, part.pos_y,0);	
+					drawImage(Images[part.TimType+"-0"],part.pos_x, part.pos_y,0);	
 					partsbinPosY+=part.height;
 					partsbinPosY+=30;
 				}
@@ -248,13 +246,16 @@ const files={"0":1,
 		
 	}
 
-	function loadImage(filename,json,part)
+	function loadImage(filename,json,part,imgType)
 	{
 		NBImagesToLoad++;
 		//console.log("load: "+filename) ;
 		Images[filename] = new Image();  
 		part.Images[filename]=Images[filename];
-		Images[filename].src = './images/'+filename+".png";  
+		if(imgType==0)
+			Images[filename].src = './images/PARTS/PART'+filename+".png";  
+		else
+			Images[filename].src = './images/'+filename+".png";  
 		Images[filename].onload = () => {  
 			NBImagesLoaded++;
 		
@@ -284,12 +285,12 @@ const files={"0":1,
 			console.log(part);
 			for (let index = 0; index < files[result]; ++index) 
 			{
-				let filename=result+"_"+index;
+				let filename=result+"-"+index;
 				//console.log("imag="+Images[filename]);
 				if(Images[filename]==undefined)
 				{
 					Images[filename]=0;
-					loadImage(filename,json,part);
+					loadImage(filename,json,part,0);
 				}
 				else
 					part.Images[filename]=Images[filename];
