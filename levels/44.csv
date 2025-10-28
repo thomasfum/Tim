@@ -1,0 +1,32 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Fusion (1015) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 14 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1500 bonus_2: 2000 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1015 num_parts_fixed: 9 num_parts_moving: 5 num_parts_partsbin: 12
+Title,PLAY A SET
+Goal,Make the tennis ball go over the net.
+"Part 0, Eye hook (23)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 403 pos_y: 334 width: 16 height: 16 orientation: bottom (0)
+"Part 1, Magnifying glass (30)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 44 pos_y: 308 width: 16 height: 37 orientation: left (1)
+"Part 2, Rope (10)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 12 connected_part_2: 7
+"Part 3, Rope (10)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 9 connected_part_2: 0
+"Part 4, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 56 width: 16 height: 96 
+"Part 5, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 280 pos_y: 136 width: 240 height: 16 
+"Part 6, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 136 width: 240 height: 16 
+"Part 7, Eye hook (23)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 92 pos_y: 152 width: 16 height: 16 orientation: top (1)
+"Part 8, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 168 width: 240 height: 16 
+"Part 9, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 394 pos_y: 251 width: 32 height: 48 
+"Part 10, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 121 width: 16 height: 15 
+"Part 11, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 163 pos_y: 153 width: 16 height: 15 
+"Part 12, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 81 pos_y: 248 width: 40 height: 48 
+"Part 13, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 359 pos_y: 186 width: 32 height: 32 
+"Part 14, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 280 pos_y: 264 width: 80 height: 36 appearance: bottom-up (0)
+"Part 15, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 184 pos_y: 104 width: 48 height: 28 
+"Part 16, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 17, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 383 pos_y: 270 width: 16 height: 16 appearance: right (3)
+"Part 18, Gun (27)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 279 pos_y: 270 width: 64 height: 31 orientation: right (0)
+"Part 19, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 341 pos_y: 288 width: 40 height: 34 orientation: right (0)
+"Part 20, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 76 pos_y: 312 width: 32 height: 17 orientation: left (1)
+"Part 21, Dynamite (19)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 493 pos_y: 216 width: 48 height: 28 orientation: fuse right (0)
+"Part 22, Rocket (36)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 9 pos_y: 260 width: 16 height: 66 orientation: original (0)
+"Part 23, Wood wall (48)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 216 pos_y: 296 width: 32 height: 16 
+"Part 24, Wood wall (48)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 216 pos_y: 264 width: 32 height: 16 
+"Part 25, Wood wall (48)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 216 pos_y: 232 width: 32 height: 16 

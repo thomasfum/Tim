@@ -1,0 +1,53 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Blues (1008) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 45 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1200 bonus_2: 1100 pressure: 67 gravity: 272 unknown_8: -8 unkonwn_10: -8 music: 1008 num_parts_fixed: 40 num_parts_moving: 5 num_parts_partsbin: 2
+Title,POKEY AND BOB SHOOT IT OUT
+Goal,"Stop the shootout between Pokey the Cat and Bob the Fish.  You must let both guns fire, but you can't let the bullets hit Bob or Pokey."
+"Part 0, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 24 width: 64 height: 32 direction_r_to_l: bottom-up (1) size: 3
+"Part 1, Trampoline (39)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 312 width: 48 height: 28 
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 190 pos_y: 215 width: 16 height: 16 appearance: bottom (0)
+"Part 3, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 228 pos_y: 216 width: 16 height: 16 appearance: bottom (0)
+"Part 4, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 272 pos_y: 216 width: 16 height: 16 appearance: bottom (0)
+"Part 5, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 109 pos_y: 167 width: 16 height: 16 appearance: bottom (0)
+"Part 6, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 149 pos_y: 167 width: 16 height: 16 appearance: bottom (0)
+"Part 7, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 189 pos_y: 167 width: 16 height: 16 appearance: bottom (0)
+"Part 8, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 230 pos_y: 167 width: 16 height: 16 appearance: bottom (0)
+"Part 9, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 266 pos_y: 167 width: 16 height: 16 appearance: bottom (0)
+"Part 10, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 309 pos_y: 166 width: 16 height: 16 appearance: bottom (0)
+"Part 11, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 386 pos_y: 216 width: 16 height: 16 appearance: bottom (0)
+"Part 12, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 429 pos_y: 214 width: 16 height: 16 appearance: bottom (0)
+"Part 13, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 368 pos_y: 168 width: 16 height: 16 appearance: bottom (0)
+"Part 14, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 402 pos_y: 168 width: 16 height: 16 appearance: bottom (0)
+"Part 15, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 104 width: 64 height: 16 
+"Part 16, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 248 width: 112 height: 16 
+"Part 17, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 232 width: 16 height: 48 
+"Part 18, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 184 width: 16 height: 32 
+"Part 19, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 41 connected_part_2: 42 pulleys: 31,38"
+"Part 20, Aquarium (15)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 200 width: 48 height: 48 
+"Part 21, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 429 pos_y: 166 width: 64 height: 31 orientation: left (1)
+"Part 22, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 200 width: 64 height: 16 
+"Part 23, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 537 pos_y: 172 width: 16 height: 16 appearance: top (2)
+"Part 24, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 25 connected_part_2: 21 pulleys: 23,26"
+"Part 25, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 280 width: 80 height: 36 appearance: bottom-up (0)
+"Part 26, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 541 pos_y: 247 width: 16 height: 16 appearance: right (3)
+"Part 27, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 49 pos_y: 230 width: 16 height: 16 appearance: top (2)
+"Part 28, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 30 connected_part_2: 25 pulleys: 27,29"
+"Part 29, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 41 pos_y: 330 width: 16 height: 16 appearance: bottom (0)
+"Part 30, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 96 pos_y: 217 width: 64 height: 31 orientation: right (0)
+"Part 31, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 378 pos_y: 10 width: 16 height: 16 appearance: top (2)
+"Part 32, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 88 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 33, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 104 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 34, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 120 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 35, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 88 width: 16 height: 80 
+"Part 36, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 184 width: 16 height: 32 
+"Part 37, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 232 width: 16 height: 48 
+"Part 38, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 187 pos_y: 16 width: 16 height: 16 appearance: left (1)
+"Part 39, Trampoline (39)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 312 width: 48 height: 28 
+"Part 40, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 434 pos_y: 220 width: 48 height: 28 orientation: fuse left (1)
+"Part 41, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 175 pos_y: 237 width: 40 height: 48 
+"Part 42, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 375 pos_y: 102 width: 40 height: 48 
+"Part 43, Pokey Cat (12)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 47 pos_y: 159 width: 40 height: 41 orientation: right (1)
+"Part 44, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 56 width: 32 height: 32 
+"Part 45, Bowling ball (0)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 290 pos_y: 59 width: 32 height: 32 
+"Part 46, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 159 pos_y: 38 width: 40 height: 34 orientation: right (0)

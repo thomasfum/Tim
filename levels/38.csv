@@ -1,0 +1,35 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Salsa (1010) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 20 count_moving: 3 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1000 bonus_2: 1100 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1010 num_parts_fixed: 17 num_parts_moving: 3 num_parts_partsbin: 9
+Title,INSIDE THE WALLS
+Goal,You must put the bowling ball inside the brick walls.
+"Part 0, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 72 width: 96 height: 16 
+"Part 1, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 200 width: 16 height: 64 
+"Part 2, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 200 width: 16 height: 64 
+"Part 3, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 264 width: 96 height: 16 
+"Part 4, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 168 width: 32 height: 32 appearance: bottom-right (2)
+"Part 5, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 184 width: 80 height: 16 
+"Part 6, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 120 width: 32 height: 32 appearance: top-right (0)
+"Part 7, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 280 width: 32 height: 32 appearance: bottom-left (3)
+"Part 8, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 168 width: 16 height: 112 
+"Part 9, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 40 width: 32 height: 32 appearance: bottom-right (2)
+"Part 10, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 56 width: 48 height: 16 
+"Part 11, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 120 width: 64 height: 16 
+"Part 12, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 104 width: 32 height: 32 appearance: bottom-left (3)
+"Part 13, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 56 width: 16 height: 48 
+"Part 14, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 56 width: 144 height: 16 
+"Part 15, Rope (10)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 17 connected_part_2: 16
+"Part 16, Eye hook (23)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 508 pos_y: 301 width: 16 height: 16 orientation: bottom (0)
+"Part 17, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 499 pos_y: 175 width: 32 height: 48 
+"Part 18, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 540 pos_y: 32 width: 16 height: 15 
+"Part 19, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 280 pos_y: 24 width: 32 height: 32 
+"Part 20, Bellows (16)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 453 pos_y: 99 width: 64 height: 48 orientation: right (0)
+"Part 21, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 264 pos_y: 312 width: 48 height: 28 
+"Part 22, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 200 pos_y: 312 width: 48 height: 28 
+"Part 23, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 136 pos_y: 312 width: 48 height: 28 
+"Part 24, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 56 pos_y: 312 width: 48 height: 28 
+"Part 25, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 26, Conveyor belt (5)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 408 pos_y: 104 width: 64 height: 16 appearance: Length 4 (14)
+"Part 27, Windmill (40)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 334 pos_y: 4 width: 40 height: 48 orientation: counter-clockwise (1)
+"Part 28, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 440 pos_y: 106 width: 40 height: 34 orientation: right (0)

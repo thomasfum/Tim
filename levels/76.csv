@@ -1,0 +1,65 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Funk (1003) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 56 count_moving: 8 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 3300 bonus_2: 2300 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1003 num_parts_fixed: 48 num_parts_moving: 8 num_parts_partsbin: 3
+Title,BALLOONS IN DANGER
+Goal,Do not let any of the balloons initially on the screen pop.
+"Part 0, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 255 pos_y: 81 width: 16 height: 16 appearance: bottom (0)
+"Part 1, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 201 pos_y: 76 width: 16 height: 16 appearance: bottom (0)
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 324 pos_y: 109 width: 16 height: 16 appearance: bottom (0)
+"Part 3, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 200 width: 80 height: 36 appearance: top-down (2)
+"Part 4, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 8 width: 40 height: 35 connected_part_1: 10 connected_part_2: 5
+"Part 5, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 8 width: 40 height: 35 connected_part_2: 6
+"Part 6, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 8 width: 40 height: 35 connected_part_2: 7
+"Part 7, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 456 pos_y: 8 width: 40 height: 35 connected_part_2: 8
+"Part 8, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 8 width: 40 height: 35 connected_part_2: 9
+"Part 9, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 8 width: 40 height: 35 
+"Part 10, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 8 width: 40 height: 35 
+"Part 11, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 120 width: 16 height: 240 
+"Part 12, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 120 width: 16 height: 240 
+"Part 13, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 40 width: 16 height: 80 
+"Part 14, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 241 pos_y: 110 width: 64 height: 31 orientation: right (0)
+"Part 15, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 174 pos_y: 95 width: 64 height: 31 orientation: right (0)
+"Part 16, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 105 pos_y: 85 width: 64 height: 31 orientation: right (0)
+"Part 17, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 56 width: 40 height: 35 connected_part_1: 18
+"Part 18, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 56 width: 40 height: 35 
+"Part 19, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 18 connected_part_2: 10
+"Part 20, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 136 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 21, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 136 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 22, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 120 width: 144 height: 16 
+"Part 23, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 17 connected_part_2: 26
+"Part 24, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 328 width: 48 height: 32 orientation: right (0)
+"Part 25, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 200 width: 40 height: 35 
+"Part 26, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 168 width: 40 height: 35 
+"Part 27, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 24 connected_part_2: 25
+"Part 28, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 232 width: 80 height: 36 appearance: top-down (2)
+"Part 29, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 264 width: 80 height: 36 appearance: top-down (2)
+"Part 30, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 72 width: 16 height: 80 
+"Part 31, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 72 width: 16 height: 144 
+"Part 32, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 40 width: 32 height: 32 appearance: top-right (0)
+"Part 33, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 40 width: 32 height: 32 appearance: top-left (1)
+"Part 34, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 80 pos_y: 100 width: 16 height: 16 appearance: left (1)
+"Part 35, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 151 pos_y: 116 width: 16 height: 16 appearance: left (1)
+"Part 36, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 28 connected_part_2: 15 pulleys: 35,40,41"
+"Part 37, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 212 pos_y: 129 width: 16 height: 16 appearance: left (1)
+"Part 38, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 29 connected_part_2: 14 pulleys: 37,42,43"
+"Part 39, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 109 pos_y: 172 width: 16 height: 16 appearance: right (3)
+"Part 40, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 153 pos_y: 190 width: 16 height: 16 appearance: top (2)
+"Part 41, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 205 width: 16 height: 16 appearance: right (3)
+"Part 42, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 236 pos_y: 223 width: 16 height: 16 appearance: top (2)
+"Part 43, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 291 pos_y: 241 width: 16 height: 16 appearance: right (3)
+"Part 44, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 68 pos_y: 158 width: 16 height: 16 appearance: top (2)
+"Part 45, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 184 width: 48 height: 32 direction_r_to_l: top-down (0) size: 2
+"Part 46, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 87 pos_y: 144 width: 16 height: 16 appearance: left (1)
+"Part 47, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 3 connected_part_2: 16 pulleys: 34,39,44,46"
+"Part 48, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 409 pos_y: 200 width: 32 height: 48 
+"Part 49, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 453 pos_y: 201 width: 32 height: 48 
+"Part 50, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 409 pos_y: 250 width: 32 height: 48 
+"Part 51, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 455 pos_y: 250 width: 32 height: 48 
+"Part 52, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 432 pos_y: 290 width: 32 height: 48 
+"Part 53, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 460 pos_y: 90 width: 48 height: 28 orientation: fuse right (0)
+"Part 54, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 386 pos_y: 90 width: 48 height: 28 orientation: fuse left (1)
+"Part 55, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 152 width: 32 height: 32 
+"Part 56, Balloon (4)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 234 pos_y: 42 width: 32 height: 48 
+"Part 57, Balloon (4)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 315 pos_y: 101 width: 32 height: 48 
+"Part 58, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 116 pos_y: 28 width: 40 height: 34 orientation: left (1)

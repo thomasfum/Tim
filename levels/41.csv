@@ -1,0 +1,32 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Rock 2 (1013) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 17 count_moving: 1 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 900 bonus_2: 1100 pressure: 68 gravity: 272 unknown_8: -8 unkonwn_10: -8 music: 1013 num_parts_fixed: 16 num_parts_moving: 1 num_parts_partsbin: 9
+Title,HELP POKEY GET HOME
+Goal,You must help Pokey the Cat find his way home to the house in the lower right corner of the screen.
+"Part 0, Dynamite with plunger (22)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 132 pos_y: 200 width: 135 height: 48 orientation: dynamites left (1)
+"Part 1, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 184 width: 240 height: 16 
+"Part 2, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 248 width: 16 height: 32 
+"Part 3, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 216 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 4, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 200 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 5, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 456 pos_y: 200 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 6, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 216 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 328 width: 176 height: 16 
+"Part 8, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 184 pos_y: 328 width: 240 height: 16 
+"Part 9, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 328 width: 128 height: 16 
+"Part 10, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 248 width: 16 height: 80 
+"Part 11, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 248 width: 240 height: 16 
+"Part 12, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 184 pos_y: 120 width: 176 height: 16 
+"Part 13, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 120 width: 96 height: 16 
+"Part 14, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 56 width: 240 height: 16 
+"Part 15, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 56 width: 48 height: 16 
+"Part 16, Pokey Cat (12)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 27 pos_y: 16 width: 40 height: 41 orientation: right (1)
+"Part 17, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 8 pos_y: 184 width: 80 height: 36 appearance: bottom-up (0)
+"Part 18, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 19, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 18 pos_y: 312 width: 16 height: 16 appearance: bottom (0)
+"Part 20, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 128 pos_y: 312 width: 16 height: 16 appearance: bottom (0)
+"Part 21, Mort Mouse (42)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 91 pos_y: 172 width: 24 height: 11 orientation: left (0)
+"Part 22, Mort Mouse (42)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 288 pos_y: 317 width: 24 height: 11 orientation: right (1)
+"Part 23, Aquarium (15)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 120 pos_y: 8 width: 48 height: 48 
+"Part 24, Aquarium (15)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 184 pos_y: 72 width: 48 height: 48 
+"Part 25, Aquarium (15)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 296 pos_y: 136 width: 48 height: 48 

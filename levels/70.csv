@@ -1,0 +1,51 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Music 1012 (1012) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 39 count_moving: 4 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 4200 bonus_2: 4000 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1012 num_parts_fixed: 35 num_parts_moving: 4 num_parts_partsbin: 6
+Title,SAVE THE BOB SQUAD
+Goal,Save Bob the Fish and all his friends.  Do not allow any of the fishbowls to be smashed.
+"Part 0, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 153 width: 16 height: 16 appearance: bottom (0)
+"Part 1, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 453 pos_y: 27 width: 16 height: 16 appearance: bottom (0)
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 486 pos_y: 19 width: 16 height: 16 appearance: bottom (0)
+"Part 3, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 56 width: 16 height: 16 appearance: bottom (0)
+"Part 4, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 478 pos_y: 86 width: 16 height: 16 appearance: bottom (0)
+"Part 5, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 443 pos_y: 126 width: 16 height: 16 appearance: bottom (0)
+"Part 6, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 477 pos_y: 146 width: 16 height: 16 appearance: bottom (0)
+"Part 7, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 449 pos_y: 170 width: 16 height: 16 appearance: bottom (0)
+"Part 8, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 487 pos_y: 178 width: 16 height: 16 appearance: bottom (0)
+"Part 9, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 72 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 10, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 104 width: 48 height: 32 direction_r_to_l: bottom-up (1) size: 2
+"Part 11, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 13 pos_y: 44 width: 16 height: 16 appearance: left (1)
+"Part 12, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 92 pos_y: 20 width: 64 height: 31 orientation: right (0)
+"Part 13, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 67 pos_y: 186 width: 16 height: 16 appearance: left (1)
+"Part 14, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 306 pos_y: 321 width: 16 height: 16 appearance: bottom (0)
+"Part 15, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 289 pos_y: 195 width: 16 height: 16 appearance: top (2)
+"Part 16, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 31 pos_y: 324 width: 16 height: 16 appearance: bottom (0)
+"Part 17, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 40 width: 64 height: 32 direction_r_to_l: bottom-up (1) size: 3
+"Part 18, Aquarium (15)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 8 width: 48 height: 48 
+"Part 19, Aquarium (15)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 8 width: 48 height: 48 
+"Part 20, Aquarium (15)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 8 width: 48 height: 48 
+"Part 21, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 264 width: 112 height: 16 
+"Part 22, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 200 width: 16 height: 64 
+"Part 23, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 72 width: 16 height: 192 
+"Part 24, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 200 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 25, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 430 pos_y: 322 width: 16 height: 16 appearance: bottom (0)
+"Part 26, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 28 connected_part_2: 27 pulleys: 13,14,15,25"
+"Part 27, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 232 width: 80 height: 36 appearance: bottom-up (0)
+"Part 28, Light bulb (29)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 49 pos_y: 97 width: 32 height: 54 appearance: bulb top (0)
+"Part 29, Magnifying glass (30)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 86 pos_y: 96 width: 16 height: 37 orientation: right (0)
+"Part 30, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 109 pos_y: 102 width: 64 height: 52 orientation: right (0)
+"Part 31, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 216 width: 80 height: 36 appearance: bottom-up (0)
+"Part 32, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 94 pos_y: 324 width: 16 height: 16 appearance: bottom (0)
+"Part 33, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 31 connected_part_2: 12 pulleys: 11,16,32"
+"Part 34, Aquarium (15)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 72 width: 48 height: 48 
+"Part 35, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 518 pos_y: 21 width: 16 height: 15 
+"Part 36, Bowling ball (0)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 183 pos_y: 152 width: 32 height: 32 
+"Part 37, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 401 pos_y: 203 width: 24 height: 23 
+"Part 38, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 151 pos_y: 173 width: 24 height: 23 
+"Part 39, Baseball (28)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 43 pos_y: 219 width: 16 height: 15 
+"Part 40, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 360 pos_y: 120 width: 80 height: 36 appearance: bottom-up (0)
+"Part 41, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 42, Jack-in-the-box (13)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 184 pos_y: 184 width: 32 height: 32 orientation: counter-clockwise (1)
+"Part 43, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 19 pos_y: 239 width: 40 height: 34 orientation: left (1)
+"Part 44, Mouse cage (6)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 232 pos_y: 264 width: 48 height: 32 orientation: left (1)

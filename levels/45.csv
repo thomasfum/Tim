@@ -1,0 +1,56 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Reggae (1004) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 41 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 800 bonus_2: 800 pressure: 18 gravity: 115 unknown_8: -8 unkonwn_10: -8 music: 1004 num_parts_fixed: 36 num_parts_moving: 5 num_parts_partsbin: 9
+Title,YOU GOTTA SMILE
+Goal,Your goal is to pop the balloon.
+"Part 0, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 328 width: 16 height: 16 
+"Part 1, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 56 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 2, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 56 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 3, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 56 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 4, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 56 width: 64 height: 32 direction_r_to_l: bottom-up (1) size: 3
+"Part 5, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 120 width: 32 height: 32 appearance: bottom-right (2)
+"Part 6, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 88 width: 32 height: 32 appearance: top-right (0)
+"Part 7, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 88 width: 32 height: 32 appearance: top-left (1)
+"Part 8, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 120 width: 32 height: 32 appearance: bottom-left (3)
+"Part 9, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 8 width: 224 height: 16 
+"Part 10, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 8 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 11, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 40 width: 16 height: 160 
+"Part 12, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 200 width: 16 height: 160 
+"Part 13, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 184 width: 16 height: 64 
+"Part 14, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 120 width: 32 height: 32 appearance: bottom-left (3)
+"Part 15, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 120 width: 32 height: 32 appearance: bottom-right (2)
+"Part 16, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 88 width: 32 height: 32 appearance: top-left (1)
+"Part 17, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 88 width: 32 height: 32 appearance: top-right (0)
+"Part 18, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 280 pos_y: 8 width: 240 height: 16 
+"Part 19, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 232 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 20, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 248 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 21, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 264 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 22, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 280 width: 48 height: 32 direction_r_to_l: top-down (0) size: 2
+"Part 23, Trampoline (39)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 328 width: 48 height: 28 
+"Part 24, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 184 pos_y: 296 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 25, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 184 width: 16 height: 64 
+"Part 26, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 456 pos_y: 232 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 27, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 248 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 28, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 408 pos_y: 264 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 29, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 280 width: 48 height: 32 direction_r_to_l: bottom-up (1) size: 2
+"Part 30, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 296 width: 64 height: 32 direction_r_to_l: bottom-up (1) size: 3
+"Part 31, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 8 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 32, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 40 width: 16 height: 144 
+"Part 33, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 504 pos_y: 104 width: 16 height: 240 
+"Part 34, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 184 width: 16 height: 160 
+"Part 35, Trampoline (39)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 504 pos_y: 344 width: 48 height: 28 
+"Part 36, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 262 pos_y: 177 width: 32 height: 48 
+"Part 37, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 521 pos_y: 102 width: 16 height: 15 
+"Part 38, Rocket (36)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 41 pos_y: 276 width: 16 height: 66 orientation: original (0)
+"Part 39, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 348 pos_y: 107 width: 24 height: 23 
+"Part 40, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 188 pos_y: 108 width: 24 height: 23 
+"Part 41, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 312 pos_y: 216 width: 80 height: 36 appearance: top-down (2)
+"Part 42, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 43, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 184 pos_y: 24 width: 40 height: 35 
+"Part 44, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 45, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 117 pos_y: 340 width: 16 height: 16 appearance: bottom (0)
+"Part 46, Electric switch & outlet (21)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 40 pos_y: 88 width: 48 height: 32 switch: up
+"Part 47, Electric engine (50)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 93 pos_y: 60 width: 56 height: 47 orientation: left (0)
+"Part 48, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 61 pos_y: 322 width: 16 height: 37 orientation: left (1)
+"Part 49, Light bulb (29)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 79 pos_y: 312 width: 32 height: 38 appearance: bulb bottom (2)

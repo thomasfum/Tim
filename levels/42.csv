@@ -1,0 +1,75 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Romantic (1014) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 60 count_moving: 28 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1500 bonus_2: 1100 pressure: 67 gravity: 272 unknown_8: -8 unkonwn_10: -8 music: 1014 num_parts_fixed: 32 num_parts_moving: 28 num_parts_partsbin: 9
+Title,RING OF FIRE
+Goal,Explode all the dynamite.
+"Part 0, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 152 width: 128 height: 16 
+"Part 1, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 58 connected_part_2: 59 pulleys: 9,10"
+"Part 2, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 8 width: 240 height: 16 
+"Part 3, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 264 width: 16 height: 80 
+"Part 4, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 344 width: 240 height: 16 
+"Part 5, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 120 width: 16 height: 240 
+"Part 6, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 8 width: 16 height: 112 
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 8 width: 240 height: 16 
+"Part 8, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 8 width: 48 height: 16 
+"Part 9, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 390 pos_y: 24 width: 16 height: 16 appearance: top (2)
+"Part 10, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 281 pos_y: 24 width: 16 height: 16 appearance: top (2)
+"Part 11, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 296 width: 32 height: 16 
+"Part 12, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 248 width: 32 height: 16 
+"Part 13, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 200 width: 32 height: 16 
+"Part 14, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 152 width: 32 height: 16 
+"Part 15, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 104 width: 32 height: 16 
+"Part 16, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 56 width: 32 height: 16 
+"Part 17, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 24 width: 16 height: 240 
+"Part 18, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 264 width: 16 height: 48 
+"Part 19, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 56 width: 240 height: 16 
+"Part 20, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 56 width: 176 height: 16 
+"Part 21, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 72 width: 16 height: 240 
+"Part 22, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 56 width: 32 height: 16 
+"Part 23, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 104 width: 32 height: 16 
+"Part 24, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 24 width: 16 height: 240 
+"Part 25, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 152 width: 32 height: 16 
+"Part 26, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 200 width: 32 height: 16 
+"Part 27, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 248 width: 32 height: 16 
+"Part 28, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 296 width: 32 height: 16 
+"Part 29, Flashlight (25)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 394 pos_y: 308 width: 32 height: 17 orientation: right (0)
+"Part 30, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 344 width: 208 height: 16 
+"Part 31, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 344 width: 64 height: 16 
+"Part 32, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 82 pos_y: 75 width: 16 height: 15 
+"Part 33, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 474 pos_y: 268 width: 48 height: 28 orientation: fuse left (1)
+"Part 34, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 484 pos_y: 76 width: 48 height: 28 orientation: fuse right (0)
+"Part 35, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 428 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 36, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 221 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 37, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 97 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 38, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 159 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 39, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 223 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 40, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 292 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 41, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 364 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 42, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 487 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 43, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 486 pos_y: 124 width: 48 height: 28 orientation: fuse right (0)
+"Part 44, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 172 width: 48 height: 28 orientation: fuse right (0)
+"Part 45, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 482 pos_y: 220 width: 48 height: 28 orientation: fuse left (1)
+"Part 46, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 316 width: 48 height: 28 orientation: fuse left (1)
+"Part 47, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 92 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 48, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 155 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 49, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 30 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 50, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 286 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 51, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 341 pos_y: 316 width: 48 height: 28 orientation: fuse right (0)
+"Part 52, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 27 pos_y: 28 width: 48 height: 28 orientation: fuse right (0)
+"Part 53, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 20 pos_y: 76 width: 48 height: 28 orientation: fuse right (0)
+"Part 54, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 19 pos_y: 124 width: 48 height: 28 orientation: fuse right (0)
+"Part 55, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 23 pos_y: 172 width: 48 height: 28 orientation: fuse right (0)
+"Part 56, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 23 pos_y: 220 width: 48 height: 28 orientation: fuse right (0)
+"Part 57, Dynamite (19)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 25 pos_y: 268 width: 48 height: 28 orientation: fuse right (0)
+"Part 58, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 263 pos_y: 207 width: 40 height: 48 
+"Part 59, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 387 pos_y: 210 width: 40 height: 48 
+"Part 60, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 136 pos_y: 184 width: 80 height: 36 appearance: bottom-up (0)
+"Part 61, Boxing glove (35)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 147 pos_y: 239 width: 48 height: 31 orientation: left (0)
+"Part 62, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 296 pos_y: 168 width: 48 height: 28 
+"Part 63, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 110 pos_y: 92 width: 16 height: 37 orientation: right (0)
+"Part 64, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 439 pos_y: 305 width: 16 height: 37 orientation: right (0)
+"Part 65, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 76 pos_y: 96 width: 32 height: 17 orientation: right (0)
+"Part 66, Cannon (18)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 131 pos_y: 100 width: 64 height: 52 orientation: right (0)
+"Part 67, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 360 pos_y: 136 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 68, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 296 pos_y: 120 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1

@@ -1,0 +1,27 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Polka (1011) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 12 count_moving: 3 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1950 bonus_2: 2300 pressure: 64 gravity: 275 unknown_8: -8 unkonwn_10: -8 music: 1011 num_parts_fixed: 9 num_parts_moving: 3 num_parts_partsbin: 9
+Title,TRAP POKEY THE CAT
+Goal,You must trap Pokey the Cat in the cage.  You must also make the cannon ball go into the bucket.
+"Part 0, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 312 width: 128 height: 16 
+"Part 1, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 152 width: 16 height: 160 
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 51 pos_y: 9 width: 16 height: 16 appearance: left (1)
+"Part 3, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 430 pos_y: 3 width: 16 height: 16 appearance: top (2)
+"Part 4, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 40 width: 16 height: 208 
+"Part 5, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 11 connected_part_2: 9 pulleys: 2,3"
+"Part 6, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 40 width: 16 height: 208 
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 248 width: 48 height: 16 
+"Part 8, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 312 width: 144 height: 16 
+"Part 9, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 39 pos_y: 231 width: 40 height: 48 
+"Part 10, Pokey Cat (12)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 361 pos_y: 271 width: 40 height: 41 orientation: right (1)
+"Part 11, Cage (11)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 142 width: 48 height: 64 
+"Part 12, Bowling ball (0)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 302 pos_y: 212 width: 32 height: 32 
+"Part 13, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 215 pos_y: 168 width: 40 height: 34 orientation: right (0)
+"Part 14, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 323 pos_y: 243 width: 16 height: 37 orientation: right (0)
+"Part 15, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 289 pos_y: 241 width: 32 height: 17 orientation: right (0)
+"Part 16, Cannon (18)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 308 pos_y: 142 width: 64 height: 52 orientation: left (1)
+"Part 17, Rocket (36)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 331 pos_y: 180 width: 16 height: 66 orientation: original (0)
+"Part 18, Rocket (36)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 307 pos_y: 173 width: 16 height: 66 orientation: original (0)
+"Part 19, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 72 pos_y: 120 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 20, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 88 pos_y: 232 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
