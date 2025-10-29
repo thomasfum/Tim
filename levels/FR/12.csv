@@ -1,0 +1,28 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Rock 2 (1013) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 15 count_moving: 3 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 320 bonus_2: 250 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1013 num_parts_fixed: 12 num_parts_moving: 3 num_parts_partsbin: 7
+Title,TUTORAT:  GENERATEURS ET MOTEURS
+Goal,"Il faut faire tomber la balle de tennis dans le trou du tuyau. Les générateurs vont se mettre à tourner, et vont fournir du courant. Les moteurs électriques doivent être branchés pour tourner."
+"Part 0, Electric switch & outlet (21)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 456 pos_y: 72 width: 48 height: 32 switch: up connected_part_1: 1
+"Part 1, Electric fan (24)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 423 pos_y: 38 width: 32 height: 32 orientation: left (1)
+"Part 2, Generator (26)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 88 width: 80 height: 32 
+"Part 3, Conveyor belt (5)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 184 width: 96 height: 16 appearance: Length 6 (28)
+"Part 4, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 200 width: 48 height: 32 orientation: right (0)
+"Part 5, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 312 width: 32 height: 32 appearance: bottom-right (2)
+"Part 6, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 312 width: 32 height: 32 appearance: bottom-left (3)
+"Part 7, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 280 width: 32 height: 32 appearance: top-right (0)
+"Part 8, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 248 width: 32 height: 32 appearance: top-right (0)
+"Part 9, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 248 width: 80 height: 16 
+"Part 10, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 280 width: 32 height: 16 
+"Part 11, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 408 pos_y: 280 width: 16 height: 32 
+"Part 12, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 318 pos_y: 265 width: 16 height: 15 
+"Part 13, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 460 pos_y: 50 width: 16 height: 15 
+"Part 14, Basketball (9)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 113 pos_y: 152 width: 32 height: 32 
+"Part 15, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 16, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 17, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 18, Windmill (40)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 278 pos_y: 38 width: 40 height: 48 orientation: clockwise (0)
+"Part 19, Generator (26)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 136 pos_y: 216 width: 80 height: 32 
+"Part 20, Electric fan (24)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 481 pos_y: 173 width: 32 height: 32 orientation: right (0)
+"Part 21, Electric engine (50)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 136 pos_y: 88 width: 56 height: 47 orientation: left (0)

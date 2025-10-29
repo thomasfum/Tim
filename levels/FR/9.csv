@@ -1,0 +1,21 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Salsa (1010) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 12 count_moving: 4 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 260 bonus_2: 240 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1010 num_parts_fixed: 8 num_parts_moving: 4 num_parts_partsbin: 3
+Title,TUTORAT:  TOUS LES SEAUX EN BAS
+Goal,"Il faut que vous fassiez tomber tous les seaux. Pour cela, il faut que vous coupiez les deux cordes avec des ciseaux."
+"Part 0, Scrissors (37)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 385 pos_y: 76 width: 40 height: 34 orientation: left (1)
+"Part 1, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 11 connected_part_2: 10 pulleys: 2,3"
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 428 pos_y: 144 width: 16 height: 16 appearance: right (3)
+"Part 3, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 333 pos_y: 37 width: 16 height: 16 appearance: top (2)
+"Part 4, Rope (10)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 connected_part_1: 5 connected_part_2: 9
+"Part 5, Eye hook (23)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 236 pos_y: 120 width: 16 height: 16 orientation: top (1)
+"Part 6, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 104 width: 96 height: 16 
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 296 width: 224 height: 16 
+"Part 8, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 405 pos_y: 141 width: 16 height: 15 
+"Part 9, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 225 pos_y: 199 width: 40 height: 48 
+"Part 10, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 420 pos_y: 195 width: 40 height: 48 
+"Part 11, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 315 pos_y: 126 width: 40 height: 48 
+"Part 12, Cannon ball (43)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 407 pos_y: 48 width: 24 height: 23 
+"Part 13, Trampoline (39)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 392 pos_y: 264 width: 48 height: 28 
+"Part 14, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 209 pos_y: 154 width: 40 height: 34 orientation: right (0)

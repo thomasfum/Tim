@@ -27,6 +27,7 @@
 // rope
 // animations
 // size 678x369
+//https://www.cursor.cc/?
 
 let Images={};
 let Icons={};
@@ -229,13 +230,7 @@ const files={
 		json.Parts.forEach(part => {
 			//console.log(part);
 			
-				if(	part.selected==1)
-				{
-					console.log("drw selected "+part.no);
-					//ctx.beginPath();
-					ctx.rect(part.pos_x-5, part.pos_y-5, part.width+5, part.height+5);
-					//ctx.stroke();
-				}	
+				
 				
 			if(part.in_partsbin==0)
 			{
@@ -329,7 +324,25 @@ const files={
 						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 					}
 				}
-				
+				if(	part.selected==1)
+				{
+					ctx.beginPath();
+					ctx.strokeStyle = 'lightgreen';
+					if(part.overlap==true)
+					{
+						//console.log("overlap");
+						ctx.strokeStyle = 'red';
+						ctx.moveTo(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2);
+						ctx.lineTo(part.pos_x+playgroundOffsetX-2+ part.width+4, part.pos_y+playgroundOffsetY-2+part.height+4);
+						
+						ctx.moveTo(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2+part.height+4);
+						ctx.lineTo(part.pos_x+playgroundOffsetX-2+ part.width+4, part.pos_y+playgroundOffsetY-2);
+					}
+					
+
+					ctx.rect(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2, part.width+4, part.height+4);
+					ctx.stroke();
+				}	
 		
 				
 			}else//part.in_partsbin==1
@@ -696,15 +709,16 @@ const files={
 				let dy=part.height;
 				if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
 				{
-					console.log("in bin");
+					//console.log("in bin");
 					dx=Icons[part.TimType].width;
 					dy=Icons[part.TimType].height;
 				}
 				if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 				{
 					document.getElementById("myCanvas").style.cursor="grabbing";
+					
 					Dragging=true;
-					console.log("Drag "+part.no);
+					//console.log("Drag "+part.no);
 					DraggingObject=part;
 					if(part.in_partsbin==1)
 					{
@@ -717,6 +731,35 @@ const files={
 
 	}
 	
+	function doPartsOverlap(part1, part2)
+	{
+		if(part1.no==part2.no)
+			return false;
+		//if(part2.no==1)
+		//{
+	
+		let max1x=part1.pos_x+part1.width;
+		let min1x=part1.pos_x;
+		
+		let max2x=part2.pos_x+part2.width;
+		let min2x=part2.pos_x;
+		
+		let max1y=part1.pos_y+part1.height;
+		let min1y=part1.pos_y;
+		
+		let max2y=part2.pos_y+part2.height;
+		let min2y=part2.pos_y;
+		
+		let aLeftOfB = max1x < min2x;
+		let aRightOfB = min1x > max2x;
+		let aAboveB = min1y > max2y;
+		let aBelowB = max1y < min2y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  //}
+	}
+
 	function selectPart(part_no)
 	{
 		LevelJson.Parts.forEach(part => {
@@ -724,8 +767,11 @@ const files={
 			{
 				if(part.no==part_no)
 				{
-					console.log("over "+part_no);
-					part.selected=1;
+					//console.log("over "+part_no);
+					if(part.selected!=1)
+					{
+						part.selected=1;
+					}
 				}
 				else
 					part.selected=0;
@@ -736,16 +782,35 @@ const files={
 	{
 		if(Dragging==true)
 		{
-	//	  console.log(DraggingObject);
-		  DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
-		  DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
-		  refresh(LevelJson,true);
+			//	  console.log(DraggingObject);
+			DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
+			DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
+			selectPart(DraggingObject.no);
+			let overlap=false;
+			LevelJson.Parts.forEach(part => {
+					
+					if(doPartsOverlap(DraggingObject,part))
+					{
+						overlap=true;
+					}
+					
+				});
+			if(overlap==true)
+			{
+				//console.log("overlap");
+				DraggingObject.overlap=true;
+			}
+			else
+				DraggingObject.overlap=false;
+
+
+			refresh(LevelJson,true);
 		}
 		else
 		{
 			Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 			Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
-			if(Xclick<playgroundOffsetX+playgroundWidth)
+			if((Xclick<playgroundOffsetX+playgroundWidth)&&(LevelJson!=undefined))
 			{
 				LevelJson.Parts.forEach(part => {
 					if(part.canBeDragged==1)
@@ -755,6 +820,7 @@ const files={
 						if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 						{
 							selectPart(part.no);
+							refresh(LevelJson,true);
 						}
 					}
 				});
@@ -822,6 +888,7 @@ const files={
 		}
 	}
 	LoadBoard();
+	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/cursor-9.cur'), auto";
 	
 </script>
 

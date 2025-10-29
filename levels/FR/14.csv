@@ -1,0 +1,23 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Fusion (1015) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 13 count_moving: 1 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 230 bonus_2: 200 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1015 num_parts_fixed: 12 num_parts_moving: 1 num_parts_partsbin: 4
+Title,TUTORAT:  EN ALLUMANT LA MECHE...
+Goal,Votre but est de faire tirer tous les canons. Il va falloir tourner une des loupes de manière à ce que la lumière converge au bon endroit.
+"Part 0, Flashlight (25)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 82 width: 32 height: 17 orientation: right (0)
+"Part 1, Magnifying glass (30)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 96 pos_y: 80 width: 16 height: 37 orientation: right (0)
+"Part 2, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 122 pos_y: 90 width: 64 height: 52 orientation: right (0)
+"Part 3, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 144 pos_y: 281 width: 64 height: 52 orientation: right (0)
+"Part 4, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 311 pos_y: 203 width: 64 height: 52 orientation: left (1)
+"Part 5, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 216 pos_y: 24 width: 240 height: 16 
+"Part 6, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 440 pos_y: 40 width: 16 height: 160 
+"Part 7, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 104 width: 16 height: 80 
+"Part 8, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 360 pos_y: 88 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 9, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 184 width: 16 height: 80 
+"Part 10, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 168 width: 224 height: 16 
+"Part 11, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 232 width: 16 height: 32 
+"Part 12, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 64 pos_y: 56 width: 16 height: 15 
+"Part 13, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 384 pos_y: 197 width: 16 height: 37 orientation: right (0)
+"Part 14, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 120 pos_y: 273 width: 16 height: 37 orientation: right (0)
+"Part 15, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 412 pos_y: 201 width: 32 height: 17 orientation: right (0)
+"Part 16, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 77 pos_y: 275 width: 32 height: 17 orientation: right (0)

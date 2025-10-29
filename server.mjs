@@ -13,6 +13,7 @@ const types = {
   gif: 'image/gif',
   json: 'application/json',
   xml: 'application/xml',
+  cur: 'image/png',
 };
 const root = normalize(resolve(directoryName));
 const server = createServer((req, res) => {

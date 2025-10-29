@@ -1,0 +1,38 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Romantic (1014) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 24 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1400 bonus_2: 1200 pressure: 0 gravity: 144 unknown_8: -8 unkonwn_10: -8 music: 1014 num_parts_fixed: 19 num_parts_moving: 5 num_parts_partsbin: 8
+Title,FAIRE ECLATER DES BALLONS SUR LA LUNE
+Goal,Faites éclater les trois ballons. Remarquez que vous êtes sur la lune.
+"Part 0, Trampoline (39)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 296 width: 48 height: 28 
+"Part 1, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 88 width: 16 height: 176 
+"Part 2, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 539 pos_y: 332 width: 16 height: 16 appearance: right (3)
+"Part 3, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 539 pos_y: 169 width: 16 height: 16 appearance: right (3)
+"Part 4, Scrissors (37)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 192 pos_y: 248 width: 40 height: 34 orientation: right (0)
+"Part 5, Scrissors (37)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 192 pos_y: 213 width: 40 height: 34 orientation: right (0)
+"Part 6, Scrissors (37)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 192 pos_y: 178 width: 40 height: 34 orientation: right (0)
+"Part 7, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 280 width: 80 height: 36 appearance: bottom-up (0)
+"Part 8, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 40 width: 40 height: 35 connected_part_1: 9
+"Part 9, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 40 width: 40 height: 35 
+"Part 10, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 40 width: 40 height: 35 
+"Part 11, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 56 width: 40 height: 35 
+"Part 12, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 56 width: 16 height: 240 
+"Part 13, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 88 width: 16 height: 144 
+"Part 14, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 16 connected_part_2: 11
+"Part 15, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 8 connected_part_2: 17
+"Part 16, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 24 width: 48 height: 32 orientation: right (0)
+"Part 17, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 24 width: 48 height: 32 orientation: right (0)
+"Part 18, Belt (8)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 9 connected_part_2: 10
+"Part 19, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 110 pos_y: 100 width: 32 height: 48 
+"Part 20, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 250 pos_y: 86 width: 32 height: 48 
+"Part 21, Balloon (4)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 316 pos_y: 202 width: 32 height: 48 
+"Part 22, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 439 pos_y: 8 width: 16 height: 15 
+"Part 23, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 183 pos_y: 8 width: 16 height: 15 
+"Part 24, Boxing glove (35)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 372 pos_y: 257 width: 48 height: 31 orientation: left (0)
+"Part 25, Boxing glove (35)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 356 pos_y: 199 width: 48 height: 31 orientation: left (0)
+"Part 26, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 27, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 28, Gun (27)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 457 pos_y: 266 width: 64 height: 31 orientation: left (1)
+"Part 29, Gun (27)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 388 pos_y: 287 width: 64 height: 31 orientation: left (1)
+"Part 30, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 360 pos_y: 104 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 31, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 88 pos_y: 280 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
