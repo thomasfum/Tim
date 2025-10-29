@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Western (1007)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 18,"count_moving": 1,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 180,"bonus_2": 260,"pressure": 66,"gravity": 272,"unknown_8": -8,"unkonwn_10": -8,"music": 1007,"num_parts_fixed": 17,"num_parts_moving": 1,"num_parts_partsbin": 3},
-"Title": "TUTORIAL:  BRIDGING THE GAP",
-"Goal": "The basketball must cross all the gaps.  To solve this puzzle you must connect two of the teeter-totters with a rope passing through the pulleys.  You must also stretch an incline smaller to fill in one of the gaps.",
+"Title": {
+"EN":"TUTORIAL:  BRIDGING THE GAP"
+},
+"Goal":  {
+"EN":"The basketball must cross all the gaps.  To solve this puzzle you must connect two of the teeter-totters with a rope passing through the pulleys.  You must also stretch an incline smaller to fill in one of the gaps."
+},
 "Parts":[
 {"no": 0,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 536,"pos_y": 200,"width": 16,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 0},
 {"no": 1,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 296,"width": 16,"height": 16,"appearance": "bottom (0)"},

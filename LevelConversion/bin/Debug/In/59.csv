@@ -1,0 +1,36 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Metal (1016) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 18 count_moving: 2 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 4200 bonus_2: 3200 pressure: 67 gravity: 272 unknown_8: -8 unkonwn_10: -8 music: 1016 num_parts_fixed: 16 num_parts_moving: 2 num_parts_partsbin: 12
+Title,LOWER THE... BOOM
+Goal,"Your goal is to put a cannonball in the bucket, and the bucket in the hole in the brick wall."
+"Part 0, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 72 width: 16 height: 176 
+"Part 1, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 248 width: 16 height: 48 
+"Part 2, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 381 pos_y: 108 width: 64 height: 52 orientation: left (1)
+"Part 3, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 24 width: 32 height: 32 appearance: top-left (1)
+"Part 4, Rope (10)","is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 connected_part_1: 17 connected_part_2: 14 pulleys: 7,8"
+"Part 5, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 312 width: 48 height: 16 
+"Part 6, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 24 width: 208 height: 16 
+"Part 7, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 308 pos_y: 18 width: 16 height: 16 appearance: top (2)
+"Part 8, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 252 pos_y: 21 width: 16 height: 16 appearance: left (1)
+"Part 9, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 328 width: 176 height: 16 
+"Part 10, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 97 pos_y: 276 width: 64 height: 52 orientation: right (0)
+"Part 11, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 328 width: 48 height: 16 
+"Part 12, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 328 width: 240 height: 16 
+"Part 13, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 200 pos_y: 344 width: 80 height: 16 
+"Part 14, Eye hook (23)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 317 pos_y: 312 width: 16 height: 16 orientation: bottom (0)
+"Part 15, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 296 width: 32 height: 16 
+"Part 16, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 18 pos_y: 106 width: 16 height: 15 
+"Part 17, Bucket (17)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 230 pos_y: 158 width: 40 height: 48 
+"Part 18, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 408 pos_y: 296 width: 80 height: 36 appearance: bottom-up (0)
+"Part 19, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 20, Scrissors (37)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 291 pos_y: 274 width: 40 height: 34 orientation: right (0)
+"Part 21, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 456 pos_y: 102 width: 16 height: 37 orientation: left (1)
+"Part 22, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 69 pos_y: 261 width: 16 height: 37 orientation: right (0)
+"Part 23, Flashlight (25)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 19 pos_y: 261 width: 32 height: 17 orientation: right (0)
+"Part 24, Light bulb (29)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 482 pos_y: 102 width: 32 height: 54 appearance: bulb top (0)
+"Part 25, Pipe wall (46)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 264 pos_y: 120 width: 80 height: 16 
+"Part 26, Pipe wall (46)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 184 pos_y: 72 width: 16 height: 48 
+"Part 27, Pipe wall (46)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 152 pos_y: 72 width: 16 height: 48 
+"Part 28, Pipe wall (46)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 120 pos_y: 72 width: 96 height: 16 
+"Part 29, Curved pipe wall (47)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 72 pos_y: 56 width: 32 height: 32 appearance: bottom-left (3)

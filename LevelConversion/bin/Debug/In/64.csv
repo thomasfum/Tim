@@ -1,0 +1,37 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Rock (1006) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 18 count_moving: 1 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 2300 bonus_2: 2400 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1006 num_parts_fixed: 17 num_parts_moving: 1 num_parts_partsbin: 13
+Title,FIRE THE CANNON
+Goal,Light and fire the cannon any way you can.
+"Part 0, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 216 width: 16 height: 112 
+"Part 1, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 328 pos_y: 328 width: 208 height: 16 
+"Part 2, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 504 pos_y: 8 width: 16 height: 128 
+"Part 3, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 184 width: 80 height: 36 appearance: top-down (2)
+"Part 4, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 216 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 5, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 232 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 6, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 376 pos_y: 136 width: 16 height: 144 
+"Part 7, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 8 width: 16 height: 240 
+"Part 8, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 296 pos_y: 120 width: 96 height: 16 
+"Part 9, Flashlight (25)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 355 pos_y: 280 width: 32 height: 17 orientation: right (0)
+"Part 10, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 425 pos_y: 276 width: 64 height: 52 orientation: right (0)
+"Part 11, Magnifying glass (30)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 399 pos_y: 275 width: 16 height: 37 orientation: right (0)
+"Part 12, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 104 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 13, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 104 width: 112 height: 16 
+"Part 14, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 104 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 15, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 136 width: 32 height: 16 
+"Part 16, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 120 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 17, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 439 pos_y: 27 width: 16 height: 15 
+"Part 18, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 424 pos_y: 72 width: 80 height: 36 appearance: top-down (2)
+"Part 19, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 20, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 21, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 22, Conveyor belt (5)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 296 pos_y: 104 width: 96 height: 16 appearance: Length 6 (28)
+"Part 23, Conveyor belt (5)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 72 pos_y: 248 width: 48 height: 16 appearance: Length 3 (7)
+"Part 24, Conveyor belt (5)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 200 pos_y: 232 width: 32 height: 16 appearance: Length 2 (0)
+"Part 25, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 26, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 301 pos_y: 329 width: 16 height: 16 appearance: bottom (0)
+"Part 27, Mouse cage (6)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 392 pos_y: 104 width: 48 height: 32 orientation: left (1)
+"Part 28, Mouse cage (6)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 24 pos_y: 248 width: 48 height: 32 orientation: right (0)
+"Part 29, Mouse cage (6)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 152 pos_y: 232 width: 48 height: 32 orientation: right (0)
+"Part 30, Monkey exercise bike (31)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 233 pos_y: 250 width: 92 height: 79 orientation: right (0)

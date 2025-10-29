@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Classical (1009)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 15,"count_moving": 4,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 250,"bonus_2": 200,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1009,"num_parts_fixed": 11,"num_parts_moving": 4,"num_parts_partsbin": 6},
-"Title": "TUTORIAL:  TILTING AT WINDMILLS",
-"Goal": "All you need to do is pop the balloon.  Note that you must flip the windmill to select which direction it turns.",
+"Title": {
+"EN":"TUTORIAL:  TILTING AT WINDMILLS"
+},
+"Goal":  {
+"EN":"All you need to do is pop the balloon.  Note that you must flip the windmill to select which direction it turns."
+},
 "Parts":[
 {"no": 0,"name": "Belt (8)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0,"connected_part_1": 2,"connected_part_2": 1},
 {"no": 1,"name": "Windmill (40)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 299,"pos_y": 291,"width": 40,"height": 48,"orientation": "clockwise (0)"},

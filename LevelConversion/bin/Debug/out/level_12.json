@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Rock 2 (1013)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 15,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 320,"bonus_2": 250,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1013,"num_parts_fixed": 12,"num_parts_moving": 3,"num_parts_partsbin": 7},
-"Title": "TUTORIAL:  GENERATORS AND MOTORS",
-"Goal": "Make the tennis ball fall down into the pipe hole.  Generators will take turning motion and provide electricity.  The electric motor must be plugged in to run.",
+"Title": {
+"EN":"TUTORIAL:  GENERATORS AND MOTORS"
+},
+"Goal":  {
+"EN":"Make the tennis ball fall down into the pipe hole.  Generators will take turning motion and provide electricity.  The electric motor must be plugged in to run."
+},
 "Parts":[
 {"no": 0,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 408,"pos_y": 280,"width": 16,"height": 32 },
 {"no": 1,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 280,"width": 32,"height": 16 },

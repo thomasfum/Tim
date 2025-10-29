@@ -106,14 +106,14 @@ namespace LevelConversion
             json += "},\n";
 
             //line 4
-            json += "\"Title\": \"";
+            json += "\"Title\": {\n\"EN\":\"";
             json += lines[4].Substring(6).Replace("\"","'");
-            json += "\",\n";
+            json += "\"\n},\n";
 
             //line 5
-            json += "\"Goal\": \"";
+            json += "\"Goal\":  {\n\"EN\":\"";
             json += lines[5].Substring(5);
-            json += "\",\n";
+            json += "\"\n},\n";
             json += "\"Parts\":[\n";
             
             for (int i = 6; i < lines.Length; i++)

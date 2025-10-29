@@ -1,0 +1,37 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Western (1007) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 14 count_moving: 2 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1300 bonus_2: 1200 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1007 num_parts_fixed: 12 num_parts_moving: 2 num_parts_partsbin: 17
+Title,POP GOES THE WEASEL
+Goal,You must get the jack-in-the-box to spring up.
+"Part 0, Jack-in-the-box (13)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 280 width: 32 height: 32 orientation: clockwise (0)
+"Part 1, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 280 width: 48 height: 32 orientation: right (0)
+"Part 2, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 248 width: 80 height: 36 appearance: top-down (2)
+"Part 3, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 40 width: 176 height: 16 
+"Part 4, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 439 pos_y: 105 width: 16 height: 16 appearance: bottom (0)
+"Part 5, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 40 width: 32 height: 32 appearance: top-left (1)
+"Part 6, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 72 width: 16 height: 48 
+"Part 7, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 120 width: 32 height: 32 appearance: bottom-left (3)
+"Part 8, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 136 width: 240 height: 16 
+"Part 9, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 408 pos_y: 136 width: 112 height: 16 
+"Part 10, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 120 width: 32 height: 32 appearance: bottom-right (2)
+"Part 11, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 24 width: 16 height: 96 
+"Part 12, Tennis ball (44)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 509 pos_y: 22 width: 16 height: 15 
+"Part 13, Basketball (9)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 237 pos_y: 8 width: 32 height: 32 
+"Part 14, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 56 pos_y: 56 width: 80 height: 36 appearance: top-down (2)
+"Part 15, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 456 pos_y: 40 width: 80 height: 36 appearance: bottom-up (0)
+"Part 16, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 17, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 18, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 19, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 20, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 248 pos_y: 280 width: 40 height: 35 
+"Part 21, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 280 pos_y: 280 width: 40 height: 35 
+"Part 22, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 360 pos_y: 280 width: 40 height: 35 
+"Part 23, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 168 pos_y: 280 width: 40 height: 35 
+"Part 24, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 392 pos_y: 280 width: 40 height: 35 
+"Part 25, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 136 pos_y: 280 width: 40 height: 35 
+"Part 26, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 27, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 28, Solar panels (38)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 344 pos_y: 56 width: 72 height: 32 
+"Part 29, Electric fan (24)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 357 pos_y: 18 width: 32 height: 32 orientation: left (1)
+"Part 30, Light bulb (29)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 418 pos_y: 36 width: 32 height: 38 appearance: bulb bottom (2)

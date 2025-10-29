@@ -1,0 +1,42 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Classical (1009)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 23,"count_moving": 5,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 2500,"bonus_2": 2400,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1009,"num_parts_fixed": 18,"num_parts_moving": 5,"num_parts_partsbin": 6},
+"Title": {
+"EN":"TRAP MORT THE MOUSE"
+},
+"Goal":  {
+"EN":"Your goal is to drop the cage onto Mort the Mouse."
+},
+"Parts":[
+{"no": 0,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 296,"pos_y": 88,"width": 112,"height": 16 },
+{"no": 1,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 72,"width": 64,"height": 32,"direction_r_to_l": "top-down (0)","size": 3},
+{"no": 2,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 216,"pos_y": 8,"width": 16,"height": 80 },
+{"no": 3,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 56,"width": 160,"height": 16 },
+{"no": 4,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 424,"pos_y": 88,"width": 48,"height": 16 },
+{"no": 5,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 87,"pos_y": 45,"width": 40,"height": 34,"orientation": "left (1)"},
+{"no": 6,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 110,"pos_y": 3,"width": 16,"height": 16,"orientation": "top (1)"},
+{"no": 7,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 376,"pos_y": 184,"width": 64,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 3},
+{"no": 8,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 184,"pos_y": 216,"width": 48,"height": 16 },
+{"no": 9,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 200,"width": 32,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 1},
+{"no": 10,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 264,"pos_y": 200,"width": 112,"height": 16 },
+{"no": 11,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 88,"width": 16,"height": 240 },
+{"no": 12,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 152,"pos_y": 8,"width": 16,"height": 96 },
+{"no": 13,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 156,"pos_y": 312,"width": 16,"height": 16,"orientation": "bottom (0)"},
+{"no": 14,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 328,"width": 240,"height": 16 },
+{"no": 15,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 72,"pos_y": 88,"width": 16,"height": 224 },
+{"no": 16,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0,"connected_part_1": 18,"connected_part_2": 13},
+{"no": 17,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 22,"connected_part_2": 6},
+{"no": 18,"name": "Balloon (4)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 147,"pos_y": 119,"width": 32,"height": 48 },
+{"no": 19,"name": "Mort Mouse (42)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 37,"pos_y": 317,"width": 24,"height": 11,"orientation": "left (0)"},
+{"no": 20,"name": "Tennis ball (44)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 475,"pos_y": 165,"width": 16,"height": 15 },
+{"no": 21,"name": "Baseball (28)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 320,"pos_y": 41,"width": 16,"height": 15 },
+{"no": 22,"name": "Cage (11)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 25,"pos_y": 155,"width": 48,"height": 64 },
+{"no": 23,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 472,"pos_y": 8,"width": 80,"height": 36,"appearance": "bottom-up (0)"},
+{"no": 24,"name": "Boxing glove (35)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 386,"pos_y": 24,"width": 48,"height": 31,"orientation": "left (0)"},
+{"no": 25,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 456,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 26,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 131,"pos_y": 232,"width": 40,"height": 34,"orientation": "left (1)"},
+{"no": 27,"name": "Electric switch & outlet (21)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 408,"pos_y": 120,"width": 48,"height": 32,"switch": "up"},
+{"no": 28,"name": "Electric fan (24)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 394,"pos_y": 134,"width": 32,"height": 32,"orientation": "right (0)"}
+]
+}

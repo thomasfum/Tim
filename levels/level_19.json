@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Rock (1006)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 15,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 310,"bonus_2": 220,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1006,"num_parts_fixed": 12,"num_parts_moving": 3,"num_parts_partsbin": 6},
-"Title": "TUTORIAL:  MONKEY BUSINESS",
-"Goal": "Your goal is to make both monkeys ride their bicycles.",
+"Title": {
+"EN":"TUTORIAL:  MONKEY BUSINESS"
+},
+"Goal":  {
+"EN":"Your goal is to make both monkeys ride their bicycles."
+},
 "Parts":[
 {"no": 0,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 200,"pos_y": 232,"width": 32,"height": 16 },
 {"no": 1,"name": "Magnifying glass (30)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 251,"pos_y": 227,"width": 16,"height": 37,"orientation": "left (1)"},

@@ -1,0 +1,45 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Classical (1009) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 29 count_moving: 3 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 1300 bonus_2: 1500 pressure: 67 gravity: 272 unknown_8: -8 unkonwn_10: -8 music: 1009 num_parts_fixed: 26 num_parts_moving: 3 num_parts_partsbin: 10
+Title,MOUSE IN THE HOUSE
+Goal,Send Mort to his house on the bottom left part of the screen.
+"Part 0, Electric switch & outlet (21)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 40 width: 48 height: 32 switch: up
+"Part 1, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 280 pos_y: 56 width: 240 height: 16 
+"Part 2, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 184 pos_y: 56 width: 96 height: 16 
+"Part 3, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 264 width: 240 height: 16 
+"Part 4, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 232 width: 16 height: 96 
+"Part 5, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: 312 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 6, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 136 pos_y: 264 width: 16 height: 64 
+"Part 7, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 104 pos_y: 312 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 8, Wood wall (48)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 328 width: 32 height: 16 
+"Part 9, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 392 pos_y: 264 width: 112 height: 16 
+"Part 10, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 520 pos_y: 184 width: 40 height: 35 
+"Part 11, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -8 pos_y: 136 width: 16 height: 112 
+"Part 12, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 168 width: 240 height: 16 
+"Part 13, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 168 width: 208 height: 16 
+"Part 14, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -8 pos_y: 104 width: 32 height: 32 appearance: top-left (1)
+"Part 15, Curved pipe wall (47)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 88 width: 32 height: 32 appearance: bottom-right (2)
+"Part 16, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 40 pos_y: -8 width: 16 height: 96 
+"Part 17, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 72 pos_y: 88 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 18, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 56 pos_y: 72 width: 16 height: 32 direction_r_to_l: top-down (0) size: 0
+"Part 19, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 152 pos_y: 184 width: 16 height: 64 
+"Part 20, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 24 pos_y: 200 width: 64 height: 32 direction_r_to_l: bottom-up (1) size: 3
+"Part 21, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 88 pos_y: 200 width: 64 height: 32 direction_r_to_l: top-down (0) size: 3
+"Part 22, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -8 pos_y: 248 width: 16 height: 112 
+"Part 23, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 344 width: 240 height: 16 
+"Part 24, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 248 pos_y: 344 width: 240 height: 16 
+"Part 25, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 344 width: 80 height: 16 
+"Part 26, Mort Mouse (42)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 432 pos_y: -1 width: 24 height: 11 orientation: right (1)
+"Part 27, Baseball (28)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 525 pos_y: 26 width: 16 height: 15 
+"Part 28, Pokey Cat (12)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 6 pos_y: 127 width: 40 height: 41 orientation: right (1)
+"Part 29, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 30, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 31, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 520 pos_y: 152 width: 40 height: 35 
+"Part 32, Generator (26)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 472 pos_y: 280 width: 80 height: 32 
+"Part 33, Electric fan (24)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 488 pos_y: 24 width: 32 height: 32 orientation: left (1)
+"Part 34, Electric fan (24)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 504 pos_y: 241 width: 32 height: 32 orientation: left (1)
+"Part 35, Electric engine (50)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 500 pos_y: 76 width: 56 height: 47 orientation: right (1)
+"Part 36, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 408 pos_y: 216 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 37, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 488 pos_y: 168 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 38, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 152 pos_y: 88 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1

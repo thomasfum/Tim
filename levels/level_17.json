@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Music 1005 (1005)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 21,"count_moving": 5,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 250,"bonus_2": 250,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1005,"num_parts_fixed": 16,"num_parts_moving": 5,"num_parts_partsbin": 6},
-"Title": "TUTORIAL:  DOING SOME BLASTING",
-"Goal": "Your goal is to push both plungers down and set off the dynamite.  Make sure your explode all dynamite that is on the playfield.",
+"Title": {
+"EN":"TUTORIAL:  DOING SOME BLASTING"
+},
+"Goal":  {
+"EN":"Your goal is to push both plungers down and set off the dynamite.  Make sure your explode all dynamite that is on the playfield."
+},
 "Parts":[
 {"no": 0,"name": "Dynamite with plunger (22)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 139,"pos_y": 80,"width": 135,"height": 48,"orientation": "dynamites left (1)"},
 {"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 72,"width": 112,"height": 16 },

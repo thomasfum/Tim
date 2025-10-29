@@ -1,0 +1,46 @@
+!Info,Data
+Puzzle file info,magic_num: 0x0102aced user_created: 0 music: Salsa (1010) 
+Puzzle [0/2],"Layers: 0,3,4,6 count_all: 30 count_moving: 5 count_in_partsbin: 0 count_scenery: 0"
+Puzzle info,bonus_1: 3300 bonus_2: 3700 pressure: 67 gravity: 268 unknown_8: -8 unkonwn_10: -8 music: 1010 num_parts_fixed: 25 num_parts_moving: 5 num_parts_partsbin: 10
+Title,MORT-TRAP
+Goal,Trap Mort in the cage.
+"Part 0, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: -40 width: 16 height: 128 
+"Part 1, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 72 width: 176 height: 16 
+"Part 2, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 200 width: 16 height: 160 
+"Part 3, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 472 pos_y: 328 width: 64 height: 16 
+"Part 4, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 488 pos_y: 72 width: 48 height: 16 
+"Part 5, Brick wall (1)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 456 pos_y: 120 width: 80 height: 16 
+"Part 6, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 424 pos_y: 120 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1
+"Part 7, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 328 width: 240 height: 16 
+"Part 8, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: -8 pos_y: 328 width: 240 height: 16 
+"Part 9, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 199 pos_y: 108 width: 16 height: 16 appearance: left (1)
+"Part 10, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 232 pos_y: 152 width: 80 height: 36 appearance: bottom-up (0)
+"Part 11, Gun (27)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 225 pos_y: 85 width: 64 height: 31 orientation: right (0)
+"Part 12, Pipe wall (46)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 536 pos_y: 120 width: 16 height: 80 
+"Part 13, Mouse cage (6)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 264 pos_y: 184 width: 48 height: 32 orientation: left (1)
+"Part 14, Pulley (7)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 19 pos_y: 162 width: 16 height: 16 appearance: bottom (0)
+"Part 15, Cannon (18)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 63 pos_y: 81 width: 64 height: 52 orientation: right (0)
+"Part 16, Light bulb (29)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 5 pos_y: 70 width: 32 height: 38 appearance: bulb bottom (2)
+"Part 17, Boxing glove (35)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 342 pos_y: 41 width: 48 height: 31 orientation: right (1)
+"Part 18, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 408 pos_y: 152 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 19, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 184 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 20, Conveyor belt (5)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 8 pos_y: 264 width: 64 height: 16 appearance: Length 4 (14)
+"Part 21, Gear (14)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 120 pos_y: 184 width: 40 height: 35 
+"Part 22, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 312 pos_y: 136 width: 16 height: 32 direction_r_to_l: bottom-up (1) size: 0
+"Part 23, Wood incline (2)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 344 pos_y: 104 width: 32 height: 32 direction_r_to_l: top-down (0) size: 1
+"Part 24, Teeter-totter (3)",is_moving: 0 in_partsbin: 0 is_scenery: 0 pos_x: 168 pos_y: 232 width: 80 height: 36 appearance: top-down (2)
+"Part 25, Mort Mouse (42)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 422 pos_y: 317 width: 24 height: 11 orientation: right (1)
+"Part 26, Pokey Cat (12)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 17 pos_y: 223 width: 40 height: 41 orientation: right (1)
+"Part 27, Cage (11)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 489 pos_y: 8 width: 48 height: 64 
+"Part 28, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 476 pos_y: 96 width: 24 height: 23 
+"Part 29, Cannon ball (43)",is_moving: 1 in_partsbin: 0 is_scenery: 0 pos_x: 295 pos_y: 97 width: 24 height: 23 
+"Part 30, Teeter-totter (3)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 296 pos_y: 216 width: 80 height: 36 appearance: bottom-up (0)
+"Part 31, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 32, Belt (8)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 33, Gear (14)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 152 pos_y: 184 width: 40 height: 35 connected_part_1: 21
+"Part 34, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 0 pos_y: 0 width: 0 height: 0 
+"Part 35, Rope (10)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: -1 pos_y: -1 width: 0 height: 0 
+"Part 36, Pulley (7)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 124 pos_y: 146 width: 16 height: 16 appearance: top (2)
+"Part 37, Magnifying glass (30)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 37 pos_y: 76 width: 16 height: 37 orientation: right (0)
+"Part 38, Dynamite (19)",is_moving: 1 in_partsbin: 1 is_scenery: 0 pos_x: 500 pos_y: 89 width: 48 height: 28 orientation: fuse left (1)
+"Part 39, Wood incline (2)",is_moving: 0 in_partsbin: 1 is_scenery: 0 pos_x: 376 pos_y: 232 width: 32 height: 32 direction_r_to_l: bottom-up (1) size: 1

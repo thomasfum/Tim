@@ -1,0 +1,39 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Funk (1003)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 14,"count_moving": 5,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 3100,"bonus_2": 7000,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1003,"num_parts_fixed": 9,"num_parts_moving": 5,"num_parts_partsbin": 12},
+"Title": {
+"EN":"PUT MORT IN PRISON"
+},
+"Goal":  {
+"EN":"Drop the cage onto Mort the Mouse."
+},
+"Parts":[
+{"no": 0,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 424,"pos_y": 312,"width": 80,"height": 16 },
+{"no": 1,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 424,"pos_y": 24,"width": 80,"height": 16 },
+{"no": 2,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 458,"pos_y": 40,"width": 16,"height": 16,"orientation": "top (1)"},
+{"no": 3,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 2,"connected_part_2": 12},
+{"no": 4,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 440,"pos_y": 184,"width": 64,"height": 16 },
+{"no": 5,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 392,"pos_y": 232,"width": 112,"height": 16 },
+{"no": 6,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 136,"width": 32,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 1},
+{"no": 7,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 504,"pos_y": 184,"width": 16,"height": 144 },
+{"no": 8,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 280,"width": 80,"height": 36,"appearance": "top-down (2)"},
+{"no": 9,"name": "Mort Mouse (42)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 453,"pos_y": 301,"width": 24,"height": 11,"orientation": "right (1)"},
+{"no": 10,"name": "Baseball (28)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 313,"pos_y": 41,"width": 16,"height": 15 },
+{"no": 11,"name": "Dynamite (19)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 314,"pos_y": 265,"width": 48,"height": 28,"orientation": "fuse left (1)"},
+{"no": 12,"name": "Cage (11)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 444,"pos_y": 109,"width": 48,"height": 64 },
+{"no": 13,"name": "Bowling ball (0)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 21,"pos_y": 22,"width": 32,"height": 32 },
+{"no": 14,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 312,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 15,"name": "Belt (8)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0 },
+{"no": 16,"name": "Conveyor belt (5)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 296,"pos_y": 56,"width": 96,"height": 16,"appearance": "Length 6 (28)"},
+{"no": 17,"name": "Rope (10)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0 },
+{"no": 18,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 108,"pos_y": 328,"width": 16,"height": 16,"appearance": "bottom (0)"},
+{"no": 19,"name": "Gun (27)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 129,"pos_y": 211,"width": 64,"height": 31,"orientation": "right (0)"},
+{"no": 20,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 431,"pos_y": 78,"width": 40,"height": 34,"orientation": "right (0)"},
+{"no": 21,"name": "Mouse cage (6)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 312,"pos_y": 184,"width": 48,"height": 32,"orientation": "left (1)"},
+{"no": 22,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 264,"pos_y": 184,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 23,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 8,"pos_y": 184,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 24,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 40,"pos_y": 56,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1},
+{"no": 25,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 104,"pos_y": 120,"width": 32,"height": 32,"direction_r_to_l": "top-down (0)","size": 1}
+]
+}

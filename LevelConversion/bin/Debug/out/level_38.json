@@ -1,0 +1,42 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Salsa (1010)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 20,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 1000,"bonus_2": 1100,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1010,"num_parts_fixed": 17,"num_parts_moving": 3,"num_parts_partsbin": 9},
+"Title": {
+"EN":"INSIDE THE WALLS"
+},
+"Goal":  {
+"EN":"You must put the bowling ball inside the brick walls."
+},
+"Parts":[
+{"no": 0,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 72,"width": 96,"height": 16 },
+{"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 200,"width": 16,"height": 64 },
+{"no": 2,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 392,"pos_y": 200,"width": 16,"height": 64 },
+{"no": 3,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 264,"width": 96,"height": 16 },
+{"no": 4,"name": "Curved pipe wall (47)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 152,"pos_y": 168,"width": 32,"height": 32,"appearance": "bottom-right (2)"},
+{"no": 5,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 72,"pos_y": 184,"width": 80,"height": 16 },
+{"no": 6,"name": "Curved pipe wall (47)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 152,"pos_y": 120,"width": 32,"height": 32,"appearance": "top-right (0)"},
+{"no": 7,"name": "Curved pipe wall (47)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 280,"width": 32,"height": 32,"appearance": "bottom-left (3)"},
+{"no": 8,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 168,"width": 16,"height": 112 },
+{"no": 9,"name": "Curved pipe wall (47)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 376,"pos_y": 40,"width": 32,"height": 32,"appearance": "bottom-right (2)"},
+{"no": 10,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 328,"pos_y": 56,"width": 48,"height": 16 },
+{"no": 11,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 40,"pos_y": 120,"width": 64,"height": 16 },
+{"no": 12,"name": "Curved pipe wall (47)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 104,"width": 32,"height": 32,"appearance": "bottom-left (3)"},
+{"no": 13,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 56,"width": 16,"height": 48 },
+{"no": 14,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 88,"pos_y": 56,"width": 144,"height": 16 },
+{"no": 15,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 17,"connected_part_2": 16},
+{"no": 16,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 508,"pos_y": 301,"width": 16,"height": 16,"orientation": "bottom (0)"},
+{"no": 17,"name": "Balloon (4)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 499,"pos_y": 175,"width": 32,"height": 48 },
+{"no": 18,"name": "Baseball (28)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 540,"pos_y": 32,"width": 16,"height": 15 },
+{"no": 19,"name": "Bowling ball (0)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 280,"pos_y": 24,"width": 32,"height": 32 },
+{"no": 20,"name": "Bellows (16)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 453,"pos_y": 99,"width": 64,"height": 48,"orientation": "right (0)"},
+{"no": 21,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 264,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 22,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 200,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 23,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 136,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 24,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 56,"pos_y": 312,"width": 48,"height": 28 },
+{"no": 25,"name": "Belt (8)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0 },
+{"no": 26,"name": "Conveyor belt (5)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 408,"pos_y": 104,"width": 64,"height": 16,"appearance": "Length 4 (14)"},
+{"no": 27,"name": "Windmill (40)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 334,"pos_y": 4,"width": 40,"height": 48,"orientation": "counter-clockwise (1)"},
+{"no": 28,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 440,"pos_y": 106,"width": 40,"height": 34,"orientation": "right (0)"}
+]
+}

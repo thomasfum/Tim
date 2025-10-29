@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Fusion (1015)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 13,"count_moving": 1,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 230,"bonus_2": 200,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1015,"num_parts_fixed": 12,"num_parts_moving": 1,"num_parts_partsbin": 4},
-"Title": "TUTORIAL:  LIGHTING A FUSE",
-"Goal": "Your goal is to fire all of the cannons.  You will need to flip one of the magnifying glasses so the light is focused correctly.",
+"Title": {
+"EN":"TUTORIAL:  LIGHTING A FUSE"
+},
+"Goal":  {
+"EN":"Your goal is to fire all of the cannons.  You will need to flip one of the magnifying glasses so the light is focused correctly."
+},
 "Parts":[
 {"no": 0,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 104,"pos_y": 232,"width": 16,"height": 32 },
 {"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 56,"pos_y": 168,"width": 224,"height": 16 },

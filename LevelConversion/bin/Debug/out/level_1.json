@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Euro (1002)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 14,"count_moving": 4,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 400,"bonus_2": 300,"pressure": 67,"gravity": 272,"unknown_8": -8,"unkonwn_10": -8,"music": 1002,"num_parts_fixed": 10,"num_parts_moving": 4,"num_parts_partsbin": 9},
-"Title": "TUTORIAL:  PUT THE BALL IN THE HOOP",
-"Goal": "Make the basketball go through the hoop.",
+"Title": {
+"EN":"TUTORIAL:  PUT THE BALL IN THE HOOP"
+},
+"Goal":  {
+"EN":"Make the basketball go through the hoop."
+},
 "Parts":[
 {"no": 0,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 408,"pos_y": 120,"width": 16,"height": 32,"direction_r_to_l": "top-down (0)","size": 0},
 {"no": 1,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 472,"pos_y": 120,"width": 16,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 0},

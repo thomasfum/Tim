@@ -1,0 +1,39 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Fusion (1015)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 14,"count_moving": 5,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 1500,"bonus_2": 2000,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1015,"num_parts_fixed": 9,"num_parts_moving": 5,"num_parts_partsbin": 12},
+"Title": {
+"EN":"PLAY A SET"
+},
+"Goal":  {
+"EN":"Make the tennis ball go over the net."
+},
+"Parts":[
+{"no": 0,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 403,"pos_y": 334,"width": 16,"height": 16,"orientation": "bottom (0)"},
+{"no": 1,"name": "Magnifying glass (30)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 44,"pos_y": 308,"width": 16,"height": 37,"orientation": "left (1)"},
+{"no": 2,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 12,"connected_part_2": 7},
+{"no": 3,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0,"connected_part_1": 9,"connected_part_2": 0},
+{"no": 4,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 264,"pos_y": 56,"width": 16,"height": 96 },
+{"no": 5,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 280,"pos_y": 136,"width": 240,"height": 16 },
+{"no": 6,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 136,"width": 240,"height": 16 },
+{"no": 7,"name": "Eye hook (23)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 92,"pos_y": 152,"width": 16,"height": 16,"orientation": "top (1)"},
+{"no": 8,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 152,"pos_y": 168,"width": 240,"height": 16 },
+{"no": 9,"name": "Balloon (4)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 394,"pos_y": 251,"width": 32,"height": 48 },
+{"no": 10,"name": "Tennis ball (44)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 56,"pos_y": 121,"width": 16,"height": 15 },
+{"no": 11,"name": "Baseball (28)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 163,"pos_y": 153,"width": 16,"height": 15 },
+{"no": 12,"name": "Bucket (17)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 81,"pos_y": 248,"width": 40,"height": 48 },
+{"no": 13,"name": "Bowling ball (0)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 359,"pos_y": 186,"width": 32,"height": 32 },
+{"no": 14,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 280,"pos_y": 264,"width": 80,"height": 36,"appearance": "bottom-up (0)"},
+{"no": 15,"name": "Trampoline (39)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 184,"pos_y": 104,"width": 48,"height": 28 },
+{"no": 16,"name": "Rope (10)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0 },
+{"no": 17,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 383,"pos_y": 270,"width": 16,"height": 16,"appearance": "right (3)"},
+{"no": 18,"name": "Gun (27)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 279,"pos_y": 270,"width": 64,"height": 31,"orientation": "right (0)"},
+{"no": 19,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 341,"pos_y": 288,"width": 40,"height": 34,"orientation": "right (0)"},
+{"no": 20,"name": "Flashlight (25)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 76,"pos_y": 312,"width": 32,"height": 17,"orientation": "left (1)"},
+{"no": 21,"name": "Dynamite (19)","is_moving": 1,"in_partsbin": 1,"is_scenery": 0,"pos_x": 493,"pos_y": 216,"width": 48,"height": 28,"orientation": "fuse right (0)"},
+{"no": 22,"name": "Rocket (36)","is_moving": 1,"in_partsbin": 1,"is_scenery": 0,"pos_x": 9,"pos_y": 260,"width": 16,"height": 66,"orientation": "original (0)"},
+{"no": 23,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 216,"pos_y": 296,"width": 32,"height": 16 },
+{"no": 24,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 216,"pos_y": 264,"width": 32,"height": 16 },
+{"no": 25,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 216,"pos_y": 232,"width": 32,"height": 16 }
+]
+}

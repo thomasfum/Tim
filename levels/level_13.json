@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Romantic (1014)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 20,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 270,"bonus_2": 400,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1014,"num_parts_fixed": 17,"num_parts_moving": 3,"num_parts_partsbin": 7},
-"Title": "TUTORIAL:  PUTTING THE GEARS IN MOTION",
-"Goal": "Your goal is to make all the gears on screen turn.  Shining light on the solar panel will make the electric plug active.",
+"Title": {
+"EN":"TUTORIAL:  PUTTING THE GEARS IN MOTION"
+},
+"Goal":  {
+"EN":"Your goal is to make all the gears on screen turn.  Shining light on the solar panel will make the electric plug active."
+},
 "Parts":[
 {"no": 0,"name": "Electric engine (50)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 344,"pos_y": 280,"width": 56,"height": 47,"orientation": "right (1)"},
 {"no": 1,"name": "Solar panels (38)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 360,"pos_y": 152,"width": 72,"height": 32 },

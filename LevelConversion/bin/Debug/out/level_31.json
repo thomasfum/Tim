@@ -1,0 +1,32 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Euro (1002)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 14,"count_moving": 4,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 900,"bonus_2": 1100,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1002,"num_parts_fixed": 10,"num_parts_moving": 4,"num_parts_partsbin": 5},
+"Title": {
+"EN":"PUT AWAY THE BASKETBALLS"
+},
+"Goal":  {
+"EN":"Put all the basketballs into the wooden container on the right side of the screen."
+},
+"Parts":[
+{"no": 0,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 312,"width": 240,"height": 16 },
+{"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 264,"pos_y": 312,"width": 240,"height": 16 },
+{"no": 2,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 264,"pos_y": 296,"width": 224,"height": 16 },
+{"no": 3,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 40,"pos_y": 296,"width": 224,"height": 16 },
+{"no": 4,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 72,"width": 16,"height": 240 },
+{"no": 5,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 472,"pos_y": 200,"width": 16,"height": 96 },
+{"no": 6,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 488,"pos_y": 184,"width": 16,"height": 128 },
+{"no": 7,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 488,"pos_y": 72,"width": 16,"height": 112 },
+{"no": 8,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 40,"pos_y": 72,"width": 16,"height": 224 },
+{"no": 9,"name": "Wood wall (48)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 376,"pos_y": 200,"width": 16,"height": 96 },
+{"no": 10,"name": "Basketball (9)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 239,"pos_y": 56,"width": 32,"height": 32 },
+{"no": 11,"name": "Basketball (9)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 206,"pos_y": 23,"width": 32,"height": 32 },
+{"no": 12,"name": "Basketball (9)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 176,"pos_y": -3,"width": 32,"height": 32 },
+{"no": 13,"name": "Basketball (9)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 143,"pos_y": 83,"width": 32,"height": 32 },
+{"no": 14,"name": "Teeter-totter (3)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 88,"pos_y": 136,"width": 80,"height": 36,"appearance": "bottom-up (0)"},
+{"no": 15,"name": "Belt (8)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0 },
+{"no": 16,"name": "Conveyor belt (5)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 184,"pos_y": 168,"width": 96,"height": 16,"appearance": "Length 6 (28)"},
+{"no": 17,"name": "Mouse cage (6)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 136,"pos_y": 168,"width": 48,"height": 32,"orientation": "right (0)"},
+{"no": 18,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 312,"pos_y": 168,"width": 64,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 3}
+]
+}

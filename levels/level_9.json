@@ -2,8 +2,12 @@
 "Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Salsa (1010)  "},
 "Puzzle": {"Layers": "0,3,4,6","count_all": 12,"count_moving": 4,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 260,"bonus_2": 240,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1010,"num_parts_fixed": 8,"num_parts_moving": 4,"num_parts_partsbin": 3},
-"Title": "TUTORIAL:  LOWER ALL THE BUCKETS",
-"Goal": "Your goal is to lower all three buckets.  To do this you must cut both ropes with the scissors.",
+"Title": {
+"EN":"TUTORIAL:  LOWER ALL THE BUCKETS"
+},
+"Goal":  {
+"EN":"Your goal is to lower all three buckets.  To do this you must cut both ropes with the scissors."
+},
 "Parts":[
 {"no": 0,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 232,"pos_y": 296,"width": 224,"height": 16 },
 {"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 200,"pos_y": 104,"width": 96,"height": 16 },

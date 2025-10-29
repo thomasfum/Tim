@@ -8,7 +8,7 @@
 
 <p id="title"></p>
 <p id="goal"></p>
-<canvas id="myCanvas" width="678" height="369" style="border:1px solid grey"></canvas>
+<canvas id="myCanvas" width="644" height="445" style="border:1px solid grey"></canvas>
 </br>
 <input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson,true);" />
 <input id="runButton" type="button" value="Run" onclick="run();" />
@@ -22,21 +22,25 @@
 
 //---------------------------
 //Todo
-// part 10 missing
-// get all levels
+// get all levels in french
 // check all levels
 // rope
-// icons on right
 // animations
-
+// size 678x369
 
 let Images={};
 let Icons={};
+let Boards={};
 let partsbin={};
 let NBImagesToLoad=0;
 let NBImagesLoaded=0;
 let NBIconsToLoad=0;
 let NBIconsLoaded=0;
+let NBBoardsToLoad=0;
+let NBBoardsLoaded=0;
+let Dragging=false;
+
+
 let LevelJson;
 let DraggingObject=undefined;
 
@@ -111,15 +115,16 @@ const files={
 	"56":{"count":7}
 };
 
-	const playgroundWidth=578;
+	const playgroundWidth=578-15;//578
 	const playgroundHeight=369;
-	const playgroundOffsetX=0;
-	const playgroundOffsetY=0;
+	const playgroundOffsetX=10;
+	const playgroundOffsetY=5;
 	
 
 	const canvas = document.getElementById("myCanvas");
 	canvas.onmousedown = MouseClickDown;
 	canvas.onmouseup = MouseClickUp;
+	canvas.onmousemove = MouseMove;
 	const ctx = canvas.getContext("2d");
 	const engine = Engine.create();
 	var runner=undefined;
@@ -154,7 +159,8 @@ const files={
 		ctx.setTransform(1,0,0,1,0,0);
 	}
 
-	function flipVertically(img,x,y){
+	function flipVertically(img,x,y)
+	{
 
 		//console.log("fliiiiip vertically");
 		// move to y + img's height
@@ -170,7 +176,8 @@ const files={
 		// always clean up -- reset transformations to default
 		ctx.setTransform(1,0,0,1,0,0);
 	}
-	function flipBoth(img,x,y){
+	function flipBoth(img,x,y)
+	{
 
 		//console.log("fliiiiip vertically");
 		// move to y + img's height
@@ -187,8 +194,10 @@ const files={
 		ctx.setTransform(1,0,0,1,0,0);
 	}
 
-	function drawImage(img,x,y,flipV,flipH){
-
+	function drawImage(img,x,y,flipV,flipH)
+	{
+		x=x+playgroundOffsetX;
+		y=y+playgroundOffsetY;
 		if((flipV==0)&&(flipH==0))
 			ctx.drawImage(img, x, y);
 		else if((flipV==1)&&(flipH==0))
@@ -211,11 +220,23 @@ const files={
 		{
 			ctx.fillStyle = "rgba(0,162,162,255)";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = "rgba(0,243,243,255)";
+			ctx.fillRect(72*8, 0,80, canvas.height);
 		}
+		displayRightBoard();
 		partsbin={};
 		let partsbinPosY=0;
 		json.Parts.forEach(part => {
 			//console.log(part);
+			
+				if(	part.selected==1)
+				{
+					console.log("drw selected "+part.no);
+					//ctx.beginPath();
+					ctx.rect(part.pos_x-5, part.pos_y-5, part.width+5, part.height+5);
+					//ctx.stroke();
+				}	
+				
 			if(part.in_partsbin==0)
 			{
 			
@@ -308,6 +329,9 @@ const files={
 						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 					}
 				}
+				
+		
+				
 			}else//part.in_partsbin==1
 			{
 				part.canBeDragged=1;
@@ -315,16 +339,16 @@ const files={
 				{
 					partsbin[part.TimType]={};
 					partsbin[part.TimType].count=1;
-					let x=playgroundOffsetX+playgroundWidth+40-Icons[part.TimType].width/2;
-					let y=playgroundOffsetY+partsbinPosY+30
+					let x=playgroundOffsetX+playgroundWidth+28-Icons[part.TimType].width/2;
+					let y=playgroundOffsetY+partsbinPosY+110
 					part.pos_x=x;
 					part.pos_y=y;
-					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+40;
+					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+28;
 					partsbin[part.TimType].pos_y=y;
 					partsbin[part.TimType].height=Icons[part.TimType].height;
 					drawImage(Icons[part.TimType],x, y,0,0);	
 					partsbinPosY+=Icons[part.TimType].height;
-					partsbinPosY+=30;
+					partsbinPosY+=20;
 				}
 				else
 					partsbin[part.TimType].count++;
@@ -340,13 +364,77 @@ const files={
 			{
 				var value=partsbin[key];
 				//console.log(key+" = ",value);
-				ctx.fillText(value.count,value.pos_x-5,value.pos_y+value.height+15);
+				ctx.fillText(value.count,value.pos_x+5,value.pos_y+value.height+15);
 			}
 		}
-		
+		displayBoard();
 	}
-
-	function loadImage(filename,json,part,imgType)
+	
+	
+	function displayRightBoard()
+	{
+		ctx.drawImage(Boards[48], 72*8+4, 10);//top run
+		ctx.drawImage(Boards[49], 72*8+4, 10+27);//middle run
+		ctx.drawImage(Boards[50], 72*8+4, 10+32);//lower run
+		ctx.drawImage(Boards[11], 72*8+4, 76);//<- ->
+		for(let y=0;y<45;y++)
+		{
+			ctx.drawImage(Boards[24], 72*8-4, 8 + y*8);
+			ctx.drawImage(Boards[24], 637, 8 + y*8);
+			
+		}
+		ctx.drawImage(Boards[10], 72*8-3, 68);//horizontal bar at right
+		ctx.drawImage(Boards[10], 72*8-3, 100);//horizontal bar at right
+	}
+	function displayScore()
+	{
+		//Score
+		for(let x=0;x<6;x++)
+		{
+			ctx.drawImage(Boards[46], 45+32*x, 375);
+		}
+		//Bonus1
+		for(let x=0;x<4;x++)
+		{
+			ctx.drawImage(Boards[46], 294+32*x, 375);
+		}
+		//Bonus1
+		for(let x=0;x<4;x++)
+		{
+			ctx.drawImage(Boards[46], 478+32*x, 375);
+		}
+	}
+	function displayBoard()
+	{
+		//Boards: 678x369
+		for(let x=0;x<79;x++)
+		{
+			ctx.drawImage(Boards[26], 16+x*8, 0);
+			ctx.drawImage(Boards[26], 16+x*8, 369-9);
+		}
+		for(let y=0;y<45;y++)
+		{
+			ctx.drawImage(Boards[24], 0, 	8 + y*8);
+		}
+		
+		ctx.drawImage(Boards[1], 71*8-4, 0);//top right corner
+		ctx.drawImage(Boards[0], 0, 0);//top left corner
+		ctx.drawImage(Boards[2], 0, 44*8);//bottom left corner
+		ctx.drawImage(Boards[3], 71*8-4, 44*8);//bottom right corner
+		
+		ctx.drawImage(Boards[10], 72*8-3, 0);//horizontal bar at right top
+		ctx.fillStyle = "rgba(0,0,0,255)";
+		ctx.fillRect(0, 368, canvas.width,80);
+		displayScore();
+		ctx.fillRect(0, 368, canvas.width,28);
+		ctx.fillRect(0, 438, canvas.width,80);
+		
+		ctx.drawImage(Boards[43], 0, 368);
+		ctx.drawImage(Boards[44], 264, 368);
+		ctx.drawImage(Boards[45], 264+184, 368);
+	}
+	
+	function loadImage(filename,part,imgType)
 	{
 		NBImagesToLoad++;
 		//console.log("load: "+filename) ;
@@ -385,21 +473,22 @@ const files={
 	function ReadJson(json)
 	{
 		LevelJson=json;
-		//console.log(json);
-		document.getElementById("title").innerHTML = json.Title;
-		document.getElementById("goal").innerHTML = json.Goal;
+		//console.log(LevelJson);
+		document.getElementById("title").innerHTML = LevelJson.Title.EN;
+		document.getElementById("goal").innerHTML = LevelJson.Goal.EN;
 		NBImagesToLoad=0;
 		NBImagesLoaded=0;
 		NBIconsToLoad=0;
 		NBIconsLoaded=0;
 		Images={};
 		partsbin={};
-		json.Parts.forEach(part => {
+		LevelJson.Parts.forEach(part => {
 			let start=part.name.indexOf('(');
 			let end=part.name.indexOf(')');
 			let result = part.name.substring(start+1, end);
 			part.TimType=result;
 			part.movingObj=undefined;
+			part.selected=0;
 			part.Images={};
 			//console.log(part.name +" =>"+result+":"+files[result]) ;
 			//console.log(part);
@@ -410,7 +499,7 @@ const files={
 				if(Images[filename]==undefined)
 				{
 					Images[filename]=0;
-					loadImage(filename,json,part,0);
+					loadImage(filename,part,0);
 				}
 				else
 					part.Images[filename]=Images[filename];
@@ -459,14 +548,7 @@ const files={
 	LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
 			if(part.is_moving)
-				//if( part.movingObj.mass2>0)
-					Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: part.movingObj.mass2 * 0.0005 })
-					/*
-				else
-				{
-					Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: -0.0005 })
-				}
-				*/
+				Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: part.movingObj.mass2 * 0.0005 })
 		});
 		
 	});
@@ -508,7 +590,7 @@ const files={
 	
 	
 	//--------------------------------------------------
-	// run
+	// cleanPhysics
 	//--------------------------------------------------
 	function cleanPhysics()
 	{
@@ -557,7 +639,7 @@ const files={
 					if(mass==undefined)
 						mass=0;
 						
-					var movingObj = Bodies.circle(part.pos_x+part.Images[part.TimType+"-0"].width/2, part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
+					var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
 						part:part,
 						TimNo:part.no,
 						isSleeping: false,
@@ -573,21 +655,13 @@ const files={
 						  }
 						  }
 						  });
-					/*	  
-					if(mass==-1)
-					{
-						console.log("apply force");
-						  Body.applyForce(movingObj, movingObj.position, { x: 0 , y: -0.040-world.gravity.y-0.05 })
-						  }
-						  */
-					//Body.setMass(movingObj, mass);
 					
 					World.add(world, [movingObj]);
 					part.movingObj=movingObj;
 				}
 				else
 				{
-					var staticObj = Bodies.rectangle(part.pos_x+part.width/2,part.pos_y+part.height/2, part.width, part.height, {
+					var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
 						isStatic: true, 
 						part:part,
 						TimNo:part.no,
@@ -604,14 +678,15 @@ const files={
 	
 
 	function MouseClickUp(e){
-		canvas.onmousemove = null;
+		//canvas.onmousemove = null;
+		Dragging=false;
 		DraggingObject=undefined;
 		document.getElementById("myCanvas").style.cursor="";
 	}
 	
 	function MouseClickDown(e){
-		Xclick=e.pageX-canvas.offsetLeft;
-		Yclick=e.pageY-canvas.offsetTop;
+		Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
+		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		// On ne lance le déplacement onmousemove que si
 		// le click est dans l'objet
 		LevelJson.Parts.forEach(part => {
@@ -619,7 +694,7 @@ const files={
 			{
 				let dx=part.width;
 				let dy=part.height;
-				if(Xclick>playgroundOffsetX+playgroundWidth)
+				if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
 				{
 					console.log("in bin");
 					dx=Icons[part.TimType].width;
@@ -628,7 +703,7 @@ const files={
 				if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 				{
 					document.getElementById("myCanvas").style.cursor="grabbing";
-					canvas.onmousemove = Move;
+					Dragging=true;
 					console.log("Drag "+part.no);
 					DraggingObject=part;
 					if(part.in_partsbin==1)
@@ -641,15 +716,113 @@ const files={
 		});	
 
 	}
-	function Move(e)
+	
+	function selectPart(part_no)
 	{
-//	  console.log(DraggingObject);
-	  DraggingObject.pos_x=e.pageX-canvas.offsetLeft-DraggingObject.width/2;
-	  DraggingObject.pos_y=e.pageY-canvas.offsetTop-DraggingObject.height/2;
-	  refresh(LevelJson,true);
+		LevelJson.Parts.forEach(part => {
+			if(part.canBeDragged==1)
+			{
+				if(part.no==part_no)
+				{
+					console.log("over "+part_no);
+					part.selected=1;
+				}
+				else
+					part.selected=0;
+			}
+		});
 	}
-
-	LoadLevel(1);
+	function MouseMove(e)
+	{
+		if(Dragging==true)
+		{
+	//	  console.log(DraggingObject);
+		  DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
+		  DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
+		  refresh(LevelJson,true);
+		}
+		else
+		{
+			Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
+			Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
+			if(Xclick<playgroundOffsetX+playgroundWidth)
+			{
+				LevelJson.Parts.forEach(part => {
+					if(part.canBeDragged==1)
+					{
+						let dx=part.width;
+						let dy=part.height;
+						if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
+						{
+							selectPart(part.no);
+						}
+					}
+				});
+			}
+		}
+	}
+	function LoadBoard()
+	{
+		for(let i=0;i<43;i++)//0->42 GP_BORD-BMP
+		{
+			NBBoardsToLoad++;
+			//console.log("load: "+i) ;
+			Boards[NBBoardsToLoad-1] = new Image();  
+			Boards[NBBoardsToLoad-1].src = './images/GP_BORD-BMP/GP_BORD-'+i+".png";  
+			Boards[NBBoardsToLoad-1].onload = () => {  
+				NBBoardsLoaded++;
+				if(NBBoardsLoaded==NBBoardsToLoad)
+				{
+					console.log("All Boards loaded: "+NBBoardsLoaded) ;
+					LoadLevel(1);
+				}
+			};
+		}
+		for(let i=0;i<3;i++)//43->45 SCORE1-BMP
+		{
+			NBBoardsToLoad++;
+			Boards[NBBoardsToLoad-1] = new Image();  
+			Boards[NBBoardsToLoad-1].src = './images/SCORE1-BMP/SCORE1-'+i+".png";  
+			Boards[NBBoardsToLoad-1].onload = () => {  
+				NBBoardsLoaded++;
+				if(NBBoardsLoaded==NBBoardsToLoad)
+				{
+					console.log("All Boards loaded: "+NBBoardsLoaded) ;
+					LoadLevel(1);
+				}
+			};
+		}
+		for(let i=0;i<2;i++)//46->47 SCORE2-BMP
+		{
+			NBBoardsToLoad++;
+			Boards[NBBoardsToLoad-1] = new Image();  
+			Boards[NBBoardsToLoad-1].src = './images/SCORE2-BMP/SCORE2-'+i+".png";  
+			Boards[NBBoardsToLoad-1].onload = () => {  
+				NBBoardsLoaded++;
+				if(NBBoardsLoaded==NBBoardsToLoad)
+				{
+					console.log("All Boards loaded: "+NBBoardsLoaded) ;
+					LoadLevel(1);
+				}
+			};
+		}
+		for(let i=0;i<11;i++)//48->59 GP_MENU
+		{
+			NBBoardsToLoad++;
+			Boards[NBBoardsToLoad-1] = new Image();  
+			Boards[NBBoardsToLoad-1].src = './images/GP_MENU-BMP/GP_MENU-'+i+".png";  
+			Boards[NBBoardsToLoad-1].onload = () => {  
+				NBBoardsLoaded++;
+				if(NBBoardsLoaded==NBBoardsToLoad)
+				{
+					console.log("All Boards loaded: "+NBBoardsLoaded) ;
+					LoadLevel(1);
+				}
+			};
+		}
+	}
+	LoadBoard();
+	
 </script>
 
 </body>

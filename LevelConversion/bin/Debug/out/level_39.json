@@ -1,0 +1,34 @@
+{
+"Puzzle file info": {"magic_num": "0x0102aced","user_created": 0,"music": "Polka (1011)  "},
+"Puzzle": {"Layers": "0,3,4,6","count_all": 12,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
+"Puzzle_info": {"bonus_1": 1950,"bonus_2": 2300,"pressure": 64,"gravity": 275,"unknown_8": -8,"unkonwn_10": -8,"music": 1011,"num_parts_fixed": 9,"num_parts_moving": 3,"num_parts_partsbin": 9},
+"Title": {
+"EN":"TRAP POKEY THE CAT"
+},
+"Goal":  {
+"EN":"You must trap Pokey the Cat in the cage.  You must also make the cannon ball go into the bucket."
+},
+"Parts":[
+{"no": 0,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 24,"pos_y": 312,"width": 128,"height": 16 },
+{"no": 1,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 136,"pos_y": 152,"width": 16,"height": 160 },
+{"no": 2,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 51,"pos_y": 9,"width": 16,"height": 16,"appearance": "left (1)"},
+{"no": 3,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 430,"pos_y": 3,"width": 16,"height": 16,"appearance": "top (2)"},
+{"no": 4,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 520,"pos_y": 40,"width": 16,"height": 208 },
+{"no": 5,"name": "Rope (10)"},
+{"no": 6,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 8,"pos_y": 40,"width": 16,"height": 208 },
+{"no": 7,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 376,"pos_y": 248,"width": 48,"height": 16 },
+{"no": 8,"name": "Brick wall (1)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 344,"pos_y": 312,"width": 144,"height": 16 },
+{"no": 9,"name": "Bucket (17)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 39,"pos_y": 231,"width": 40,"height": 48 },
+{"no": 10,"name": "Pokey Cat (12)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 361,"pos_y": 271,"width": 40,"height": 41,"orientation": "right (1)"},
+{"no": 11,"name": "Cage (11)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 424,"pos_y": 142,"width": 48,"height": 64 },
+{"no": 12,"name": "Bowling ball (0)","is_moving": 1,"in_partsbin": 1,"is_scenery": 0,"pos_x": 302,"pos_y": 212,"width": 32,"height": 32 },
+{"no": 13,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 215,"pos_y": 168,"width": 40,"height": 34,"orientation": "right (0)"},
+{"no": 14,"name": "Magnifying glass (30)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 323,"pos_y": 243,"width": 16,"height": 37,"orientation": "right (0)"},
+{"no": 15,"name": "Flashlight (25)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 289,"pos_y": 241,"width": 32,"height": 17,"orientation": "right (0)"},
+{"no": 16,"name": "Cannon (18)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 308,"pos_y": 142,"width": 64,"height": 52,"orientation": "left (1)"},
+{"no": 17,"name": "Rocket (36)","is_moving": 1,"in_partsbin": 1,"is_scenery": 0,"pos_x": 331,"pos_y": 180,"width": 16,"height": 66,"orientation": "original (0)"},
+{"no": 18,"name": "Rocket (36)","is_moving": 1,"in_partsbin": 1,"is_scenery": 0,"pos_x": 307,"pos_y": 173,"width": 16,"height": 66,"orientation": "original (0)"},
+{"no": 19,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 72,"pos_y": 120,"width": 32,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 1},
+{"no": 20,"name": "Wood incline (2)","is_moving": 0,"in_partsbin": 1,"is_scenery": 0,"pos_x": 88,"pos_y": 232,"width": 32,"height": 32,"direction_r_to_l": "bottom-up (1)","size": 1}
+]
+}
