@@ -44,6 +44,7 @@ let NBIconsLoaded=0;
 let NBBoardsToLoad=0;
 let NBBoardsLoaded=0;
 let Dragging=false;
+let SelectedPart=undefined;
 
 
 let LevelJson;
@@ -66,8 +67,8 @@ const files={
 	"2":{"count":4},//wood incline
 	"3":{"count":3},
 	"4":{"count":7,"mass":-1},//ballon
-	"5":{"count":35,"node_x":80,"node_y":50,"node_d":20},//conveyor belt
-	"6":{"count":2,"node_x":98,"node_y":50,"node_d":20},//mouse cage
+	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20},//conveyor belt
+	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20},//mouse cage
 	"7":{"count":4},
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.8,"mass":5},//Basketball 
@@ -240,9 +241,6 @@ const files={
 		let partsbinPosY=0;
 		json.Parts.forEach(part => {
 			//console.log(part);
-			
-				
-				
 			if(part.in_partsbin==0)
 			{
 			
@@ -267,7 +265,7 @@ const files={
 						flipH = part.orientation.substring(start+1, end);
 						//console.log("flipH="+flipH);
 					}
-					if(part.TimType!=8)//belst
+					if(part.TimType!=8)//not belt
 					{
 						if(part.appearance==undefined)
 						{
@@ -336,12 +334,8 @@ const files={
 							drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 						}
 					}
-					
-					
-
-		
-		
 				}
+				//selection
 				if((part.selected==1)&&(part.TimType!=8))
 				{
 					ctx.beginPath();
@@ -360,6 +354,9 @@ const files={
 
 					ctx.rect(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2, part.width+4, part.height+4);
 					ctx.stroke();
+					ctx.drawImage(Boards[59], part.pos_x+playgroundOffsetX-14, part.pos_y+playgroundOffsetY-12);//delette
+					ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
+					
 				}	
 		
 				
@@ -422,7 +419,7 @@ const files={
 			
 			ctx.beginPath();
 			//ctx.moveTo(json.Parts[beltStart].pos_x, json.Parts[beltStart].pos_y);
-			ctx.moveTo(x, y);
+			ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
 			ctx.lineTo(Mouse_pos_x, Mouse_pos_y);
 			ctx.stroke();
 		}
@@ -437,8 +434,8 @@ const files={
 					const  [x2,y2]=GetNodePos(json.Parts[part.connected_part_2]);
 					ctx.beginPath();
 					ctx.strokeStyle = 'black';
-					ctx.moveTo(x1, y1);
-					ctx.lineTo(x2, y2);
+					ctx.moveTo(x1+playgroundOffsetX, y1+playgroundOffsetY);
+					ctx.lineTo(x2+playgroundOffsetX, y2+playgroundOffsetY);
 					ctx.stroke();
 				}
 			}
@@ -448,9 +445,34 @@ const files={
 	}
 	function GetNodePos(part)
 	{
-		let x=part.pos_x+(part.width*files[part.TimType].node_x/100);
+		let flipV=0;
+		let flipH=0;
+		if(part.direction_r_to_l!=undefined)
+		{
+			let start=part.direction_r_to_l.indexOf('(');
+			let end=part.direction_r_to_l.indexOf(')');
+			flipV = part.direction_r_to_l.substring(start+1, end);
+			//console.log("flipV="+flipV);
+		}
+		
+		if(part.orientation!=undefined)
+		{
+			//console.log("orientation");
+			let start=part.orientation.indexOf('(');
+			let end=part.orientation.indexOf(')');
+			flipH = part.orientation.substring(start+1, end);
+			//console.log("flipH="+flipH);
+		}
+		
+		var x=part.pos_x+(part.width*files[part.TimType].node_x/100);
 		let y=part.pos_y+(part.height*files[part.TimType].node_y/100);
 		//console.log("GetNodePos = "+x+":"+y);
+		
+		if(flipH!=0)
+		{
+			let nx=(part.width-(part.width*files[part.TimType].node_x/100));
+			x=part.pos_x+nx;
+		}
 		return [x, y];
 	}
 	
@@ -707,6 +729,14 @@ const files={
 	{
 		console.log("run! "+engine.world.gravity.y);
 		
+		
+		LevelJson.Parts.forEach(part => {
+			if(part.canBeDragged==1)
+			{
+				part.selected=0;
+			}
+		});
+		
 		//clean the World
 		cleanPhysics();
 		engine.world.gravity.y = 0;
@@ -858,7 +888,58 @@ const files={
 			{
 				//console.log("MouseClickUp:2");
 				let endConnection=false;
-				if(BeltMode==1)
+				if(BeltMode==0)
+				{
+					if(SelectedPart!=undefined)
+					{
+						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
+						{
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
+							{
+								//console.log("delete");
+								LevelJson.Parts[SelectedPart].in_partsbin=1;
+								LevelJson.Parts[SelectedPart].pos_x=-1;
+								LevelJson.Parts[SelectedPart].pos_y=-1;
+								refresh(LevelJson,true);
+							}
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
+							{
+							
+								if(LevelJson.Parts[SelectedPart].direction_r_to_l!=undefined)
+								{
+									let start=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf('(');
+									let end=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf(')');
+									let flipV = LevelJson.Parts[SelectedPart].direction_r_to_l.substring(start+1, end);
+									//console.log("flipV="+flipV);
+									if(flipV==0)
+										flipV=1;
+									else
+										flipV=0;
+									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipH+")";
+									refresh(LevelJson,true);
+								}
+								
+								if(LevelJson.Parts[SelectedPart].orientation!=undefined)
+								{
+									//console.log("orientation");
+									let start=LevelJson.Parts[SelectedPart].orientation.indexOf('(');
+									let end=LevelJson.Parts[SelectedPart].orientation.indexOf(')');
+									let flipH = LevelJson.Parts[SelectedPart].orientation.substring(start+1, end);
+									//console.log("flipH="+flipH);
+									if(flipH==0)
+										flipH=1;
+									else
+										flipH=0;
+									LevelJson.Parts[SelectedPart].orientation="("+flipH+")";
+									refresh(LevelJson,true);
+								}
+								
+							}
+						}
+						
+					}
+				}
+				else if(BeltMode==1)
 				{
 					let retNo=checkConnection(Mouse_pos_x,Mouse_pos_y);
 					if(retNo==-1)
@@ -977,38 +1058,7 @@ const files={
 				}
 				else
 				{
-				/*
-					//console.log("on fixed");
-					let no=-1;
-					LevelJson.Parts.forEach(part => {
-						if(doPartsOverlapMouse(part,Xclick,Yclick	))
-						{
-							if(!PartConnectionFree(part.no))
-							{
-								
-								let beltNo=PartConnectionBelt(part.no);
-								
-								if(LevelJson.Parts[beltNo].connected_part_1==part.no)
-								{
-									//console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 1");
-									LevelJson.Parts[beltNo].connected_part_1=undefined;
-									beltStart=LevelJson.Parts[beltNo].connected_part_2;
-									BeltNoConnecting=beltNo;
-									BeltMode=2;
-								}
-								if(LevelJson.Parts[beltNo].connected_part_2==part.no)
-								{
-									console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 2");
-									LevelJson.Parts[beltNo].connected_part_2=undefined;
-									beltStart=LevelJson.Parts[beltNo].connected_part_1;
-									BeltNoConnecting=beltNo;
-									BeltMode=2;
-								}
-							}
-						}
-					});
-					return no;
-					*/
+				
 				}
 			});	
 		}
@@ -1048,11 +1098,20 @@ const files={
 		if(files[part1.TimType].node_x==undefined)
 			return false;
 	
+		const  [xn,yn]=GetNodePos(part1)
+	/*
 		let max1x=part1.pos_x+((files[part1.TimType].node_x+files[part1.TimType].node_d)*+part1.width)/100;
 		let min1x=part1.pos_x+((files[part1.TimType].node_x-files[part1.TimType].node_d)*+part1.width)/100;
 				
 		let max1y=part1.pos_y+((files[part1.TimType].node_y+files[part1.TimType].node_d)*+part1.height)/100;
 		let min1y=part1.pos_y+((files[part1.TimType].node_y-files[part1.TimType].node_d)*+part1.height)/100;
+		*/
+		
+		let max1x=xn+(files[part1.TimType].node_d*part1.width)/100;
+		let min1x=xn-(files[part1.TimType].node_d*part1.width)/100;
+				
+		let max1y=yn+(files[part1.TimType].node_d*+part1.height)/100;
+		let min1y=yn-(files[part1.TimType].node_d*+part1.height)/100;
 		
 		let aLeftOfB = max1x < x;
 		let aRightOfB = min1x > x;
@@ -1066,6 +1125,7 @@ const files={
 
 	function selectPart(part_no)
 	{
+		SelectedPart=part_no;
 		LevelJson.Parts.forEach(part => {
 			if(part.canBeDragged==1)
 			{
@@ -1174,6 +1234,51 @@ const files={
 	}
 	function LoadBoard()
 	{
+		NBBoardsToLoad=0;
+		let fileList=[];
+		for(let i=0;i<43;i++)//0->42 GP_BORD-BMP
+		{
+			NBBoardsToLoad++;
+			fileList[NBBoardsToLoad-1] = './images/GP_BORD-BMP/GP_BORD-'+i+".png";  
+		}
+		for(let i=0;i<3;i++)//43->45 SCORE1-BMP
+		{
+			NBBoardsToLoad++;
+			fileList[NBBoardsToLoad-1] = './images/SCORE1-BMP/SCORE1-'+i+".png";  
+		}
+		for(let i=0;i<2;i++)//46->47 SCORE2-BMP
+		{
+			NBBoardsToLoad++;
+			fileList[NBBoardsToLoad-1] = './images/SCORE2-BMP/SCORE2-'+i+".png";  
+		}
+		for(let i=0;i<11;i++)//48->59 GP_MENU
+		{
+			NBBoardsToLoad++;
+			fileList[NBBoardsToLoad-1] = './images/GP_MENU-BMP/GP_MENU-'+i+".png";  
+		}
+		for(let i=27;i<32;i++)//59->64 small Icons
+		{
+			NBBoardsToLoad++;
+			fileList[NBBoardsToLoad-1] = './images/MOUSE-BMP/MOUSE-'+i+".png";  
+		}
+		//console.log("Board:",fileList);
+		
+		for(let i=0;i<NBBoardsToLoad;i++)
+		{
+			Boards[i] = new Image();  
+			Boards[i].src = fileList[i];  
+			Boards[i].onload = () => {  
+				NBBoardsLoaded++;
+				if(NBBoardsLoaded==NBBoardsToLoad)
+				{
+					console.log("All extra images loaded: "+NBBoardsLoaded) ;
+					LoadLevel(1);
+				}
+			};
+		}
+		return;
+		/*
+		NBBoardsToLoad=0;
 		for(let i=0;i<43;i++)//0->42 GP_BORD-BMP
 		{
 			NBBoardsToLoad++;
@@ -1231,6 +1336,7 @@ const files={
 				}
 			};
 		}
+		*/
 	}
 	LoadBoard();
 	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
