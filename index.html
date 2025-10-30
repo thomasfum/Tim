@@ -315,11 +315,14 @@ const files={
 							}
 							else
 							{
+								let size=0;
+								if(part.size!=undefined)
+									size=part.size;
 								if((part.anim==undefined)||(part.anim==0))
-									drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,flipV,flipH);
+									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,flipV,flipH);
 								else
 								{
-									drawImage(Images[part.TimType+"-"+part.animStep], part.pos_x, part.pos_y,flipV,flipH);
+									drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y,flipV,flipH);
 									part.animDelay++;
 									if(part.animDelay>10)
 									{
@@ -768,7 +771,6 @@ const files={
 		
 	});
 	
-	
 	//--------------------------------------------------
 	// cleanPhysics
 	//--------------------------------------------------
@@ -798,7 +800,6 @@ const files={
 	function run()
 	{
 		console.log("run! "+engine.world.gravity.y);
-		
 		
 		LevelJson.Parts.forEach(part => {
 			if(part.canBeDragged==1)
@@ -941,7 +942,7 @@ const files={
 			{
 				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 				BeltMode=0;
-				if(LevelJson.Parts[DraggingObject.no].pos_x+LevelJson.Parts[DraggingObject.no].width>playgroundOffsetX+playgroundWidth)//on the bin
+				if(LevelJson.Parts[DraggingObject.no].pos_x+LevelJson.Parts[DraggingObject.no].width>playgroundWidth)//on the bin
 				{
 					LevelJson.Parts[DraggingObject.no].pos_x=-1;
 					LevelJson.Parts[DraggingObject.no].pos_y=-1;
@@ -952,7 +953,7 @@ const files={
 				{
 					//console.log("overlap");
 					LevelJson.Parts[DraggingObject.no].overlap=false;
-					if(LevelJson.Parts[DraggingObject.no].origin_pos_x>playgroundOffsetX+playgroundWidth)//on the bin
+					if(LevelJson.Parts[DraggingObject.no].origin_pos_x>playgroundWidth)//was on the bin
 					{
 						LevelJson.Parts[DraggingObject.no].in_partsbin=1;
 						LevelJson.Parts[DraggingObject.no].pos_x=-1;
@@ -960,6 +961,7 @@ const files={
 					}
 					else
 					{
+						console.log("moveback to bin "+LevelJson.Parts[DraggingObject.no].origin_pos_x+" / " +(playgroundWidth));
 						LevelJson.Parts[DraggingObject.no].pos_x=LevelJson.Parts[DraggingObject.no].origin_pos_x;
 						LevelJson.Parts[DraggingObject.no].pos_y=LevelJson.Parts[DraggingObject.no].origin_pos_y;
 					}
@@ -971,7 +973,7 @@ const files={
 		}
 		else
 		{
-			if(Xclick<playgroundOffsetX+playgroundWidth)//not on the bin
+			if(Xclick</*playgroundOffsetX+*/playgroundWidth)//not on the bin
 			{
 				console.log("MouseClickUp:2 "+BeltMode );
 				let endConnection=false;
@@ -1002,7 +1004,7 @@ const files={
 										flipV=1;
 									else
 										flipV=0;
-									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipH+")";
+									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";
 									refresh(LevelJson,true);
 								}
 								
@@ -1133,7 +1135,7 @@ const files={
 				{
 					let dx=part.width;
 					let dy=part.height;
-					if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
+					if(Xclick>/*playgroundOffsetX+*/playgroundWidth)//on the bin
 					{
 						//console.log("in bin part"+part.no+" h="+Icons[part.TimType].height+" + y" +part.pos_y+" / yclick"+Yclick);
 						dx=Icons[part.TimType].width;
@@ -1281,7 +1283,7 @@ const files={
 					{
 						let dx=part.width;
 						let dy=part.height;
-						if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
+						if(Xclick>/*playgroundOffsetX+*/playgroundWidth)//on the bin
 						{
 							//console.log("in bin");
 							dx=Icons[part.TimType].width;
