@@ -27,11 +27,11 @@
 // get all levels in french
 // get all levels image in french 
 // check all levels
-// disconect belt from mouse
-// swap, delete unit
 // animations
 // size 678x369
-
+//---------------------------
+//bug
+//
 
 let Images={};
 let Icons={};
@@ -420,7 +420,7 @@ const files={
 			ctx.beginPath();
 			//ctx.moveTo(json.Parts[beltStart].pos_x, json.Parts[beltStart].pos_y);
 			ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
-			ctx.lineTo(Mouse_pos_x, Mouse_pos_y);
+			ctx.lineTo(Mouse_pos_x+playgroundOffsetX, Mouse_pos_y+playgroundOffsetY);
 			ctx.stroke();
 		}
 		//draw belts
@@ -432,16 +432,28 @@ const files={
 					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
 					const  [x1,y1]=GetNodePos(json.Parts[part.connected_part_1]);
 					const  [x2,y2]=GetNodePos(json.Parts[part.connected_part_2]);
-					ctx.beginPath();
-					ctx.strokeStyle = 'black';
-					ctx.moveTo(x1+playgroundOffsetX, y1+playgroundOffsetY);
-					ctx.lineTo(x2+playgroundOffsetX, y2+playgroundOffsetY);
-					ctx.stroke();
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,8);
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,-8);
 				}
 			}
 		});
 		
 		displayBoard();
+	}
+	
+	
+	function drawLine(x1,y1,x2,y2, offset = 0) {
+		var [ox, oy] = [0, 0];  
+		if (offset) {
+			const [dx, dy] = [x1 - x2, y1 - y2];
+			const scale = offset / (dx * dx + dy * dy) ** 0.5;
+			[ox, oy] = [-dy * scale, dx * scale];
+		}
+		ctx.beginPath();
+		ctx.strokeStyle = 'black';
+		ctx.lineTo(ox + x1, oy + y1);
+		ctx.lineTo(ox + x2, oy + y2);
+		ctx.stroke();
 	}
 	function GetNodePos(part)
 	{
@@ -840,7 +852,7 @@ const files={
 		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
 		Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
 		//console.log("MouseClickUp:1",DraggingObject);
-		if(DraggingObject!=undefined)
+		if(DraggingObject!=undefined)//dragging
 		{
 			//console.log("MouseClickUp:2",DraggingObject);
 			if(DraggingObject.TimType==8)
@@ -886,7 +898,7 @@ const files={
 		{
 			if(Xclick<playgroundOffsetX+playgroundWidth)//not on the bin
 			{
-				//console.log("MouseClickUp:2");
+				console.log("MouseClickUp:2 "+BeltMode );
 				let endConnection=false;
 				if(BeltMode==0)
 				{
@@ -943,7 +955,17 @@ const files={
 				{
 					let retNo=checkConnection(Mouse_pos_x,Mouse_pos_y);
 					if(retNo==-1)
+					{
 						endConnection=true;
+						BeltMode=0;
+						LevelJson.Parts[BeltNoConnecting].connected_part_1=undefined;
+						LevelJson.Parts[BeltNoConnecting].connected_part_2=undefined;
+						LevelJson.Parts[BeltNoConnecting].pos_x=-1;
+						LevelJson.Parts[BeltNoConnecting].pos_y=-1;
+						LevelJson.Parts[BeltNoConnecting].in_partsbin=1;
+						//console.log("disco ",LevelJson.Parts[BeltNoConnecting]);
+						refresh(LevelJson,true);
+					}
 					else
 					{
 						BeltMode=2;
@@ -996,6 +1018,7 @@ const files={
 		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
 		{
+			
 			LevelJson.Parts.forEach(part => {
 				if(doPartsOverlapMouse(part,Xclick,Yclick	))
 				{
@@ -1277,66 +1300,7 @@ const files={
 			};
 		}
 		return;
-		/*
-		NBBoardsToLoad=0;
-		for(let i=0;i<43;i++)//0->42 GP_BORD-BMP
-		{
-			NBBoardsToLoad++;
-			//console.log("load: "+i) ;
-			Boards[NBBoardsToLoad-1] = new Image();  
-			Boards[NBBoardsToLoad-1].src = './images/GP_BORD-BMP/GP_BORD-'+i+".png";  
-			Boards[NBBoardsToLoad-1].onload = () => {  
-				NBBoardsLoaded++;
-				if(NBBoardsLoaded==NBBoardsToLoad)
-				{
-					console.log("All Boards loaded: "+NBBoardsLoaded) ;
-					LoadLevel(1);
-				}
-			};
-		}
-		for(let i=0;i<3;i++)//43->45 SCORE1-BMP
-		{
-			NBBoardsToLoad++;
-			Boards[NBBoardsToLoad-1] = new Image();  
-			Boards[NBBoardsToLoad-1].src = './images/SCORE1-BMP/SCORE1-'+i+".png";  
-			Boards[NBBoardsToLoad-1].onload = () => {  
-				NBBoardsLoaded++;
-				if(NBBoardsLoaded==NBBoardsToLoad)
-				{
-					console.log("All Boards loaded: "+NBBoardsLoaded) ;
-					LoadLevel(1);
-				}
-			};
-		}
-		for(let i=0;i<2;i++)//46->47 SCORE2-BMP
-		{
-			NBBoardsToLoad++;
-			Boards[NBBoardsToLoad-1] = new Image();  
-			Boards[NBBoardsToLoad-1].src = './images/SCORE2-BMP/SCORE2-'+i+".png";  
-			Boards[NBBoardsToLoad-1].onload = () => {  
-				NBBoardsLoaded++;
-				if(NBBoardsLoaded==NBBoardsToLoad)
-				{
-					console.log("All Boards loaded: "+NBBoardsLoaded) ;
-					LoadLevel(1);
-				}
-			};
-		}
-		for(let i=0;i<11;i++)//48->59 GP_MENU
-		{
-			NBBoardsToLoad++;
-			Boards[NBBoardsToLoad-1] = new Image();  
-			Boards[NBBoardsToLoad-1].src = './images/GP_MENU-BMP/GP_MENU-'+i+".png";  
-			Boards[NBBoardsToLoad-1].onload = () => {  
-				NBBoardsLoaded++;
-				if(NBBoardsLoaded==NBBoardsToLoad)
-				{
-					console.log("All Boards loaded: "+NBBoardsLoaded) ;
-					LoadLevel(1);
-				}
-			};
-		}
-		*/
+		
 	}
 	LoadBoard();
 	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
