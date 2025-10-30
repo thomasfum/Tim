@@ -27,7 +27,7 @@
 // get all levels in french
 // get all levels image in french 
 // check all levels
-// disconect belt
+// disconect belt from mouse
 // swap, delete unit
 // animations
 // size 678x369
@@ -243,7 +243,7 @@ const files={
 			
 				
 				
-			if((part.in_partsbin==0)&&(part.TimType!=8))
+			if(part.in_partsbin==0)
 			{
 			
 				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
@@ -267,72 +267,74 @@ const files={
 						flipH = part.orientation.substring(start+1, end);
 						//console.log("flipH="+flipH);
 					}
-					
-					if(part.appearance==undefined)
+					if(part.TimType!=8)//belst
 					{
-						if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
+						if(part.appearance==undefined)
 						{
-							//dupliquer en width
-							for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
+							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 							{
-								if(index==0)
-									drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
-								else if(index==part.width/Images[part.TimType+"-0"].width-1)
-									drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
-								else
+								//dupliquer en width
+								for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
 								{
-									if(index%2==0)
-										drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+									if(index==0)
+										drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+									else if(index==part.width/Images[part.TimType+"-0"].width-1)
+										drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
 									else
-										drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+									{
+										if(index%2==0)
+											drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+										else
+											drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+									}
 								}
 							}
-						}
-						else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
-						{
-
-							//dupliquer en height
-							//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
-							for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+							else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
 							{
-								if(index==0)
-									drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
-								else if(index==part.height/Images[part.TimType+"-0"].height-1)
-									drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+
+								//dupliquer en height
+								//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
+								for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+								{
+									if(index==0)
+										drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+									else if(index==part.height/Images[part.TimType+"-0"].height-1)
+										drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+									else
+									{
+										if(index%2==0)
+											drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+										else
+											drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+									}
+								}
+							}
+							else
+							{
+								if((part.anim==undefined)||(part.anim==0))
+									drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,flipV,flipH);
 								else
 								{
-									if(index%2==0)
-										drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
-									else
-										drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+									drawImage(Images[part.TimType+"-"+part.animStep], part.pos_x, part.pos_y,flipV,flipH);
+									part.animDelay++;
+									if(part.animDelay>10)
+									{
+										part.animDelay=0;
+										part.animStep++;
+										if(part.animStep>=files[part.TimType].count)
+											part.animStep=0;
+									}
 								}
 							}
 						}
 						else
 						{
-							if((part.anim==undefined)||(part.anim==0))
-								drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,flipV,flipH);
-							else
-							{
-								drawImage(Images[part.TimType+"-"+part.animStep], part.pos_x, part.pos_y,flipV,flipH);
-								part.animDelay++;
-								if(part.animDelay>10)
-								{
-									part.animDelay=0;
-									part.animStep++;
-									if(part.animStep>=files[part.TimType].count)
-										part.animStep=0;
-								}
-							}
+							let start=part.appearance.indexOf('(');
+							let end=part.appearance.indexOf(')');
+							let subResult = part.appearance.substring(start+1, end);
+							//console.log(part.TimType+"_"+subResult);
+							drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 						}
-					}
-					else
-					{
-						let start=part.appearance.indexOf('(');
-						let end=part.appearance.indexOf(')');
-						let subResult = part.appearance.substring(start+1, end);
-						//console.log(part.TimType+"_"+subResult);
-						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 					}
 					
 					
@@ -406,6 +408,7 @@ const files={
 		//draw drag belt
 		if(BeltMode==2)
 		{
+			//console.log("BeltMode = 2");
 			ctx.strokeStyle = 'red';
 			if((MouseOnPart!=-1)&&(PartConnectionFree(MouseOnPart)==true))
 			{
@@ -775,6 +778,21 @@ const files={
 		});
 		return partFree;
 	}
+	
+	function PartConnectionBelt(part_no)
+	{
+		let BeltNo=-1;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==8)
+			{
+				if(part.connected_part_1==part_no)
+					BeltNo=part.no;
+				if(part.connected_part_2==part_no)
+					BeltNo=part.no;
+			}
+		});
+		return BeltNo;
+	}
 
 	function checkConnection(pos_x,pos_y)
 	{
@@ -874,6 +892,7 @@ const files={
 						endConnection=true;
 						LevelJson.Parts[BeltNoConnecting].connected_part_1=beltStart;
 						LevelJson.Parts[BeltNoConnecting].connected_part_2=retNo;
+						LevelJson.Parts[BeltNoConnecting].in_partsbin=0;
 						//console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]);
 						BeltMode=0;
 						BeltNoConnecting=-1;
@@ -896,8 +915,40 @@ const files={
 		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
 		{
-		// le click est dans l'objet
 			LevelJson.Parts.forEach(part => {
+				if(doPartsOverlapMouse(part,Xclick,Yclick	))
+				{
+					if(!PartConnectionFree(part.no))
+					{
+						
+						let beltNo=PartConnectionBelt(part.no);
+						
+						if(LevelJson.Parts[beltNo].connected_part_1==part.no)
+						{
+							//console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 1");
+							LevelJson.Parts[beltNo].connected_part_1=undefined;
+							beltStart=LevelJson.Parts[beltNo].connected_part_2;
+							BeltNoConnecting=beltNo;
+							BeltMode=2;
+						}
+						if(LevelJson.Parts[beltNo].connected_part_2==part.no)
+						{
+							console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 2");
+							LevelJson.Parts[beltNo].connected_part_2=undefined;
+							beltStart=LevelJson.Parts[beltNo].connected_part_1;
+							BeltNoConnecting=beltNo;
+							BeltMode=2;
+						}
+					}
+				}
+			});
+		
+			if(BeltMode==2)
+				return;
+		
+			// le click est dans l'objet
+			LevelJson.Parts.forEach(part => {
+			
 				if(part.canBeDragged==1)
 				{
 					let dx=part.width;
@@ -923,6 +974,41 @@ const files={
 							console.log("drag=",part);
 						}
 					}
+				}
+				else
+				{
+				/*
+					//console.log("on fixed");
+					let no=-1;
+					LevelJson.Parts.forEach(part => {
+						if(doPartsOverlapMouse(part,Xclick,Yclick	))
+						{
+							if(!PartConnectionFree(part.no))
+							{
+								
+								let beltNo=PartConnectionBelt(part.no);
+								
+								if(LevelJson.Parts[beltNo].connected_part_1==part.no)
+								{
+									//console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 1");
+									LevelJson.Parts[beltNo].connected_part_1=undefined;
+									beltStart=LevelJson.Parts[beltNo].connected_part_2;
+									BeltNoConnecting=beltNo;
+									BeltMode=2;
+								}
+								if(LevelJson.Parts[beltNo].connected_part_2==part.no)
+								{
+									console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 2");
+									LevelJson.Parts[beltNo].connected_part_2=undefined;
+									beltStart=LevelJson.Parts[beltNo].connected_part_1;
+									BeltNoConnecting=beltNo;
+									BeltMode=2;
+								}
+							}
+						}
+					});
+					return no;
+					*/
 				}
 			});	
 		}
@@ -962,11 +1048,11 @@ const files={
 		if(files[part1.TimType].node_x==undefined)
 			return false;
 	
-		let max1x=part1.pos_x+part1.width;
-		let min1x=part1.pos_x;
+		let max1x=part1.pos_x+((files[part1.TimType].node_x+files[part1.TimType].node_d)*+part1.width)/100;
+		let min1x=part1.pos_x+((files[part1.TimType].node_x-files[part1.TimType].node_d)*+part1.width)/100;
 				
-		let max1y=part1.pos_y+part1.height;
-		let min1y=part1.pos_y;
+		let max1y=part1.pos_y+((files[part1.TimType].node_y+files[part1.TimType].node_d)*+part1.height)/100;
+		let min1y=part1.pos_y+((files[part1.TimType].node_y-files[part1.TimType].node_d)*+part1.height)/100;
 		
 		let aLeftOfB = max1x < x;
 		let aRightOfB = min1x > x;
