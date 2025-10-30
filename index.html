@@ -19,15 +19,19 @@
 //https://www.vogons.org/viewtopic.php?p=1089143#p1089143
 //https://codeberg.org/knt47/timgres
 //https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Level_Format
+//https://classicreload.com/play/dosx-the-incredible-machine.html
+//https://www.cursor.cc/?
 
 //---------------------------
 //Todo
 // get all levels in french
+// get all levels image in french 
 // check all levels
-// rope
+// disconect belt
+// swap, delete unit
 // animations
 // size 678x369
-//https://www.cursor.cc/?
+
 
 let Images={};
 let Icons={};
@@ -43,7 +47,7 @@ let Dragging=false;
 
 
 let LevelJson;
-let DraggingObject=undefined;
+var DraggingObject=undefined;
 
 
 let 	
@@ -62,8 +66,8 @@ const files={
 	"2":{"count":4},//wood incline
 	"3":{"count":3},
 	"4":{"count":7,"mass":-1},//ballon
-	"5":{"count":35},//conveyor belt
-	"6":{"count":2},
+	"5":{"count":35,"node_x":80,"node_y":50,"node_d":20},//conveyor belt
+	"6":{"count":2,"node_x":98,"node_y":50,"node_d":20},//mouse cage
 	"7":{"count":4},
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.8,"mass":5},//Basketball 
@@ -121,6 +125,13 @@ const files={
 	const playgroundOffsetX=10;
 	const playgroundOffsetY=5;
 	
+	
+	var BeltMode=0;
+	var beltStart=-1;
+	var Mouse_pos_x=0;
+	var Mouse_pos_y=0;
+	var MouseOnPart=0;
+	var BeltNoConnecting=-1;
 
 	const canvas = document.getElementById("myCanvas");
 	canvas.onmousedown = MouseClickDown;
@@ -232,7 +243,7 @@ const files={
 			
 				
 				
-			if(part.in_partsbin==0)
+			if((part.in_partsbin==0)&&(part.TimType!=8))
 			{
 			
 				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
@@ -323,8 +334,13 @@ const files={
 						//console.log(part.TimType+"_"+subResult);
 						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
 					}
+					
+					
+
+		
+		
 				}
-				if(	part.selected==1)
+				if((part.selected==1)&&(part.TimType!=8))
 				{
 					ctx.beginPath();
 					ctx.strokeStyle = 'lightgreen';
@@ -345,7 +361,8 @@ const files={
 				}	
 		
 				
-			}else//part.in_partsbin==1
+			}
+			else//part.in_partsbin==1
 			{
 				part.canBeDragged=1;
 				if(partsbin[part.TimType]==undefined)
@@ -353,7 +370,7 @@ const files={
 					partsbin[part.TimType]={};
 					partsbin[part.TimType].count=1;
 					let x=playgroundOffsetX+playgroundWidth+28-Icons[part.TimType].width/2;
-					let y=playgroundOffsetY+partsbinPosY+110
+					let y=playgroundOffsetY+partsbinPosY+110;
 					part.pos_x=x;
 					part.pos_y=y;
 					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+28;
@@ -364,7 +381,13 @@ const files={
 					partsbinPosY+=20;
 				}
 				else
+				{
+					//let x=playgroundOffsetX+playgroundWidth+28-Icons[part.TimType].width/2;
+					//let y=playgroundOffsetY+partsbinPosY+110
+					part.pos_x=-1;
+					part.pos_y=-1;
 					partsbin[part.TimType].count++;
+				}
 			}
 		});
 		
@@ -380,9 +403,53 @@ const files={
 				ctx.fillText(value.count,value.pos_x+5,value.pos_y+value.height+15);
 			}
 		}
+		//draw drag belt
+		if(BeltMode==2)
+		{
+			ctx.strokeStyle = 'red';
+			if((MouseOnPart!=-1)&&(PartConnectionFree(MouseOnPart)==true))
+			{
+				//console.log("MouseOnPart = ",json.Parts[MouseOnPart].TimType);
+				if(files[json.Parts[MouseOnPart].TimType].node_x!=undefined)
+					ctx.strokeStyle = 'lightgreen';
+			}
+			
+			
+			const  [x,y]=GetNodePos(json.Parts[beltStart]);
+			
+			ctx.beginPath();
+			//ctx.moveTo(json.Parts[beltStart].pos_x, json.Parts[beltStart].pos_y);
+			ctx.moveTo(x, y);
+			ctx.lineTo(Mouse_pos_x, Mouse_pos_y);
+			ctx.stroke();
+		}
+		//draw belts
+		json.Parts.forEach(part => {
+			if(part.TimType==8)//belt
+			{
+				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
+				{
+					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
+					const  [x1,y1]=GetNodePos(json.Parts[part.connected_part_1]);
+					const  [x2,y2]=GetNodePos(json.Parts[part.connected_part_2]);
+					ctx.beginPath();
+					ctx.strokeStyle = 'black';
+					ctx.moveTo(x1, y1);
+					ctx.lineTo(x2, y2);
+					ctx.stroke();
+				}
+			}
+		});
+		
 		displayBoard();
 	}
-	
+	function GetNodePos(part)
+	{
+		let x=part.pos_x+(part.width*files[part.TimType].node_x/100);
+		let y=part.pos_y+(part.height*files[part.TimType].node_y/100);
+		//console.log("GetNodePos = "+x+":"+y);
+		return [x, y];
+	}
 	
 	function displayRightBoard()
 	{
@@ -502,6 +569,11 @@ const files={
 			part.TimType=result;
 			part.movingObj=undefined;
 			part.selected=0;
+			if(part.in_partsbin==1)
+			{
+				part.pos_x=-1;
+				part.pos_y=-1;
+			}
 			part.Images={};
 			//console.log(part.name +" =>"+result+":"+files[result]) ;
 			//console.log(part);
@@ -689,46 +761,171 @@ const files={
 		Runner.run(runner, engine);
 	}
 	
+	function PartConnectionFree(part_no)
+	{
+		let partFree=true;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==8)
+			{
+				if(part.connected_part_1==part_no)
+					partFree=false;
+				if(part.connected_part_2==part_no)
+					partFree=false;
+			}
+		});
+		return partFree;
+	}
 
+	function checkConnection(pos_x,pos_y)
+	{
+		let no=-1;
+		LevelJson.Parts.forEach(part => {
+			if(doPartsOverlapMouse(part,pos_x,pos_y))
+			{
+				if(PartConnectionFree(part.no))
+					no= part.no;
+			}
+		});
+		return no;
+	}
 	function MouseClickUp(e){
-		//canvas.onmousemove = null;
+		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+		Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+		//console.log("MouseClickUp:1",DraggingObject);
+		if(DraggingObject!=undefined)
+		{
+			//console.log("MouseClickUp:2",DraggingObject);
+			if(DraggingObject.TimType==8)
+			{
+				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+				BeltMode=1;
+					Dragging=false;
+					BeltNoConnecting=DraggingObject.no;
+			}
+			else
+			{
+				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+				BeltMode=0;
+				if(LevelJson.Parts[DraggingObject.no].pos_x+LevelJson.Parts[DraggingObject.no].width>playgroundOffsetX+playgroundWidth)//on the bin
+				{
+					LevelJson.Parts[DraggingObject.no].pos_x=-1;
+					LevelJson.Parts[DraggingObject.no].pos_y=-1;
+					LevelJson.Parts[DraggingObject.no].in_partsbin=1;
+					refresh(LevelJson,true);
+				}
+				if(LevelJson.Parts[DraggingObject.no].overlap==true)
+				{
+					//console.log("overlap");
+					LevelJson.Parts[DraggingObject.no].overlap=false;
+					if(LevelJson.Parts[DraggingObject.no].origin_pos_x>playgroundOffsetX+playgroundWidth)//on the bin
+					{
+						LevelJson.Parts[DraggingObject.no].in_partsbin=1;
+						LevelJson.Parts[DraggingObject.no].pos_x=-1;
+						LevelJson.Parts[DraggingObject.no].pos_y=-1;
+					}
+					else
+					{
+						LevelJson.Parts[DraggingObject.no].pos_x=LevelJson.Parts[DraggingObject.no].origin_pos_x;
+						LevelJson.Parts[DraggingObject.no].pos_y=LevelJson.Parts[DraggingObject.no].origin_pos_y;
+					}
+					
+					refresh(LevelJson,true);
+				}
+				//here release
+			}
+		}
+		else
+		{
+			if(Xclick<playgroundOffsetX+playgroundWidth)//not on the bin
+			{
+				//console.log("MouseClickUp:2");
+				let endConnection=false;
+				if(BeltMode==1)
+				{
+					let retNo=checkConnection(Mouse_pos_x,Mouse_pos_y);
+					if(retNo==-1)
+						endConnection=true;
+					else
+					{
+						BeltMode=2;
+						//console.log("Start con:"+retNo);
+						beltStart=retNo;
+					}
+				}
+				else if(BeltMode==2)
+				{
+					
+					let retNo=checkConnection(Mouse_pos_x,Mouse_pos_y);
+					if(retNo==-1)
+					{
+						endConnection=true;
+						BeltMode=0;
+						LevelJson.Parts[BeltNoConnecting].connected_part_1=undefined;
+						LevelJson.Parts[BeltNoConnecting].connected_part_2=undefined;
+						LevelJson.Parts[BeltNoConnecting].pos_x=-1;
+						LevelJson.Parts[BeltNoConnecting].pos_y=-1;
+						LevelJson.Parts[BeltNoConnecting].in_partsbin=1;
+						//console.log("disco ",LevelJson.Parts[BeltNoConnecting]);
+						refresh(LevelJson,true);
+					}
+					else
+					{
+						BeltMode=0;
+						endConnection=true;
+						LevelJson.Parts[BeltNoConnecting].connected_part_1=beltStart;
+						LevelJson.Parts[BeltNoConnecting].connected_part_2=retNo;
+						//console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]);
+						BeltMode=0;
+						BeltNoConnecting=-1;
+						refresh(LevelJson,true);
+					}
+				}
+				if(endConnection==true)
+				{
+					document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+					BeltMode=0;
+				}
+			}
+		}
 		Dragging=false;
 		DraggingObject=undefined;
-		document.getElementById("myCanvas").style.cursor="";
 	}
 	
 	function MouseClickDown(e){
 		Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
-		// On ne lance le déplacement onmousemove que si
+		if(BeltMode==0)
+		{
 		// le click est dans l'objet
-		LevelJson.Parts.forEach(part => {
-			if(part.canBeDragged==1)
-			{
-				let dx=part.width;
-				let dy=part.height;
-				if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
+			LevelJson.Parts.forEach(part => {
+				if(part.canBeDragged==1)
 				{
-					//console.log("in bin");
-					dx=Icons[part.TimType].width;
-					dy=Icons[part.TimType].height;
-				}
-				if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
-				{
-					document.getElementById("myCanvas").style.cursor="grabbing";
-					
-					Dragging=true;
-					//console.log("Drag "+part.no);
-					DraggingObject=part;
-					if(part.in_partsbin==1)
+					let dx=part.width;
+					let dy=part.height;
+					if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
 					{
-						part.in_partsbin=0;
-						console.log("drag=",part);
+						//console.log("in bin part"+part.no+" h="+Icons[part.TimType].height+" + y" +part.pos_y+" / yclick"+Yclick);
+						dx=Icons[part.TimType].width;
+						dy=Icons[part.TimType].height;
+					}
+					if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
+					{
+						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+						
+						Dragging=true;
+						//console.log("Drag "+part.no);
+						DraggingObject=part;
+						part.origin_pos_x=part.pos_x;
+						part.origin_pos_y=part.pos_y;
+						if(part.in_partsbin==1)
+						{
+							part.in_partsbin=0;
+							console.log("drag=",part);
+						}
 					}
 				}
-			}
-		});	
-
+			});	
+		}
 	}
 	
 	function doPartsOverlap(part1, part2)
@@ -758,6 +955,27 @@ const files={
 		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
 		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
 	  //}
+	}
+	
+	function doPartsOverlapMouse(part1, x,y)
+	{
+		if(files[part1.TimType].node_x==undefined)
+			return false;
+	
+		let max1x=part1.pos_x+part1.width;
+		let min1x=part1.pos_x;
+				
+		let max1y=part1.pos_y+part1.height;
+		let min1y=part1.pos_y;
+		
+		let aLeftOfB = max1x < x;
+		let aRightOfB = min1x > x;
+		let aAboveB = min1y > y;
+		let aBelowB = max1y < y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  
 	}
 
 	function selectPart(part_no)
@@ -802,29 +1020,70 @@ const files={
 			}
 			else
 				DraggingObject.overlap=false;
-
-
 			refresh(LevelJson,true);
 		}
-		else
+		else//over
 		{
+			let onPartNo=-1;
 			Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 			Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
-			if((Xclick<playgroundOffsetX+playgroundWidth)&&(LevelJson!=undefined))
+			if(LevelJson!=undefined)
 			{
+				let onFixed=false;
+				let onDraggable=false;
 				LevelJson.Parts.forEach(part => {
 					if(part.canBeDragged==1)
 					{
 						let dx=part.width;
 						let dy=part.height;
+						if(Xclick>playgroundOffsetX+playgroundWidth)//on the bin
+						{
+							//console.log("in bin");
+							dx=Icons[part.TimType].width;
+							dy=Icons[part.TimType].height;
+						}
 						if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 						{
+							if(BeltMode==1)
+								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+							else
+								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-2.cur'), auto";//drag cursor
+							onPartNo=part.no;
 							selectPart(part.no);
 							refresh(LevelJson,true);
+							onDraggable=true;
 						}
 					}
+					else
+					{
+						let dx=part.width;
+						let dy=part.height;
+						if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
+						{
+							onFixed=true;
+							onPartNo=part.no;
+							//console.log("onFixed");
+						}
+					}
+					
 				});
+				if(onDraggable==false)
+				{
+					//console.log("not over");
+					if(BeltMode==0)
+						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+					else
+						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+				}
 			}
+			MouseOnPart=onPartNo;
+			if(BeltMode==2)
+			{
+				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+				refresh(LevelJson,true);
+			}
+			
 		}
 	}
 	function LoadBoard()
@@ -888,7 +1147,7 @@ const files={
 		}
 	}
 	LoadBoard();
-	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/cursor-9.cur'), auto";
+	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 	
 </script>
 
