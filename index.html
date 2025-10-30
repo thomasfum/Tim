@@ -67,8 +67,8 @@ const files={
 	"2":{"count":4},//wood incline
 	"3":{"count":3},
 	"4":{"count":7,"mass":-1},//ballon
-	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20},//conveyor belt
-	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20},//mouse cage
+	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
+	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
 	"7":{"count":4},
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.8,"mass":5},//Basketball 
@@ -226,6 +226,7 @@ const files={
 		console.log("All images loaded: "+NBImagesLoaded) ;
 		refresh(LevelJson,true);
 	}
+	
 	function refresh(json, allObjects)
 	{
 		//console.log("Refresh "+allObjects);
@@ -233,20 +234,23 @@ const files={
 		{
 			ctx.fillStyle = "rgba(0,162,162,255)";
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
-			ctx.fillStyle = "rgba(0,243,243,255)";
-			ctx.fillRect(72*8, 0,80, canvas.height);
+			
 		}
+		ctx.fillStyle = "rgba(0,243,243,255)";
+		ctx.fillRect(72*8, 0,80, canvas.height);
 		displayRightBoard();
 		partsbin={};
 		let partsbinPosY=0;
 		json.Parts.forEach(part => {
-			//console.log(part);
+			
 			if(part.in_partsbin==0)
 			{
-			
+				//if(part.no==17)
+				//	console.log("refresh 1 -",part.no);
 				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
 				{
-				
+					//if(part.no==17)
+					//	console.log("refresh 2 -",part.no);
 					let flipH=0;
 					let flipV=0;
 					if(part.direction_r_to_l!=undefined)
@@ -269,6 +273,8 @@ const files={
 					{
 						if(part.appearance==undefined)
 						{
+							//if(part.no==17)
+							//	console.log("refresh 3 -",part.no);
 							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 							{
 								//dupliquer en width
@@ -319,7 +325,7 @@ const files={
 									{
 										part.animDelay=0;
 										part.animStep++;
-										if(part.animStep>=files[part.TimType].count)
+										if(part.animStep>=files[part.TimType].nb_anim)
 											part.animStep=0;
 									}
 								}
@@ -327,11 +333,27 @@ const files={
 						}
 						else
 						{
+							//console.log("refresh "+part.no+" "+part.anim);
 							let start=part.appearance.indexOf('(');
 							let end=part.appearance.indexOf(')');
 							let subResult = part.appearance.substring(start+1, end);
 							//console.log(part.TimType+"_"+subResult);
-							drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);	
+							if((part.anim==undefined)||(part.anim==0))
+								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);
+							else
+							{
+								let val=part.animStep+parseInt(subResult);
+								//console.log(part.TimType+"_"+val);
+								drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,flipV,flipH);
+								part.animDelay++;
+								if(part.animDelay>10)
+								{
+									part.animDelay=0;
+									part.animStep++;
+									if(part.animStep>=files[part.TimType].nb_anim)
+										part.animStep=0;
+								}
+							}							
 						}
 					}
 				}
@@ -440,9 +462,9 @@ const files={
 		
 		displayBoard();
 	}
-	
-	
-	function drawLine(x1,y1,x2,y2, offset = 0) {
+		
+	function drawLine(x1,y1,x2,y2, offset = 0) 
+	{
 		var [ox, oy] = [0, 0];  
 		if (offset) {
 			const [dx, dy] = [x1 - x2, y1 - y2];
@@ -455,6 +477,7 @@ const files={
 		ctx.lineTo(ox + x2, oy + y2);
 		ctx.stroke();
 	}
+
 	function GetNodePos(part)
 	{
 		let flipV=0;
@@ -503,6 +526,7 @@ const files={
 		ctx.drawImage(Boards[10], 72*8-3, 68);//horizontal bar at right
 		ctx.drawImage(Boards[10], 72*8-3, 100);//horizontal bar at right
 	}
+
 	function displayScore()
 	{
 		//Score
@@ -521,6 +545,7 @@ const files={
 			ctx.drawImage(Boards[46], 478+32*x, 375);
 		}
 	}
+
 	function displayBoard()
 	{
 		//Boards: 678x369
@@ -550,7 +575,7 @@ const files={
 		ctx.drawImage(Boards[44], 264, 368);
 		ctx.drawImage(Boards[45], 264+184, 368);
 	}
-	
+
 	function loadImage(filename,part,imgType)
 	{
 		NBImagesToLoad++;
@@ -585,7 +610,6 @@ const files={
 			}
 		};
 	}	
-
 
 	function ReadJson(json)
 	{
@@ -638,8 +662,6 @@ const files={
 		});
 	}
 
-
-
 	function LoadLevel(level)
 	{
 		stop();
@@ -660,7 +682,6 @@ const files={
 		LoadLevel(l);
 	}
 
-
 	//--------------------------------------------------
 	// beforeRender
 	//--------------------------------------------------
@@ -669,8 +690,31 @@ const files={
 	//console.log("beforeRender");
 	LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
+		{
 			if(part.is_moving)
+			{
+				//apply gravity
 				Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: part.movingObj.mass2 * 0.0005 })
+				//check if in contact with a belt
+				
+				engine.world.bodies.forEach((body)=>{
+
+					if((LevelJson.Parts[body.TimNo].TimType==5)&&(LevelJson.Parts[body.TimNo].anim==true))//moving belt
+					{
+						if (Matter.Collision.collides(part.movingObj, body) != null) 
+						{
+							// collision happened
+							console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
+							Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
+						}
+					}
+				
+				
+				});
+				
+			}
+				
+		}
 		});
 		
 	});
@@ -684,6 +728,25 @@ const files={
 	});
 
 	//--------------------------------------------------
+	// AnimPart
+	//--------------------------------------------------
+	function AnimPart(PartNo, forward)
+	{
+		console.log("anim mouse "+PartNo);
+		LevelJson.Parts[PartNo].anim=true;
+		LevelJson.Parts[PartNo].animStep=1;
+		LevelJson.Parts[PartNo].animDelay=0;
+		if(forward==true)
+		{
+			let AutherExtremity=PartBeltExtremity(PartNo);
+			if(AutherExtremity!=-1)
+			{
+				console.log("from Part"+PartNo+" action on "+AutherExtremity);
+				AnimPart(AutherExtremity,false)
+			}
+		}
+	}
+	//--------------------------------------------------
 	// collision
 	//--------------------------------------------------
 	Events.on(engine,"collisionStart", (event) => {
@@ -693,17 +756,12 @@ const files={
 		console.log("Collision Parts No: "+collision.bodyA.TimNo +" - "+ collision.bodyB.TimNo);
 		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
 		{
-			console.log("anim mouse "+LevelJson.Parts[collision.bodyA.TimNo].no);
-			LevelJson.Parts[collision.bodyA.TimNo].anim=true;
-			LevelJson.Parts[collision.bodyA.TimNo].animStep=1;
-			LevelJson.Parts[collision.bodyA.TimNo].animDelay=0;
+			AnimPart(collision.bodyA.TimNo,true);
+			
 		}
 		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
 		{
-			console.log("anim mouse "+LevelJson.Parts[collision.bodyA.TimNo].no);
-			LevelJson.Parts[collision.bodyB.TimNo].anim=true;
-			LevelJson.Parts[collision.bodyB.TimNo].animStep=1;
-			LevelJson.Parts[collision.bodyB.TimNo].animDelay=0;
+			AnimPart(collision.bodyB.TimNo,true);
 		}	
 
 		});
@@ -770,7 +828,7 @@ const files={
 						mass=0;
 						
 					var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
-						part:part,
+						//part:part,
 						TimNo:part.no,
 						isSleeping: false,
 						isStatic: false,
@@ -804,6 +862,7 @@ const files={
 		Render.run(render);
 		runner=Runner.create()
 		Runner.run(runner, engine);
+		
 	}
 	
 	function PartConnectionFree(part_no)
@@ -819,6 +878,21 @@ const files={
 			}
 		});
 		return partFree;
+	}
+	
+	function PartBeltExtremity(part_no)
+	{
+		let OtherPart=-1;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==8)
+			{
+				if(part.connected_part_1==part_no)
+					OtherPart=part.connected_part_2;
+				if(part.connected_part_2==part_no)
+					OtherPart=part.connected_part_1;
+			}
+		});
+		return OtherPart;
 	}
 	
 	function PartConnectionBelt(part_no)
@@ -848,7 +922,8 @@ const files={
 		});
 		return no;
 	}
-	function MouseClickUp(e){
+	function MouseClickUp(e)
+	{
 		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
 		Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
 		//console.log("MouseClickUp:1",DraggingObject);
@@ -1013,7 +1088,8 @@ const files={
 		DraggingObject=undefined;
 	}
 	
-	function MouseClickDown(e){
+	function MouseClickDown(e)
+	{
 		Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
