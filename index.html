@@ -29,6 +29,9 @@
 // check all levels
 // animations
 // size 678x369
+// langage management
+// phisycs for inclined wood
+// drag exttion
 //---------------------------
 //bug
 //
@@ -60,6 +63,12 @@ let
 		Runner = Matter.Runner,
 		Composite = Matter.Composite,
 		World = Matter.World;
+
+
+const WinCondition={
+	"1":{"Conditions":[{"unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
+	"2":{"Conditions":[{"unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]}
+};	
 		
 const files={			 
 	"0":{"count":1,"restitution":0.2,"mass":1},//Bowling ball
@@ -133,6 +142,14 @@ const files={
 	var Mouse_pos_y=0;
 	var MouseOnPart=0;
 	var BeltNoConnecting=-1;
+	
+	var CurrentLevel=0;
+	var CurrentLevelWinned=false;
+	var ExpandUnit=0;
+	var Score=0;
+	var Bonus1 =0;
+	var Bonus2 =0;
+	var myTimer;
 
 	const canvas = document.getElementById("myCanvas");
 	canvas.onmousedown = MouseClickDown;
@@ -157,7 +174,7 @@ const files={
 
 
 	function flipHorizontally(img,x,y){
-		console.log("fliiiiip horizontally");
+		//console.log("fliiiiip horizontally");
 		// move to x + img's width
 		ctx.translate(x+img.width,y);
 
@@ -224,20 +241,24 @@ const files={
 	function AllImagesLoaded()
 	{
 		console.log("All images loaded: "+NBImagesLoaded) ;
+		myTimer = setInterval(myTimerBonus1, 1000);
 		refresh(LevelJson,true);
 	}
 	
 	function refresh(json, allObjects)
 	{
+		
+		//displayScore();
 		//console.log("Refresh "+allObjects);
 		if(allObjects==true)
 		{
 			ctx.fillStyle = "rgba(0,162,162,255)";
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
 			
 		}
 		ctx.fillStyle = "rgba(0,243,243,255)";
-		ctx.fillRect(72*8, 0,80, canvas.height);
+		ctx.fillRect(72*8, 0,80, canvas.height-80);
+		
 		displayRightBoard();
 		partsbin={};
 		let partsbinPosY=0;
@@ -380,8 +401,17 @@ const files={
 					ctx.rect(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2, part.width+4, part.height+4);
 					ctx.stroke();
 					ctx.drawImage(Boards[59], part.pos_x+playgroundOffsetX-14, part.pos_y+playgroundOffsetY-12);//delette
-					ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
+					if(part.size!=undefined)
+					{
+						ctx.drawImage(Boards[60], part.pos_x+playgroundOffsetX-14, part.pos_y+playgroundOffsetY+part.height/2-6);//expand
+						ctx.drawImage(Boards[60], part.pos_x+playgroundOffsetX+part.width, part.pos_y+playgroundOffsetY+part.height/2-6);//expand
+					}
 					
+					if((part.orientation!=undefined)||(part.direction_r_to_l!=undefined))
+					{
+						ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
+					}
+					//console.log("overlap",part);
 				}	
 		
 				
@@ -462,8 +492,9 @@ const files={
 				}
 			}
 		});
-		
+		displayScore();
 		displayBoard();
+		
 	}
 		
 	function drawLine(x1,y1,x2,y2, offset = 0) 
@@ -530,23 +561,46 @@ const files={
 		ctx.drawImage(Boards[10], 72*8-3, 100);//horizontal bar at right
 	}
 
+	function displayScoreDigit(digit,pos, offset)
+	{
+		//console.log("s="+digit);
+		if(digit==undefined)
+			digit=0;
+		if(digit<5)
+			ctx.drawImage(Boards[46], 0,20+(digit*21),24,38,offset+32*pos, 408-13 +1,24,38);
+		else
+			ctx.drawImage(Boards[47], 0,20+(digit-5)*21,24,38,offset+32*pos, 408-13+1,24,38);
+		
+	}
+	function displayScoreNumber(number,nbdigits, offset)
+	{
+		var digits = number.toString().split('');
+		var realDigits = digits.map(Number);
+		var z=nbdigits-realDigits.length;
+		for(let i=0;i<z;++i)
+		{
+			realDigits.unshift(0);
+		}
+	
+		
+		for(let x=0;x<nbdigits;x++)
+		{
+			displayScoreDigit(realDigits[x], x,offset)
+		}
+	}
 	function displayScore()
 	{
+		//ctx.fillStyle = "rgba(0,0,0,255)";
+		//ctx.fillRect(0, 368, canvas.width,80);
+		//bonus 1 is going down with time to 0
+		// if puzzle successfull done score=score + bonus1 +bonus 2
+		
 		//Score
-		for(let x=0;x<6;x++)
-		{
-			ctx.drawImage(Boards[46], 45+32*x, 375);
-		}
+		displayScoreNumber(Score,6, 45);
 		//Bonus1
-		for(let x=0;x<4;x++)
-		{
-			ctx.drawImage(Boards[46], 294+32*x, 375);
-		}
-		//Bonus1
-		for(let x=0;x<4;x++)
-		{
-			ctx.drawImage(Boards[46], 478+32*x, 375);
-		}
+		displayScoreNumber(Bonus1,4, 294);
+		//Bonus2
+		displayScoreNumber(Bonus2,4, 478);
 	}
 
 	function displayBoard()
@@ -571,12 +625,14 @@ const files={
 		ctx.fillStyle = "rgba(0,0,0,255)";
 		ctx.fillRect(0, 368, canvas.width,80);
 		displayScore();
+		
 		ctx.fillRect(0, 368, canvas.width,28);
 		ctx.fillRect(0, 438, canvas.width,80);
 		
 		ctx.drawImage(Boards[43], 0, 368);
 		ctx.drawImage(Boards[44], 264, 368);
 		ctx.drawImage(Boards[45], 264+184, 368);
+		
 	}
 
 	function loadImage(filename,part,imgType)
@@ -617,9 +673,13 @@ const files={
 	function ReadJson(json)
 	{
 		LevelJson=json;
-		//console.log(LevelJson);
+		//console.log(LevelJson.Puzzle_info);
 		document.getElementById("title").innerHTML = LevelJson.Title.EN;
 		document.getElementById("goal").innerHTML = LevelJson.Goal.EN;
+		Bonus1=LevelJson.Puzzle_info.bonus_1;
+		Bonus2=LevelJson.Puzzle_info.bonus_2;
+		
+		
 		NBImagesToLoad=0;
 		NBImagesLoaded=0;
 		NBIconsToLoad=0;
@@ -667,6 +727,7 @@ const files={
 
 	function LoadLevel(level)
 	{
+		CurrentLevel=level;
 		stop();
 		cleanPhysics();
 		console.log("loading level "+level);
@@ -684,12 +745,50 @@ const files={
 		let l=document.getElementById("levelInput").value;
 		LoadLevel(l);
 	}
-
+	function checkIfWin()
+	{
+		let win=0;
+		if(WinCondition[CurrentLevel]!=undefined)
+		{
+			for (let index = 0; index < WinCondition[CurrentLevel].Conditions.length; ++index) 
+			{
+				//ctx.fillStyle = "rgba(0,125,125,255)";
+				//ctx.fillRect(WinCondition[CurrentLevel].Conditions[index].x1, WinCondition[CurrentLevel].Conditions[index].y1, WinCondition[CurrentLevel].Conditions[index].dx, WinCondition[CurrentLevel].Conditions[index].dy);
+				let unitNo=WinCondition[CurrentLevel].Conditions[index].unitNo;
+				engine.world.bodies.forEach((body)=>{
+					if(body.TimNo==unitNo)
+					{
+						if((body.position.x>WinCondition[CurrentLevel].Conditions[index].x1)&&
+						(body.position.x<WinCondition[CurrentLevel].Conditions[index].x1+WinCondition[CurrentLevel].Conditions[index].dx)&&
+						(body.position.y>WinCondition[CurrentLevel].Conditions[index].y1)&&
+						(body.position.y<WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy)
+						)
+						{
+							//console.log("test condition WIN");
+							win++;
+						}
+					}
+				});
+			}
+		}
+		if(win==WinCondition[CurrentLevel].Conditions.length)
+		{
+			if(CurrentLevelWinned==false)
+			{
+				CurrentLevelWinned=true;
+				Score=Score+Bonus1+Bonus2;
+				Bonus1=0;
+				Bonus2=0;
+				displayScore();
+				alert("Win!");
+			}
+		}
+	}
 	//--------------------------------------------------
 	// beforeRender
 	//--------------------------------------------------
 	Events.on(render, "beforeRender", (event) => {
-		
+			
 	//console.log("beforeRender");
 	LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
@@ -699,7 +798,6 @@ const files={
 				//apply gravity
 				Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: part.movingObj.mass2 * 0.0005 })
 				//check if in contact with a belt
-				
 				engine.world.bodies.forEach((body)=>{
 
 					if((LevelJson.Parts[body.TimNo].TimType==5)&&(LevelJson.Parts[body.TimNo].anim==true))//moving belt
@@ -707,45 +805,49 @@ const files={
 						if (Matter.Collision.collides(part.movingObj, body) != null) 
 						{
 							// collision happened
-							console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
-							Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
+							//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
+							//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
+							if(LevelJson.Parts[body.TimNo].animDirectionX==0)
+								Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
+							if(LevelJson.Parts[body.TimNo].animDirectionX==1)
+								Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.001, y: 0 })
 						}
 					}
-				
-				
 				});
-				
 			}
-				
 		}
 		});
-		
+		//checkIfWin();
 	});
 	//--------------------------------------------------
 	// afterRender
 	//--------------------------------------------------
 	Events.on(render, "afterRender", (event) => {
 		
+		
+			
 	//console.log("afterRender");
 	refresh(LevelJson, false);
+	checkIfWin();
 	});
 
 	//--------------------------------------------------
 	// AnimPart
 	//--------------------------------------------------
-	function AnimPart(PartNo, forward)
+	function AnimPart(PartNo, forwardMessage,flipH,flipV)
 	{
-		console.log("anim mouse "+PartNo);
+		//console.log("anim mouse "+PartNo);
 		LevelJson.Parts[PartNo].anim=true;
 		LevelJson.Parts[PartNo].animStep=1;
 		LevelJson.Parts[PartNo].animDelay=0;
-		if(forward==true)
+		LevelJson.Parts[PartNo].animDirectionX=flipH;
+		if(forwardMessage==true)
 		{
 			let AutherExtremity=PartBeltExtremity(PartNo);
 			if(AutherExtremity!=-1)
 			{
-				console.log("from Part"+PartNo+" action on "+AutherExtremity);
-				AnimPart(AutherExtremity,false)
+				//console.log("from Part"+PartNo+" action on "+AutherExtremity);
+				AnimPart(AutherExtremity,false,flipH,flipV)
 			}
 		}
 	}
@@ -756,15 +858,51 @@ const files={
 	  event.pairs.forEach((collision) => {
 		  
 		//console.log("Collision Parts No: "+collision.bodyA.part.no +" - "+ collision.bodyB.part.no);
-		console.log("Collision Parts No: "+collision.bodyA.TimNo +" - "+ collision.bodyB.TimNo);
+		//console.log("Collision Parts No: "+collision.bodyA.TimNo +" - "+ collision.bodyB.TimNo);
 		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
 		{
-			AnimPart(collision.bodyA.TimNo,true);
+			let flipH=0;
+			let flipV=0;
+			if(LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l!=undefined)
+			{
+				let start=LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.indexOf('(');
+				let end=LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.indexOf(')');
+				flipV = LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.substring(start+1, end);
+				//console.log("flipV="+flipV);
+			}
+			if(LevelJson.Parts[collision.bodyA.TimNo].orientation!=undefined)
+			{
+				//console.log("orientation");
+				let start=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf('(');
+				let end=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf(')');
+				flipH = LevelJson.Parts[collision.bodyA.TimNo].orientation.substring(start+1, end);
+				//console.log("flipH="+flipH);
+			}
+			console.log("moving part direction "+flipH+" "+flipV);
+			AnimPart(collision.bodyA.TimNo,true,flipH,flipV);
 			
 		}
 		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
 		{
-			AnimPart(collision.bodyB.TimNo,true);
+			let flipH=0;
+			let flipV=0;
+			if(LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l!=undefined)
+			{
+				let start=LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.indexOf('(');
+				let end=LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.indexOf(')');
+				flipV = LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.substring(start+1, end);
+				//console.log("flipV="+flipV);
+			}
+			if(LevelJson.Parts[collision.bodyB.TimNo].orientation!=undefined)
+			{
+				//console.log("orientation");
+				let start=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf('(');
+				let end=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf(')');
+				flipH = LevelJson.Parts[collision.bodyB.TimNo].orientation.substring(start+1, end);
+				//console.log("flipH="+flipH);
+			}
+			//console.log("moving part direction "+flipH+" "+flipV);
+			AnimPart(collision.bodyB.TimNo,true,flipH,flipV);
 		}	
 
 		});
@@ -800,7 +938,7 @@ const files={
 	function run()
 	{
 		console.log("run! "+engine.world.gravity.y);
-		
+		CurrentLevelWinned=false;
 		LevelJson.Parts.forEach(part => {
 			if(part.canBeDragged==1)
 			{
@@ -860,12 +998,18 @@ const files={
 				}
 			}
 		});
+		clearInterval(myTimer);
 		Render.run(render);
 		runner=Runner.create()
 		Runner.run(runner, engine);
 		
 	}
-	
+	function myTimerBonus1()
+	{
+		if(Bonus1>0)
+			Bonus1--;
+		displayScore();
+	}
 	function PartConnectionFree(part_no)
 	{
 		let partFree=true;
@@ -927,6 +1071,12 @@ const files={
 	{
 		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
 		Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+		ExpandUnit=0;
+		
+		if((Mouse_pos_x>playgroundWidth+5)&&(Mouse_pos_x<playgroundWidth+65)&&(Mouse_pos_y>5)&&(Mouse_pos_y<70))
+		{
+			run();
+		}
 		//console.log("MouseClickUp:1",DraggingObject);
 		if(DraggingObject!=undefined)//dragging
 		{
@@ -961,7 +1111,7 @@ const files={
 					}
 					else
 					{
-						console.log("moveback to bin "+LevelJson.Parts[DraggingObject.no].origin_pos_x+" / " +(playgroundWidth));
+						//console.log("moveback to bin "+LevelJson.Parts[DraggingObject.no].origin_pos_x+" / " +(playgroundWidth));
 						LevelJson.Parts[DraggingObject.no].pos_x=LevelJson.Parts[DraggingObject.no].origin_pos_x;
 						LevelJson.Parts[DraggingObject.no].pos_y=LevelJson.Parts[DraggingObject.no].origin_pos_y;
 					}
@@ -975,14 +1125,16 @@ const files={
 		{
 			if(Xclick</*playgroundOffsetX+*/playgroundWidth)//not on the bin
 			{
-				console.log("MouseClickUp:2 "+BeltMode );
+				//console.log("MouseClickUp:2 "+BeltMode );
 				let endConnection=false;
 				if(BeltMode==0)
 				{
 					if(SelectedPart!=undefined)
 					{
+						//left side
 						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
 						{
+							//delete
 							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
 							{
 								//console.log("delete");
@@ -991,6 +1143,7 @@ const files={
 								LevelJson.Parts[SelectedPart].pos_y=-1;
 								refresh(LevelJson,true);
 							}
+							//flip
 							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
 							{
 							
@@ -1023,6 +1176,24 @@ const files={
 									refresh(LevelJson,true);
 								}
 								
+							}
+							//expand left
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+							{
+								console.log("expand left");
+								ExpandUnit=-1;
+							}
+						}
+						
+						//right side
+						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width+14))
+						{
+							
+							//expand right
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+							{
+								console.log("expand right");
+								ExpandUnit=1;
 							}
 						}
 						
@@ -1164,92 +1335,82 @@ const files={
 			});	
 		}
 	}
-	
-	function doPartsOverlap(part1, part2)
-	{
-		if(part1.no==part2.no)
-			return false;
-		//if(part2.no==1)
-		//{
-	
-		let max1x=part1.pos_x+part1.width;
-		let min1x=part1.pos_x;
-		
-		let max2x=part2.pos_x+part2.width;
-		let min2x=part2.pos_x;
-		
-		let max1y=part1.pos_y+part1.height;
-		let min1y=part1.pos_y;
-		
-		let max2y=part2.pos_y+part2.height;
-		let min2y=part2.pos_y;
-		
-		let aLeftOfB = max1x < min2x;
-		let aRightOfB = min1x > max2x;
-		let aAboveB = min1y > max2y;
-		let aBelowB = max1y < min2y;
-		
-		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
-		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
-	  //}
-	}
-	
-	function doPartsOverlapMouse(part1, x,y)
-	{
-		if(files[part1.TimType].node_x==undefined)
-			return false;
-	
-		const  [xn,yn]=GetNodePos(part1)
-	/*
-		let max1x=part1.pos_x+((files[part1.TimType].node_x+files[part1.TimType].node_d)*+part1.width)/100;
-		let min1x=part1.pos_x+((files[part1.TimType].node_x-files[part1.TimType].node_d)*+part1.width)/100;
-				
-		let max1y=part1.pos_y+((files[part1.TimType].node_y+files[part1.TimType].node_d)*+part1.height)/100;
-		let min1y=part1.pos_y+((files[part1.TimType].node_y-files[part1.TimType].node_d)*+part1.height)/100;
-		*/
-		
-		let max1x=xn+(files[part1.TimType].node_d*part1.width)/100;
-		let min1x=xn-(files[part1.TimType].node_d*part1.width)/100;
-				
-		let max1y=yn+(files[part1.TimType].node_d*+part1.height)/100;
-		let min1y=yn-(files[part1.TimType].node_d*+part1.height)/100;
-		
-		let aLeftOfB = max1x < x;
-		let aRightOfB = min1x > x;
-		let aAboveB = min1y > y;
-		let aBelowB = max1y < y;
-		
-		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
-		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
-	  
-	}
-
-	function selectPart(part_no)
-	{
-		SelectedPart=part_no;
-		LevelJson.Parts.forEach(part => {
-			if(part.canBeDragged==1)
-			{
-				if(part.no==part_no)
-				{
-					//console.log("over "+part_no);
-					if(part.selected!=1)
-					{
-						part.selected=1;
-					}
-				}
-				else
-					part.selected=0;
-			}
-		});
-	}
 	function MouseMove(e)
 	{
+		if(ExpandUnit!=0)
+		{
+			//let newPos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft)/16)*16+8;
+			let newPos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+			//console.log("expand part "+SelectedPart + " direction "+ExpandUnit);
+			if(ExpandUnit==-1) //expand left
+			{
+				if(newPos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width)
+				{
+					let div=LevelJson.Parts[SelectedPart].pos_x - newPos_x;
+					console.log("expand left: "+div+" "+newPos_x+" / "  +LevelJson.Parts[SelectedPart].pos_x);
+					if(div>16)
+					{
+						console.log("expand");
+						if(LevelJson.Parts[SelectedPart].size<3)
+						{
+							LevelJson.Parts[SelectedPart].size++;
+							LevelJson.Parts[SelectedPart].width+=16;
+							LevelJson.Parts[SelectedPart].pos_x-=16;
+							refresh(LevelJson,true);
+						}
+					}
+					if(div<-16)
+					{
+						console.log("stretch");
+						if(LevelJson.Parts[SelectedPart].size>0)
+						{
+							LevelJson.Parts[SelectedPart].size--;
+							LevelJson.Parts[SelectedPart].width-=16;
+							LevelJson.Parts[SelectedPart].pos_x+=16;
+							refresh(LevelJson,true);
+						}
+					}
+				}
+				
+			}
+			if(ExpandUnit==1) //expand right
+			{
+				if(newPos_x>LevelJson.Parts[SelectedPart].pos_x)
+				{
+					let div=newPos_x- (LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width);
+					console.log("expand right: "+div+" "+newPos_x+" / " +(LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width));
+					if(div>16)
+					{
+						if(LevelJson.Parts[SelectedPart].size<3)
+						{
+							LevelJson.Parts[SelectedPart].size++;
+							LevelJson.Parts[SelectedPart].width+=16;
+							refresh(LevelJson,true);
+						}
+					}
+					if(div<-16)
+					{
+						if(LevelJson.Parts[SelectedPart].size>0)
+						{
+							LevelJson.Parts[SelectedPart].size--;
+							LevelJson.Parts[SelectedPart].width-=16;
+							refresh(LevelJson,true);
+						}
+					}
+				}
+				
+			}
+		}
+		
 		if(Dragging==true)
 		{
 			//	  console.log(DraggingObject);
-			DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
-			DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
+			//DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
+			//DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
+			
+			DraggingObject.pos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2)/16)*16+8;
+			DraggingObject.pos_y=Math.round((e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2)/16)*16+8;
+			
 			selectPart(DraggingObject.no);
 			let overlap=false;
 			LevelJson.Parts.forEach(part => {
@@ -1316,6 +1477,8 @@ const files={
 				});
 				if(onDraggable==false)
 				{
+					
+					//selectPart(-1);
 					//console.log("not over");
 					if(BeltMode==0)
 						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
@@ -1333,6 +1496,85 @@ const files={
 			
 		}
 	}
+	function doPartsOverlap(part1, part2)
+	{
+		if(part1.no==part2.no)
+			return false;
+		//if(part2.no==1)
+		//{
+	
+		let max1x=part1.pos_x+part1.width;
+		let min1x=part1.pos_x;
+		
+		let max2x=part2.pos_x+part2.width;
+		let min2x=part2.pos_x;
+		
+		let max1y=part1.pos_y+part1.height;
+		let min1y=part1.pos_y;
+		
+		let max2y=part2.pos_y+part2.height;
+		let min2y=part2.pos_y;
+		
+		let aLeftOfB = max1x <= min2x;
+		let aRightOfB = min1x >= max2x;
+		let aAboveB = min1y >= max2y;
+		let aBelowB = max1y <= min2y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  //}
+	}
+	
+	function doPartsOverlapMouse(part1, x,y)
+	{
+		if(files[part1.TimType].node_x==undefined)
+			return false;
+	
+		const  [xn,yn]=GetNodePos(part1)
+	/*
+		let max1x=part1.pos_x+((files[part1.TimType].node_x+files[part1.TimType].node_d)*+part1.width)/100;
+		let min1x=part1.pos_x+((files[part1.TimType].node_x-files[part1.TimType].node_d)*+part1.width)/100;
+				
+		let max1y=part1.pos_y+((files[part1.TimType].node_y+files[part1.TimType].node_d)*+part1.height)/100;
+		let min1y=part1.pos_y+((files[part1.TimType].node_y-files[part1.TimType].node_d)*+part1.height)/100;
+		*/
+		
+		let max1x=xn+(files[part1.TimType].node_d*part1.width)/100;
+		let min1x=xn-(files[part1.TimType].node_d*part1.width)/100;
+				
+		let max1y=yn+(files[part1.TimType].node_d*+part1.height)/100;
+		let min1y=yn-(files[part1.TimType].node_d*+part1.height)/100;
+		
+		let aLeftOfB = max1x < x;
+		let aRightOfB = min1x > x;
+		let aAboveB = min1y > y;
+		let aBelowB = max1y < y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  
+	}
+
+	function selectPart(part_no)
+	{
+		SelectedPart=part_no;
+		LevelJson.Parts.forEach(part => {
+			if(part.canBeDragged==1)
+			{
+				if(part.no==part_no)
+				{
+					//console.log("over "+part_no);
+					if(part.selected!=1)
+					{
+						part.selected=1;
+					}
+				}
+				else
+					part.selected=0;
+			}
+		});
+	}
+	
 	function LoadBoard()
 	{
 		NBBoardsToLoad=0;
