@@ -31,7 +31,6 @@
 // size 678x369
 // langage management
 // phisycs for inclined wood
-// drag exttion
 //---------------------------
 //bug
 //
@@ -1129,75 +1128,7 @@ const files={
 				let endConnection=false;
 				if(BeltMode==0)
 				{
-					if(SelectedPart!=undefined)
-					{
-						//left side
-						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
-						{
-							//delete
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
-							{
-								//console.log("delete");
-								LevelJson.Parts[SelectedPart].in_partsbin=1;
-								LevelJson.Parts[SelectedPart].pos_x=-1;
-								LevelJson.Parts[SelectedPart].pos_y=-1;
-								refresh(LevelJson,true);
-							}
-							//flip
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
-							{
-							
-								if(LevelJson.Parts[SelectedPart].direction_r_to_l!=undefined)
-								{
-									let start=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf('(');
-									let end=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf(')');
-									let flipV = LevelJson.Parts[SelectedPart].direction_r_to_l.substring(start+1, end);
-									//console.log("flipV="+flipV);
-									if(flipV==0)
-										flipV=1;
-									else
-										flipV=0;
-									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";
-									refresh(LevelJson,true);
-								}
-								
-								if(LevelJson.Parts[SelectedPart].orientation!=undefined)
-								{
-									//console.log("orientation");
-									let start=LevelJson.Parts[SelectedPart].orientation.indexOf('(');
-									let end=LevelJson.Parts[SelectedPart].orientation.indexOf(')');
-									let flipH = LevelJson.Parts[SelectedPart].orientation.substring(start+1, end);
-									//console.log("flipH="+flipH);
-									if(flipH==0)
-										flipH=1;
-									else
-										flipH=0;
-									LevelJson.Parts[SelectedPart].orientation="("+flipH+")";
-									refresh(LevelJson,true);
-								}
-								
-							}
-							//expand left
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
-							{
-								console.log("expand left");
-								ExpandUnit=-1;
-							}
-						}
-						
-						//right side
-						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width+14))
-						{
-							
-							//expand right
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
-							{
-								console.log("expand right");
-								ExpandUnit=1;
-							}
-						}
-						
-					}
+					
 				}
 				else if(BeltMode==1)
 				{
@@ -1267,7 +1198,80 @@ const files={
 		Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
 		{
+			if(SelectedPart!=undefined)
+					{
+						Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+						Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+						//left side
+						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
+						{
+							//delete
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
+							{
+								//console.log("delete");
+								LevelJson.Parts[SelectedPart].in_partsbin=1;
+								LevelJson.Parts[SelectedPart].pos_x=-1;
+								LevelJson.Parts[SelectedPart].pos_y=-1;
+								refresh(LevelJson,true);
+							}
+							//flip
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
+							{
+							
+								if(LevelJson.Parts[SelectedPart].direction_r_to_l!=undefined)
+								{
+									let start=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf('(');
+									let end=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf(')');
+									let flipV = LevelJson.Parts[SelectedPart].direction_r_to_l.substring(start+1, end);
+									//console.log("flipV="+flipV);
+									if(flipV==0)
+										flipV=1;
+									else
+										flipV=0;
+									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";
+									refresh(LevelJson,true);
+								}
+								
+								if(LevelJson.Parts[SelectedPart].orientation!=undefined)
+								{
+									//console.log("orientation");
+									let start=LevelJson.Parts[SelectedPart].orientation.indexOf('(');
+									let end=LevelJson.Parts[SelectedPart].orientation.indexOf(')');
+									let flipH = LevelJson.Parts[SelectedPart].orientation.substring(start+1, end);
+									//console.log("flipH="+flipH);
+									if(flipH==0)
+										flipH=1;
+									else
+										flipH=0;
+									LevelJson.Parts[SelectedPart].orientation="("+flipH+")";
+									refresh(LevelJson,true);
+								}
+								
+							}
+							//expand left
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+							{
+								//console.log("expand left");
+								ExpandUnit=-1;
+							}
+						}
+						
+						//right side
+						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width+14))
+						{
+							
+							//expand right
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+							{
+								//console.log("expand right");
+								ExpandUnit=1;
+							}
+						}
+						
+					}
 			
+			
+			//-----------------------------
 			LevelJson.Parts.forEach(part => {
 				if(doPartsOverlapMouse(part,Xclick,Yclick	))
 				{
@@ -1347,10 +1351,10 @@ const files={
 				if(newPos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width)
 				{
 					let div=LevelJson.Parts[SelectedPart].pos_x - newPos_x;
-					console.log("expand left: "+div+" "+newPos_x+" / "  +LevelJson.Parts[SelectedPart].pos_x);
+					//console.log("expand left: "+div+" "+newPos_x+" / "  +LevelJson.Parts[SelectedPart].pos_x);
 					if(div>16)
 					{
-						console.log("expand");
+						//console.log("expand");
 						if(LevelJson.Parts[SelectedPart].size<3)
 						{
 							LevelJson.Parts[SelectedPart].size++;
@@ -1361,7 +1365,7 @@ const files={
 					}
 					if(div<-16)
 					{
-						console.log("stretch");
+						//console.log("stretch");
 						if(LevelJson.Parts[SelectedPart].size>0)
 						{
 							LevelJson.Parts[SelectedPart].size--;
@@ -1378,7 +1382,7 @@ const files={
 				if(newPos_x>LevelJson.Parts[SelectedPart].pos_x)
 				{
 					let div=newPos_x- (LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width);
-					console.log("expand right: "+div+" "+newPos_x+" / " +(LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width));
+					//console.log("expand right: "+div+" "+newPos_x+" / " +(LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width));
 					if(div>16)
 					{
 						if(LevelJson.Parts[SelectedPart].size<3)
