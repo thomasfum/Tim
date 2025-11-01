@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<script src="matter_0.20.0.js"></script>
+<script src="./main.js"></script>
+<script>
+</script>
+<body>
+
+<h1>TIM</h1>
+<input type="text" id="levelInput" name="levelInput"><br><br>
+<input id="loadLevelButton" type="button" value="Load Level" onclick="loadLevelClicked();" />
+
+<p id="title"></p>
+<p id="goal"></p>
+<canvas id="myCanvas" width="644" height="445" style="border:1px solid grey"></canvas>
+</br>
+<input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson,true);" />
+<input id="runButton" type="button" value="Run" onclick="run()" />
+<input id="stopButton" type="button" value="Stop" onclick="stop();" />
+<script>
+init();
+</script>
+
+</body>
+</html> 

@@ -645,8 +645,10 @@ const files={
 	{
 		LevelJson=json;
 		//console.log(LevelJson.Puzzle_info);
-		document.getElementById("title").innerHTML = LevelJson.Title.EN;
-		document.getElementById("goal").innerHTML = LevelJson.Goal.EN;
+		if(document.getElementById("title")!=undefined)
+			document.getElementById("title").innerHTML = LevelJson.Title.EN;
+		if(document.getElementById("goal")!=undefined)
+			document.getElementById("goal").innerHTML = LevelJson.Goal.EN;
 		Bonus1=LevelJson.Puzzle_info.bonus_1;
 		Bonus2=LevelJson.Puzzle_info.bonus_2;
 		
