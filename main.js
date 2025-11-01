@@ -19,29 +19,52 @@
 //bug
 //
 
-let Images={};
-let Icons={};
-let Boards={};
-let partsbin={};
-let NBImagesToLoad=0;
-let NBImagesLoaded=0;
-let NBIconsToLoad=0;
-let NBIconsLoaded=0;
-let NBBoardsToLoad=0;
-let NBBoardsLoaded=0;
-let Dragging=false;
-let SelectedPart=undefined;
+	let Images={};
+	let Icons={};
+	let Boards={};
+	let partsbin={};
+	let NBImagesToLoad=0;
+	let NBImagesLoaded=0;
+	let NBIconsToLoad=0;
+	let NBIconsLoaded=0;
+	let NBBoardsToLoad=0;
+	let NBBoardsLoaded=0;
+	let Dragging=false;
+	let SelectedPart=undefined;
 
 
-let LevelJson;
-var DraggingObject=undefined;
-var canvas=undefined;	
-var ctx=undefined;
-var engine=undefined;
-var runner=undefined;
-var render =undefined;
-var world=undefined;
+	let LevelJson;
+	var DraggingObject=undefined;
+	var canvas=undefined;	
+	var ctx=undefined;
+	var engine=undefined;
+	var runner=undefined;
+	var render =undefined;
+	var world=undefined;
+	var wireframe=false;
 	
+	const playgroundWidth=578-15;//578
+	const playgroundHeight=369;
+	const playgroundOffsetX=10;
+	const playgroundOffsetY=5;
+	const MaxLevel=2;
+	
+	
+	var BeltMode=0;
+	var beltStart=-1;
+	var Mouse_pos_x=0;
+	var Mouse_pos_y=0;
+	var MouseOnPart=0;
+	var BeltNoConnecting=-1;
+	
+	var CurrentLevel=0;
+	var CurrentLevelWinned=false;
+	var CurrentLevelRunning=false;
+	var ExpandUnit=0;
+	var Score=0;
+	var Bonus1 =0;
+	var Bonus2 =0;
+	var myTimer;
 	
 
 let 	
@@ -61,7 +84,7 @@ const WinCondition={
 };	
 		
 const files={			 
-	"0":{"count":1,"restitution":0.2,"mass":1},//Bowling ball
+	"0":{"count":1,"restitution":0.2,"mass":2},//Bowling ball
 	"1":{"count":8},
 	"2":{"count":4},//wood incline
 	"3":{"count":3},
@@ -120,26 +143,6 @@ const files={
 	"56":{"count":7}
 };
 
-	const playgroundWidth=578-15;//578
-	const playgroundHeight=369;
-	const playgroundOffsetX=10;
-	const playgroundOffsetY=5;
-	
-	
-	var BeltMode=0;
-	var beltStart=-1;
-	var Mouse_pos_x=0;
-	var Mouse_pos_y=0;
-	var MouseOnPart=0;
-	var BeltNoConnecting=-1;
-	
-	var CurrentLevel=0;
-	var CurrentLevelWinned=false;
-	var ExpandUnit=0;
-	var Score=0;
-	var Bonus1 =0;
-	var Bonus2 =0;
-	var myTimer;
 
 	
 
@@ -518,18 +521,22 @@ const files={
 	
 	function displayRightBoard()
 	{
-		ctx.drawImage(Boards[48], 72*8+4, 10);//top run
-		ctx.drawImage(Boards[49], 72*8+4, 10+27);//middle run
-		ctx.drawImage(Boards[50], 72*8+4, 10+32);//lower run
-		ctx.drawImage(Boards[11], 72*8+4, 76);//<- ->
+		let dy=8;
+		ctx.drawImage(Boards[48], 72*8+4, 16 -dy);//top run
+		ctx.drawImage(Boards[49], 72*8+4, 10+27-dy);//middle run
+		ctx.drawImage(Boards[50], 72*8+4, 10+32-dy);//lower run
+		ctx.drawImage(Boards[51], 72*8+4+24, 28-dy);//arbitre
+		ctx.drawImage(Boards[55], 72*8+4+12, 51-dy);//runner
+		
+		ctx.drawImage(Boards[11], 72*8+4, 76-dy);//<- ->
 		for(let y=0;y<45;y++)
 		{
 			ctx.drawImage(Boards[24], 72*8-4, 8 + y*8);
 			ctx.drawImage(Boards[24], 637, 8 + y*8);
 			
 		}
-		ctx.drawImage(Boards[10], 72*8-3, 68);//horizontal bar at right
-		ctx.drawImage(Boards[10], 72*8-3, 100);//horizontal bar at right
+		ctx.drawImage(Boards[10], 72*8-3, 68-dy);//horizontal bar at right
+		ctx.drawImage(Boards[10], 72*8-3, 100-dy);//horizontal bar at right
 	}
 
 	function displayScoreDigit(digit,pos, offset)
@@ -600,9 +607,11 @@ const files={
 		ctx.fillRect(0, 368, canvas.width,28);
 		ctx.fillRect(0, 438, canvas.width,80);
 		
+		
 		ctx.drawImage(Boards[43], 0, 368);
 		ctx.drawImage(Boards[44], 264, 368);
 		ctx.drawImage(Boards[45], 264+184, 368);
+		
 		
 	}
 
@@ -701,8 +710,9 @@ const files={
 	function LoadLevel(level)
 	{
 		CurrentLevel=level;
+		CurrentLevelWinned=false;
 		stop();
-		cleanPhysics();
+		cleanPhysics(true);
 		console.log("loading level "+level);
 		
 		ctx.fillStyle = "rgba(0,162,162,255)";
@@ -753,12 +763,20 @@ const files={
 				Bonus1=0;
 				Bonus2=0;
 				displayScore();
-				alert("Win!");
+				setTimeout(function() { youWin(); }, 2000);
 			}
 		}
 	}
 	
-
+	function youWin()
+	{	
+		stop();
+		ctx.fillStyle = "rgba(0,243,243,255)";
+		ctx.fillRect(canvas.width/2-40,canvas.height/2-40, 80,80);
+		ctx.font = "10px Arial";
+		ctx.fillStyle = "purple";
+		ctx.fillText("You win",canvas.width/2-20,canvas.height/2-20);
+	}
 	//--------------------------------------------------
 	// AnimPart
 	//--------------------------------------------------
@@ -780,26 +798,32 @@ const files={
 		}
 	}
 	
-	
 	//--------------------------------------------------
 	// cleanPhysics
 	//--------------------------------------------------
-	function cleanPhysics()
+	function cleanPhysics(all)
 	{
 		const allBody= [];
 		engine.world.bodies.forEach((body)=>{
-			if((body.isStatic==false)&&(body.isSleeping == false))
+			if(all==false)
 			{
-				allBody.push(body);
+				if((body.isStatic==false)&&(body.isSleeping == false))
+				{
+					allBody.push(body);
+				}
 			}
+			else
+				allBody.push(body);
 		});
 		World.remove(world, allBody);
 	}
+	
 	//--------------------------------------------------
 	// stop
 	//--------------------------------------------------
 	function stop()
 	{
+		CurrentLevelRunning=false;
 		Render.stop(render)
 		if(runner!=undefined)
 			Runner.stop(runner);
@@ -809,7 +833,9 @@ const files={
 	//--------------------------------------------------
 	function run()
 	{
-		console.log("run! "+engine.world.gravity.y);
+		
+		CurrentLevelRunning=true;
+		//console.log("run! "+engine.world.gravity.y);
 		CurrentLevelWinned=false;
 		LevelJson.Parts.forEach(part => {
 			if(part.canBeDragged==1)
@@ -819,7 +845,7 @@ const files={
 		});
 		
 		//clean the World
-		cleanPhysics();
+		cleanPhysics(false);
 		engine.world.gravity.y = 0;
 		LevelJson.Parts.forEach(part => {
 			let start=part.name.indexOf('(');
@@ -941,6 +967,19 @@ const files={
 	}
 	function MouseClickUp(e)
 	{
+		if(CurrentLevelWinned==true)
+		{
+			if(CurrentLevel<MaxLevel)
+				LoadLevel(CurrentLevel+1);
+			return;
+		}
+		if(CurrentLevelRunning==true)
+		{	
+			stop();
+			myTimer = setInterval(myTimerBonus1, 1000);
+			refresh(LevelJson,true);
+			return;
+		}
 		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
@@ -1069,6 +1108,12 @@ const files={
 	
 	function MouseClickDown(e)
 	{
+		
+		if(CurrentLevelWinned==true)
+			return;
+		if(CurrentLevelRunning==true)
+			return;
+		
 		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
@@ -1216,6 +1261,11 @@ const files={
 	}
 	function MouseMove(e)
 	{
+		if(CurrentLevelWinned==true)
+			return;
+		if(CurrentLevelRunning==true)
+			return;
+		
 		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(ExpandUnit!=0)
@@ -1503,36 +1553,11 @@ const files={
 		return;
 		
 	}
-	
-	function init()
-	{
-	canvas = document.getElementById("myCanvas");
-	canvas.onmousedown = MouseClickDown;
-	canvas.onmouseup = MouseClickUp;
-	canvas.onmousemove = MouseMove;
-	ctx = canvas.getContext("2d");
-	engine = Engine.create();
-	runner=undefined;
-	render = Render.create({
-		  engine, 
-		  canvas: canvas,
-		  options: {
-			wireframes: false,
-			background: "rgba(0,162,162,255)",
-			width: canvas.width,
-			height: canvas.height,
-			pixelRatio:  window.devicePixelRatio // here
-		  }
-		}); 
-
-	world = engine.world;
-	
-	
-	
 	//--------------------------------------------------
 	// beforeRender
 	//--------------------------------------------------
-	Events.on(render, "beforeRender", (event) => {
+	function beforeRender()
+	{
 			
 	//console.log("beforeRender");
 	LevelJson.Parts.forEach(part => {
@@ -1563,25 +1588,21 @@ const files={
 		}
 		});
 		//checkIfWin();
-	});
+	}
 	//--------------------------------------------------
 	// afterRender
 	//--------------------------------------------------
-	Events.on(render, "afterRender", (event) => {
-		
-		
-			
-	//console.log("afterRender");
-	refresh(LevelJson, false);
-	checkIfWin();
-	});
-	
-	
-	
+	function afterRender()
+	{
+		//console.log("afterRender");
+		refresh(LevelJson, false);
+		checkIfWin();
+	}
 	//--------------------------------------------------
-	// collision
+	// collisionStart
 	//--------------------------------------------------
-	Events.on(engine,"collisionStart", (event) => {
+	function collisionStart(event)
+	{
 	  event.pairs.forEach((collision) => {
 		  
 		//console.log("Collision Parts No: "+collision.bodyA.part.no +" - "+ collision.bodyB.part.no);
@@ -1634,8 +1655,41 @@ const files={
 
 		});
 		
-	});
-	LoadBoard();
-	document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+	}
+	//--------------------------------------------------
+	// init
+	//--------------------------------------------------
+	function init()
+	{
+		canvas = document.getElementById("myCanvas");
+		wireframeCheckbox =  document.getElementById("wireframe");
+		wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;})
+
+		canvas.onmousedown = MouseClickDown;
+		canvas.onmouseup = MouseClickUp;
+		canvas.onmousemove = MouseMove;
+		ctx = canvas.getContext("2d");
+		engine = Engine.create();
+		runner=undefined;
+		render = Render.create({
+			  engine, 
+			  canvas: canvas,
+			  options: {
+				wireframes: wireframe,
+				background: "rgba(0,162,162,255)",
+				width: canvas.width,
+				height: canvas.height,
+				pixelRatio:  window.devicePixelRatio // here
+			  }
+			}); 
+
+		world = engine.world;
+		
+		Events.on(render, "beforeRender", (event) => {beforeRender();});
+		Events.on(render, "afterRender", (event) => {afterRender();});
+		Events.on(engine,"collisionStart", (event) => {collisionStart(event);});
+			
+		LoadBoard();
+		document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 	}
 	
