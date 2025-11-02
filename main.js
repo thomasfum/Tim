@@ -19,6 +19,9 @@
 //bug
 //
 
+
+	var CurrentLevel=3;
+
 	let Images={};
 	let Icons={};
 	let Boards={};
@@ -58,7 +61,7 @@
 	var MouseOnPart=0;
 	var BeltNoConnecting=-1;
 	
-	var CurrentLevel=0;
+	
 	var CurrentLevelWinned=false;
 	var CurrentLevelRunning=false;
 	var ExpandUnit=0;
@@ -84,7 +87,8 @@ let
 
 const WinCondition={
 	"1":{"Conditions":[{"unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
-	"2":{"Conditions":[{"unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]}
+	"2":{"Conditions":[{"unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]},
+	"3":{"Conditions":[{"unitNo":8},{"unitNo":9},{"unitNo":10}]}
 };	
 		
 const files={			 
@@ -93,7 +97,7 @@ const files={
 	"2":{"count":4,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
 	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
 	"3":{"count":3},
-	"4":{"count":7,"mass":-1},//ballon
+	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7},//ballon
 	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
 	"7":{"count":4},
@@ -103,9 +107,9 @@ const files={
 	"11":{"count":1},
 	"12":{"count":10},
 	"13":{"count":21},
-	"14":{"count":4},//gear
+	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
 	"15":{"count":26},
-	"16":{"count":3},//bellows (soufflet)
+	"16":{"count":3,"nb_anim":3},//bellows (soufflet)
 	"17":{"count":1},
 	"18":{"count":16},
 	"19":{"count":6},
@@ -117,7 +121,7 @@ const files={
 	"25":{"count":2},
 	"26":{"count":6},
 	"27":{"count":6},
-	"28":{"count":1},
+	"28":{"count":1,"restitution":0.2,"mass":2},//baseball
 	"29":{"count":6},
 	"30":{"count":1},
 	"31":{"count":10},
@@ -132,8 +136,8 @@ const files={
 	"40":{"count":4},
 	"41":{"count":6},
 	"42":{"count":2},
-	"43":{"count":1},//canon ball
-	"44":{"count":1},
+	"43":{"count":1,"restitution":0.2,"mass":2},//canon ball
+	"44":{"count":1,"restitution":0.2,"mass":2},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
 	//"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 1  0.5 1 0.5 0.5 0 0.5  0 0"}]},//curved pipe wall
@@ -244,15 +248,16 @@ const files={
 		displayRightBoard();
 		partsbin={};
 		let partsbinPosY=0;
+		//step 1
 		json.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
-				//if(part.no==17)
+				//if(part.no==9)
 				//	console.log("refresh 1 -",part.no);
 				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
 				{
-					//if(part.no==17)
+					//if(part.no==9)
 					//	console.log("refresh 2 -",part.no);
 					let flipH=0;
 					let flipV=0;
@@ -325,14 +330,34 @@ const files={
 									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,flipV,flipH);
 								else
 								{
-									drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y,flipV,flipH);
+									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
+									if((part.animOnce==true)&&(part.animStep==files[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+									{
+									}
+									else
+										drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2,flipV,flipH);
+									//console.log("static part=",part.staticObj);
+									//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
+									//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+									
+									//console.log("static part ici ("+part.TimType+")",part.staticObj);
+									
+									//part.staticObj.height=Images[part.TimType+"-"+(size+part.animStep)].height;
+									//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
+									//part.staticObj.position.y=100;
+									if(part.staticObj!=undefined)
+										part.staticObj.height=12;
 									part.animDelay++;
 									if(part.animDelay>10)
 									{
 										part.animDelay=0;
 										part.animStep++;
 										if(part.animStep>=files[part.TimType].nb_anim)
+										{
 											part.animStep=0;
+											if(part.animOnce==true)
+												part.animStep=files[part.TimType].nb_anim-1;
+										}
 									}
 								}
 							}
@@ -350,14 +375,25 @@ const files={
 							{
 								let val=part.animStep+parseInt(subResult);
 								//console.log(part.TimType+"_"+val);
-								drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,flipV,flipH);
+								if((part.animOnce==true)&&(part.animStep==files[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+								{
+								}
+								else
+									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,flipV,flipH);
+								//console.log("static part=",part.staticObj);
+								part.staticObj.height=Images[part.TimType+"-"+val].height;
+								
 								part.animDelay++;
 								if(part.animDelay>10)
 								{
 									part.animDelay=0;
 									part.animStep++;
 									if(part.animStep>=files[part.TimType].nb_anim)
+									{
 										part.animStep=0;
+										if(part.animOnce==true)
+											part.animStep=files[part.TimType].nb_anim-1;
+									}
 								}
 							}							
 						}
@@ -427,6 +463,14 @@ const files={
 			}
 		});
 		
+		
+		//step 2 //cisor
+		json.Parts.forEach(part => {
+			
+			if(part.in_partsbin==0)
+			{
+			}
+		};//
 		//display number in bin
 		for(var key in partsbin)
 		{
@@ -464,6 +508,7 @@ const files={
 		json.Parts.forEach(part => {
 			if(part.TimType==8)//belt
 			{
+				//console.log("belt");
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
 					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
@@ -746,9 +791,11 @@ const files={
 				//ctx.fillStyle = "rgba(0,125,125,255)";
 				//ctx.fillRect(WinCondition[CurrentLevel].Conditions[index].x1, WinCondition[CurrentLevel].Conditions[index].y1, WinCondition[CurrentLevel].Conditions[index].dx, WinCondition[CurrentLevel].Conditions[index].dy);
 				let unitNo=WinCondition[CurrentLevel].Conditions[index].unitNo;
+				let found=false;
 				engine.world.bodies.forEach((body)=>{
 					if(body.TimNo==unitNo)
 					{
+						found=true;
 						if((body.position.x>WinCondition[CurrentLevel].Conditions[index].x1)&&
 						(body.position.x<WinCondition[CurrentLevel].Conditions[index].x1+WinCondition[CurrentLevel].Conditions[index].dx)&&
 						(body.position.y>WinCondition[CurrentLevel].Conditions[index].y1)&&
@@ -759,19 +806,23 @@ const files={
 							win++;
 						}
 					}
+					
 				});
+				if(found==false)
+					win++;
 			}
-		}
-		if(win==WinCondition[CurrentLevel].Conditions.length)
-		{
-			if(CurrentLevelWinned==false)
+		
+			if(win==WinCondition[CurrentLevel].Conditions.length)
 			{
-				CurrentLevelWinned=true;
-				Score=Score+Bonus1+Bonus2;
-				Bonus1=0;
-				Bonus2=0;
-				displayScore();
-				setTimeout(function() { youWin(); }, 2000);
+				if(CurrentLevelWinned==false)
+				{
+					CurrentLevelWinned=true;
+					Score=Score+Bonus1+Bonus2;
+					Bonus1=0;
+					Bonus2=0;
+					displayScore();
+					setTimeout(function() { youWin(); }, 2000);
+				}
 			}
 		}
 	}
@@ -788,20 +839,22 @@ const files={
 	//--------------------------------------------------
 	// AnimPart
 	//--------------------------------------------------
-	function AnimPart(PartNo, forwardMessage,flipH,flipV)
+	function AnimPart(PartNo, forwardMessage,flipH,flipV,once,cleanAtEnd)
 	{
-		//console.log("anim mouse "+PartNo);
+		console.log("anim "+PartNo+ "="+LevelJson.Parts[PartNo].name);
 		LevelJson.Parts[PartNo].anim=true;
 		LevelJson.Parts[PartNo].animStep=1;
 		LevelJson.Parts[PartNo].animDelay=0;
 		LevelJson.Parts[PartNo].animDirectionX=flipH;
+		LevelJson.Parts[PartNo].animOnce=once;
+		LevelJson.Parts[PartNo].animCleanAtEnd=cleanAtEnd;
 		if(forwardMessage==true)
 		{
 			let AutherExtremity=PartBeltExtremity(PartNo);
 			if(AutherExtremity!=-1)
 			{
-				//console.log("from Part"+PartNo+" action on "+AutherExtremity);
-				AnimPart(AutherExtremity,false,flipH,flipV)
+				console.log("from Part "+PartNo+" action on "+AutherExtremity);
+				AnimPart(AutherExtremity,false,flipH,flipV,false,false)
 			}
 		}
 	}
@@ -870,8 +923,13 @@ const files={
 						restitution=0;
 					var mass=files[result].mass;
 					if(mass==undefined)
-						mass=0;
-						
+						mass=1;
+					let ox=0;
+					let oy=0;
+					if(files[part.TimType].ox!=undefined)
+						ox=files[part.TimType].ox;
+					if(files[part.TimType].oy!=undefined)
+						oy=files[part.TimType].oy;
 					var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
 						TimNo:part.no,
 						isSleeping: false,
@@ -882,10 +940,14 @@ const files={
 						mass:Math.abs(mass),
 						mass2:mass,
 						render: {
-						  sprite: { texture: part.Images[part.TimType+"-0"].src/*, 
+						  sprite: { texture: part.Images[part.TimType+"-0"].src,/*, 
 						  xScale: ratio,
 						  yScale: ratio,
 						  */
+						    
+							xOffset: ox,
+							yOffset: oy//-0.18
+						  
 						  }
 						  }
 						  });
@@ -979,6 +1041,9 @@ const files={
 								render: { fillStyle: "rgba(0, 0, 255, 0)"}
 								}, true, 0.001, 20);
 							World.add(world, [staticObj]);
+							part.staticObj=staticObj;
+							part.staticObjId=staticObj.id;
+							console.log("id=",part.staticObjId);
 						}
 					}
 					else
@@ -989,6 +1054,9 @@ const files={
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
 						World.add(world, [staticObj]);
+						part.staticObj=staticObj;
+						part.staticObjId=staticObj.id;
+						//console.log("id=",part.staticObjId);
 					}
 				}
 			}
@@ -1643,7 +1711,7 @@ const files={
 				if(NBBoardsLoaded==NBBoardsToLoad)
 				{
 					console.log("All extra images loaded: "+NBBoardsLoaded) ;
-					LoadLevel(1);
+					LoadLevel(CurrentLevel);
 				}
 			};
 		}
@@ -1663,7 +1731,8 @@ const files={
 			if(part.is_moving)
 			{
 				//apply gravity
-				Body.applyForce(part.movingObj, part.movingObj.position, { x: 0, y: part.movingObj.mass2 * 0.0005 })
+				//if(part.movingObj.mass2>0)
+					Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
 
@@ -1695,6 +1764,100 @@ const files={
 		refresh(LevelJson, false);
 		checkIfWin();
 	}
+	
+	function collision_mouse(TimNo)
+	{
+		let flipH=0;
+			let flipV=0;
+			if(LevelJson.Parts[TimNo].direction_r_to_l!=undefined)
+			{
+				let start=LevelJson.Parts[TimNo].direction_r_to_l.indexOf('(');
+				let end=LevelJson.Parts[TimNo].direction_r_to_l.indexOf(')');
+				flipV = LevelJson.Parts[TimNo].direction_r_to_l.substring(start+1, end);
+				//console.log("flipV="+flipV);
+			}
+			if(LevelJson.Parts[TimNo].orientation!=undefined)
+			{
+				//console.log("orientation");
+				let start=LevelJson.Parts[TimNo].orientation.indexOf('(');
+				let end=LevelJson.Parts[TimNo].orientation.indexOf(')');
+				flipH = LevelJson.Parts[TimNo].orientation.substring(start+1, end);
+				//console.log("flipH="+flipH);
+			}
+			console.log("moving part direction "+flipH+" "+flipV);
+			AnimPart(TimNo,true,flipH,flipV,false,false);
+	}
+	function collision_bellow(TimNo)
+	{
+		let flipH=0;
+		let flipV=0;
+		if(LevelJson.Parts[TimNo].direction_r_to_l!=undefined)
+		{
+			let start=LevelJson.Parts[TimNo].direction_r_to_l.indexOf('(');
+			let end=LevelJson.Parts[TimNo].direction_r_to_l.indexOf(')');
+			flipV = LevelJson.Parts[TimNo].direction_r_to_l.substring(start+1, end);
+			//console.log("flipV="+flipV);
+		}
+		if(LevelJson.Parts[TimNo].orientation!=undefined)
+		{
+			//console.log("orientation");
+			let start=LevelJson.Parts[TimNo].orientation.indexOf('(');
+			let end=LevelJson.Parts[TimNo].orientation.indexOf(')');
+			flipH = LevelJson.Parts[TimNo].orientation.substring(start+1, end);
+			//console.log("flipH="+flipH);
+		}
+		console.log("moving part direction "+flipH+" "+flipV);
+		AnimPart(TimNo,false,flipH,flipV,true,false);
+	
+		let scaleX=1;
+		if(flipH==1)
+			scaleX=-1;
+		
+		let startPoint = { x: LevelJson.Parts[TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[TimNo].width/2, y: LevelJson.Parts[TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[TimNo].height/2 };
+		var collisions = [];
+        let  bodies = Composite.allBodies(engine.world);
+        let  endPoint = { x: LevelJson.Parts[TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[TimNo].width/2+100*scaleX, y: LevelJson.Parts[TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[TimNo].height/2};
+		
+		
+		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
+		console.log("collisions",collisions);
+		collisions.forEach((collision) => {
+			if(collision.body.isStatic==false)
+			{
+			//console.log("collisions ->",collision.body);
+			//collision.body.isSleeping=true;
+			//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+			Body.setVelocity(collision.body, { x:5*scaleX, y: 0 });
+			collision.body.TimDirectionX=scaleX;
+			//console.log("collisions ->",collision.body);
+			}
+		});
+		/*
+		ctx.beginPath();
+        ctx.moveTo(startPoint.x, startPoint.y);
+        ctx.lineTo(endPoint.x, endPoint.y);
+        if (collisions.length > 0) {
+            ctx.strokeStyle = '#fff';
+        } else {
+            ctx.strokeStyle = '#555';
+        }
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+		*/
+
+	}
+	
+	function collision_ballon(_boby)
+	{
+		
+		LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
+		LevelJson.Parts[_boby.TimNo].pos_y=_boby.position.y-28;
+		World.remove(world, [_boby]);
+		
+		console.log("destroy ballon "+_boby.TimNo);
+		LevelJson.Parts[_boby.TimNo].is_moving=false;
+		AnimPart(_boby.TimNo,true,0,0,true,true);
+	}
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
@@ -1703,53 +1866,78 @@ const files={
 	  event.pairs.forEach((collision) => {
 		  
 		//console.log("Collision Parts No: "+collision.bodyA.part.no +" - "+ collision.bodyB.part.no);
-		//console.log("Collision Parts No: "+collision.bodyA.TimNo +" - "+ collision.bodyB.TimNo);
+		console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
 		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
-		{
-			let flipH=0;
-			let flipV=0;
-			if(LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l!=undefined)
-			{
-				let start=LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.indexOf('(');
-				let end=LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.indexOf(')');
-				flipV = LevelJson.Parts[collision.bodyA.TimNo].direction_r_to_l.substring(start+1, end);
-				//console.log("flipV="+flipV);
-			}
-			if(LevelJson.Parts[collision.bodyA.TimNo].orientation!=undefined)
-			{
-				//console.log("orientation");
-				let start=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf('(');
-				let end=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf(')');
-				flipH = LevelJson.Parts[collision.bodyA.TimNo].orientation.substring(start+1, end);
-				//console.log("flipH="+flipH);
-			}
-			console.log("moving part direction "+flipH+" "+flipV);
-			AnimPart(collision.bodyA.TimNo,true,flipH,flipV);
-			
+		{	
+			collision_mouse(collision.bodyA.TimNo);
 		}
 		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
 		{
-			let flipH=0;
-			let flipV=0;
-			if(LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l!=undefined)
+			collision_mouse(collision.bodyB.TimNo);
+		}
+		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)
+		{	
+			collision_bellow(collision.bodyA.TimNo);
+		}
+		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)
+		{
+			collision_bellow(collision.bodyB.TimNo);
+		}
+		
+		
+		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon
+		{
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==14)//gear
 			{
-				let start=LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.indexOf('(');
-				let end=LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.indexOf(')');
-				flipV = LevelJson.Parts[collision.bodyB.TimNo].direction_r_to_l.substring(start+1, end);
-				//console.log("flipV="+flipV);
+				collision_ballon(collision.bodyA);
 			}
-			if(LevelJson.Parts[collision.bodyB.TimNo].orientation!=undefined)
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor
 			{
-				//console.log("orientation");
-				let start=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf('(');
-				let end=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf(')');
-				flipH = LevelJson.Parts[collision.bodyB.TimNo].orientation.substring(start+1, end);
-				//console.log("flipH="+flipH);
+				let flipH=0
+				if(LevelJson.Parts[collision.bodyB.TimNo].orientation!=undefined)
+				{
+					//console.log("orientation");
+					let start=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf('(');
+					let end=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf(')');
+					flipH = LevelJson.Parts[collision.bodyB.TimNo].orientation.substring(start+1, end);
+					if(flipH==0)
+						flipH=-1;
+					//console.log("flipH="+flipH);
+				}
+					
+				console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
+				
+				if(flipH==collision.bodyA.TimDirectionX)
+					collision_ballon(collision.bodyA);
 			}
-			//console.log("moving part direction "+flipH+" "+flipV);
-			AnimPart(collision.bodyB.TimNo,true,flipH,flipV);
-		}	
+		}
+		
+		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==4)//baloon
+		{
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==14)//gear
+			{
+				collision_ballon(collision.bodyB);
+			}
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor
+			{
+				let flipH=0
+				if(LevelJson.Parts[collision.bodyA.TimNo].orientation!=undefined)
+				{
+					//console.log("orientation");
+					let start=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf('(');
+					let end=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf(')');
+					flipH = LevelJson.Parts[collision.bodyA.TimNo].orientation.substring(start+1, end);
+					//console.log("flipH="+flipH);
+					if(flipH==0)
+						flipH=-1;
+				}
 
+				console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
+				if(flipH==collision.bodyB.TimDirectionX)
+					collision_ballon(collision.bodyB);
+			}
+		}
+		
 		});
 		
 	}
@@ -1765,7 +1953,7 @@ const files={
 		canvas = document.getElementById("myCanvas");
 		wireframeCheckbox =  document.getElementById("wireframe");
 		if(wireframeCheckbox!=undefined)
-			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;})
+			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(LevelJson,true);})
 
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;
