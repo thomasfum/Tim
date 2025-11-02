@@ -43,6 +43,7 @@
 	var world=undefined;
 	var wireframe=false;
 	
+	
 	const playgroundWidth=578-15;//578
 	const playgroundHeight=369;
 	const playgroundOffsetX=10;
@@ -75,8 +76,11 @@ let
 		Render = Matter.Render,
 		Runner = Matter.Runner,
 		Composite = Matter.Composite,
+		Common = Matter.Common,
 		World = Matter.World;
 
+//var decomp = require('poly-decomp');
+//let  decomp=polygonDecomp.decomp;
 
 const WinCondition={
 	"1":{"Conditions":[{"unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
@@ -86,7 +90,8 @@ const WinCondition={
 const files={			 
 	"0":{"count":1,"restitution":0.2,"mass":2},//Bowling ball
 	"1":{"count":8},
-	"2":{"count":4},//wood incline
+	"2":{"count":4,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
+	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
 	"3":{"count":3},
 	"4":{"count":7,"mass":-1},//ballon
 	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
@@ -131,7 +136,9 @@ const files={
 	"44":{"count":1},
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
-	"47":{"count":4},//curved pipe wall
+	//"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 1  0.5 1 0.5 0.5 0 0.5  0 0"}]},//curved pipe wall
+	//"47":{"count":4,"phy_poly":[[0,0],[1, 0], [1, 1], [0.5, 1] [0.5, 0.5], [0,0.5], [0, 0]]},//curved pipe wall
+	"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 0.5  0 0.5  0 0","y":0.25},{"p":"0.5 0  1 0  1 1  0.5 1  0.5 0","x":-0.25}]},//curved pipe wall
 	"48":{"count":8},//wood wall
 	"49":{"count":1},
 	"50":{"count":3},
@@ -145,6 +152,7 @@ const files={
 
 
 	
+
 
 
 	function flipHorizontally(img,x,y){
@@ -865,12 +873,13 @@ const files={
 						mass=0;
 						
 					var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
-						//part:part,
 						TimNo:part.no,
 						isSleeping: false,
 						isStatic: false,
 						restitution: restitution, 
+						
 						//	density:mass, 
+						mass:Math.abs(mass),
 						mass2:mass,
 						render: {
 						  sprite: { texture: part.Images[part.TimType+"-0"].src/*, 
@@ -886,13 +895,101 @@ const files={
 				}
 				else
 				{
-					var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
-						isStatic: true, 
-						part:part,
-						TimNo:part.no,
-						render: { fillStyle: "rgba(0, 0, 255, 0)" }
-						});
-					World.add(world, [staticObj]);
+					//if(part.TimType==2)//inclined wood
+					if(files[part.TimType].phy_poly!=undefined)
+					{
+						console.log("poly");
+						let flipH=0;
+						let flipV=0;
+						
+						if(part.direction_r_to_l!=undefined)
+						{
+							let start=part.direction_r_to_l.indexOf('(');
+							let end=part.direction_r_to_l.indexOf(')');
+							flipV = part.direction_r_to_l.substring(start+1, end);
+							//console.log("flipV="+flipV);
+						}
+						if(part.orientation!=undefined)
+						{
+							//console.log("orientation");
+							let start=part.orientation.indexOf('(');
+							let end=part.orientation.indexOf(')');
+							flipH = part.orientation.substring(start+1, end);
+							//console.log("flipH="+flipH);
+						}
+						for(let i=0;i<files[part.TimType].phy_poly.length;i++)
+						{
+							
+						
+						/*
+							console.log("verts1=",files[part.TimType].phy_poly);
+							let ret=polygonMakeCCW(files[part.TimType].phy_poly);
+							console.log(ret);
+							console.log("verts2=",files[part.TimType].phy_poly);
+							// Decompose into convex polygons, using the faster algorithm
+							var result2;
+							
+							var convexPolygons = polygonQuickDecomp(files[part.TimType].phy_poly,result2);
+							console.log("verts3=",result2);
+							//let verts = Matter.Vertices.fromPath(files[part.TimType].phy_poly[0]);
+							//let verts = Matter.Vertices.fromPath(convexPolygons);
+							//let verts = Vertices.create(points, body);
+							console.log("verts3=",convexPolygons);
+							*/
+							let verts = Matter.Vertices.fromPath(files[part.TimType].phy_poly[i].p);
+							let scaleX=1;
+							let scaleY=1;
+							if(flipH!=0)
+								scaleX=-1;
+							if(flipV!=0)
+								scaleY=-1;
+							if(part.TimType==47)
+							{
+								let start=part.appearance.indexOf('(');
+								let end=part.appearance.indexOf(')');
+								let subResult = part.appearance.substring(start+1, end);
+								if(subResult==1)
+									scaleX=-1;
+								if(subResult==2)
+									scaleY=-1;
+								if(subResult==3)
+								{
+									scaleX=-1;
+									scaleY=-1;
+								}
+							}
+							
+							
+							Matter.Vertices.scale(verts, scaleX*part.width, scaleY*part.height);
+							let ox=part.pos_x+part.width/2;
+							let oy=part.pos_y+part.height/2;
+							if(files[part.TimType].phy_poly[i].y!=undefined)
+							{
+								console.log("ggg  y");
+									oy=oy-(files[part.TimType].phy_poly[i].y*part.height);
+							}
+							if(files[part.TimType].phy_poly[i].x!=undefined)
+							{
+								console.log("ggg  x");
+									ox=ox-(files[part.TimType].phy_poly[i].x*part.width);
+							}
+							var staticObj =Bodies.fromVertices(playgroundOffsetX+ox*scaleX, playgroundOffsetY+oy*scaleY, verts, {
+								isStatic: true, 
+								TimNo:part.no,
+								render: { fillStyle: "rgba(0, 0, 255, 0)"}
+								}, true, 0.001, 20);
+							World.add(world, [staticObj]);
+						}
+					}
+					else
+					{
+						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
+							isStatic: true, 
+							TimNo:part.no,
+							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							});
+						World.add(world, [staticObj]);
+					}
 				}
 			}
 		});
@@ -1661,9 +1758,14 @@ const files={
 	//--------------------------------------------------
 	function init()
 	{
+		
+		//import { poly-decomp } from './decomp.js';
+		//Common.setDecomp('poly-decomp');
+		//Common.setDecomp(require('poly-decomp'));
 		canvas = document.getElementById("myCanvas");
 		wireframeCheckbox =  document.getElementById("wireframe");
-		wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;})
+		if(wireframeCheckbox!=undefined)
+			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;})
 
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;
