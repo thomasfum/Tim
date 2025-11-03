@@ -14,9 +14,10 @@
 // animations
 // size 678x369
 // langage management
+// welcome page with level info
 //---------------------------
 //bug
-// ballon replay
+
 
 
 
@@ -37,6 +38,7 @@
 
 
 	let LevelJson;
+	let LevelJsonOrigin;
 	var DraggingObject=undefined;
 	var canvas=undefined;	
 	var ctx=undefined;
@@ -229,10 +231,10 @@ const files={
 	{
 		console.log("All images loaded: "+NBImagesLoaded) ;
 		myTimer = setInterval(myTimerBonus1, 1000);
-		refresh(LevelJson,true);
+		refresh(true);
 	}
 	
-	function refresh(json, allObjects)
+	function refresh( allObjects)
 	{
 		if(wireframe==true)
 			return;
@@ -251,16 +253,16 @@ const files={
 		partsbin={};
 		let partsbinPosY=0;
 		//step 1
-		json.Parts.forEach(part => {
+		LevelJson.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
-				//if(part.no==9)
-				//	console.log("refresh 1 -",part.no);
-				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0)))
+				if(part.no==9)
+					console.log("refresh 1 -"+part.no+ " m="+part.is_moving);
+				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 				{
-					//if(part.no==9)
-					//	console.log("refresh 2 -",part.no);
+					if(part.no==9)
+						console.log("refresh 2 -",part.no);
 					let flipH=0;
 					let flipV=0;
 					if(part.direction_r_to_l!=undefined)
@@ -328,13 +330,15 @@ const files={
 								let size=0;
 								if(part.size!=undefined)
 									size=part.size;
-								if((part.anim==undefined)||(part.anim==0))
+								if((part.anim==undefined)||(part.anim==false))
 									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,flipV,flipH);
 								else
 								{
 									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
+									//console.log("anim1 "+part.anim);
 									if((part.animOnce==true)&&(part.animStep==files[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 									{
+										console.log("1 no image for "+part.no+" : "+part.animStep);
 									}
 									else
 										drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2,flipV,flipH);
@@ -371,14 +375,16 @@ const files={
 							let end=part.appearance.indexOf(')');
 							let subResult = part.appearance.substring(start+1, end);
 							//console.log(part.TimType+"_"+subResult);
-							if((part.anim==undefined)||(part.anim==0))
+							if((part.anim==undefined)||(part.anim==false))
 								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);
 							else
 							{
+								//console.log("anim2 "+part.anim);
 								let val=part.animStep+parseInt(subResult);
 								//console.log(part.TimType+"_"+val);
 								if((part.animOnce==true)&&(part.animStep==files[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 								{
+									console.log("2 no image for "+part.no+" : "+part.animStep);
 								}
 								else
 									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,flipV,flipH);
@@ -470,13 +476,13 @@ const files={
 		
 		//--------------------------
 		//step 2 //cisor
-		json.Parts.forEach(part => {
+		LevelJson.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
 				if(part.TimType==37)
 				{
-					console.log("cisor 2");
+					//console.log("cisor 2");
 					
 					let flipH=0;
 					let flipV=0;
@@ -522,30 +528,30 @@ const files={
 			ctx.strokeStyle = 'red';
 			if((MouseOnPart!=-1)&&(PartConnectionFree(MouseOnPart)==true))
 			{
-				//console.log("MouseOnPart = ",json.Parts[MouseOnPart].TimType);
-				if(files[json.Parts[MouseOnPart].TimType].node_x!=undefined)
+				//console.log("MouseOnPart = ",LevelJson.Parts[MouseOnPart].TimType);
+				if(files[LevelJson.Parts[MouseOnPart].TimType].node_x!=undefined)
 					ctx.strokeStyle = 'lightgreen';
 			}
 			
 			
-			const  [x,y]=GetNodePos(json.Parts[beltStart]);
+			const  [x,y]=GetNodePos(LevelJson.Parts[beltStart]);
 			
 			ctx.beginPath();
-			//ctx.moveTo(json.Parts[beltStart].pos_x, json.Parts[beltStart].pos_y);
+			//ctx.moveTo(LevelJson.Parts[beltStart].pos_x, LevelJson.Parts[beltStart].pos_y);
 			ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
 			ctx.lineTo(Mouse_pos_x+playgroundOffsetX, Mouse_pos_y+playgroundOffsetY);
 			ctx.stroke();
 		}
 		//draw belts
-		json.Parts.forEach(part => {
+		LevelJson.Parts.forEach(part => {
 			if(part.TimType==8)//belt
 			{
 				//console.log("belt");
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
 					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
-					const  [x1,y1]=GetNodePos(json.Parts[part.connected_part_1]);
-					const  [x2,y2]=GetNodePos(json.Parts[part.connected_part_2]);
+					const  [x1,y1]=GetNodePos(LevelJson.Parts[part.connected_part_1]);
+					const  [x2,y2]=GetNodePos(LevelJson.Parts[part.connected_part_2]);
 					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,8);
 					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,-8);
 				}
@@ -730,13 +736,14 @@ const files={
 			if(NBIconsLoaded==NBIconsToLoad)
 			{
 				console.log("All icons loaded: "+NBIconsLoaded) ;
-				refresh(LevelJson,true);
+				refresh(true);
 			}
 		};
 	}	
 
 	function ReadJson(json)
 	{
+		//LevelJsonOrigin = structuredClone(LevelJson);
 		LevelJson=json;
 		//console.log(LevelJson.Puzzle_info);
 		if(document.getElementById("title")!=undefined)
@@ -920,22 +927,47 @@ const files={
 		Render.stop(render)
 		if(runner!=undefined)
 			Runner.stop(runner);
+		
+		
+		if(LevelJson!=undefined)
+		{
+			console.log("reset LevelJson");
+			LevelJson.Parts.forEach(part => {
+				
+				part.staticObj=undefined;
+				part.movingObj=undefined;
+				part.selected=0;
+				part.is_moving=LevelJsonOrigin.Parts[part.no].is_moving;
+				part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
+				part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
+				part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
+				part.anim=false;
+				part.animStep=0;
+				part.animDelay=0;
+				part.animDirectionX=0;
+				part.animOnce=false;
+				part.animCleanAtEnd=false;
+	
+			});
+		}
 	}
 	//--------------------------------------------------
 	// run
 	//--------------------------------------------------
 	function run()
 	{
+
+		//remocve the link with physics
+		LevelJson.Parts.forEach(part => {
+			part.staticObj=undefined;
+			part.movingObj=undefined;
+		});
+		LevelJsonOrigin =JSON.parse(JSON.stringify(LevelJson));
 		
+		console.log("LevelJsonOrigin! ",LevelJsonOrigin);
 		CurrentLevelRunning=true;
 		//console.log("run! "+engine.world.gravity.y);
 		CurrentLevelWinned=false;
-		LevelJson.Parts.forEach(part => {
-			if(part.canBeDragged==1)
-			{
-				part.selected=0;
-			}
-		});
 		
 		//clean the World
 		cleanPhysics(false);
@@ -947,7 +979,7 @@ const files={
 			
 			if(part.in_partsbin==0)
 			{
-				console.log(part);
+				//console.log(part);
 				if(part.is_moving)
 				{
 					var restitution=files[result].restitution;
@@ -1011,7 +1043,7 @@ const files={
 							flipH = part.orientation.substring(start+1, end);
 							//console.log("flipH="+flipH);
 						}
-						console.log("phy_poly.length="+files[part.TimType].phy_poly.length);
+						//console.log("phy_poly.length="+files[part.TimType].phy_poly.length);
 						for(let i=0;i<files[part.TimType].phy_poly.length;i++)
 						{
 							
@@ -1034,6 +1066,7 @@ const files={
 							let verts = Matter.Vertices.fromPath(files[part.TimType].phy_poly[i].p);
 							let scaleX=1;
 							let scaleY=1;
+							
 							if(flipH!=0)
 								scaleX=-1;
 							if(flipV!=0)
@@ -1056,19 +1089,20 @@ const files={
 							
 							
 							Matter.Vertices.scale(verts, scaleX*part.width, scaleY*part.height);
-							let ox=part.pos_x+part.width/2;
-							let oy=part.pos_y+part.height/2;
-							if(files[part.TimType].phy_poly[i].y!=undefined)
-							{
-								console.log("ggg  y");
-									oy=oy-(files[part.TimType].phy_poly[i].y*part.height);
-							}
+							let ox=part.pos_x+(part.width/2);
+							let oy=part.pos_y+(part.height/2);
 							if(files[part.TimType].phy_poly[i].x!=undefined)
 							{
 								console.log("ggg  x");
-									ox=ox-(files[part.TimType].phy_poly[i].x*part.width);
+								ox=ox-(files[part.TimType].phy_poly[i].x*part.width)*scaleX;
 							}
-							var staticObj =Bodies.fromVertices(playgroundOffsetX+ox*scaleX, playgroundOffsetY+oy*scaleY, verts, {
+							if(files[part.TimType].phy_poly[i].y!=undefined)
+							{
+								console.log("ggg  y");
+								oy=oy-(files[part.TimType].phy_poly[i].y*part.height)*scaleY;
+							}
+							
+							var staticObj =Bodies.fromVertices(playgroundOffsetX+ox, playgroundOffsetY+oy, verts, {
 								isStatic: true, 
 								TimNo:part.no,
 								render: { fillStyle: "rgba(0, 0, 255, 0)"}
@@ -1174,8 +1208,12 @@ const files={
 		if(CurrentLevelRunning==true)
 		{	
 			stop();
+			
+			
+		
+			
 			myTimer = setInterval(myTimerBonus1, 1000);
-			refresh(LevelJson,true);
+			refresh(true);
 			return;
 		}
 		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
@@ -1196,8 +1234,8 @@ const files={
 			{
 				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
 				BeltMode=1;
-					Dragging=false;
-					BeltNoConnecting=DraggingObject.no;
+				Dragging=false;
+				BeltNoConnecting=DraggingObject.no;
 			}
 			else
 			{
@@ -1208,7 +1246,7 @@ const files={
 					LevelJson.Parts[DraggingObject.no].pos_x=-1;
 					LevelJson.Parts[DraggingObject.no].pos_y=-1;
 					LevelJson.Parts[DraggingObject.no].in_partsbin=1;
-					refresh(LevelJson,true);
+					refresh(true);
 				}
 				if(LevelJson.Parts[DraggingObject.no].overlap==true)
 				{
@@ -1227,7 +1265,7 @@ const files={
 						LevelJson.Parts[DraggingObject.no].pos_y=LevelJson.Parts[DraggingObject.no].origin_pos_y;
 					}
 					
-					refresh(LevelJson,true);
+					refresh(true);
 				}
 				//here release
 			}
@@ -1255,7 +1293,7 @@ const files={
 						LevelJson.Parts[BeltNoConnecting].pos_y=-1;
 						LevelJson.Parts[BeltNoConnecting].in_partsbin=1;
 						//console.log("disco ",LevelJson.Parts[BeltNoConnecting]);
-						refresh(LevelJson,true);
+						refresh(true);
 					}
 					else
 					{
@@ -1278,7 +1316,7 @@ const files={
 						LevelJson.Parts[BeltNoConnecting].pos_y=-1;
 						LevelJson.Parts[BeltNoConnecting].in_partsbin=1;
 						//console.log("disco ",LevelJson.Parts[BeltNoConnecting]);
-						refresh(LevelJson,true);
+						refresh(true);
 					}
 					else
 					{
@@ -1290,7 +1328,7 @@ const files={
 						//console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]);
 						BeltMode=0;
 						BeltNoConnecting=-1;
-						refresh(LevelJson,true);
+						refresh(true);
 					}
 				}
 				if(endConnection==true)
@@ -1330,7 +1368,7 @@ const files={
 								LevelJson.Parts[SelectedPart].in_partsbin=1;
 								LevelJson.Parts[SelectedPart].pos_x=-1;
 								LevelJson.Parts[SelectedPart].pos_y=-1;
-								refresh(LevelJson,true);
+								refresh(true);
 							}
 							//flip
 							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
@@ -1347,7 +1385,7 @@ const files={
 									else
 										flipV=0;
 									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";
-									refresh(LevelJson,true);
+									refresh(true);
 								}
 								
 								if(LevelJson.Parts[SelectedPart].orientation!=undefined)
@@ -1362,7 +1400,7 @@ const files={
 									else
 										flipH=0;
 									LevelJson.Parts[SelectedPart].orientation="("+flipH+")";
-									refresh(LevelJson,true);
+									refresh(true);
 								}
 								
 							}
@@ -1485,7 +1523,7 @@ const files={
 							LevelJson.Parts[SelectedPart].size++;
 							LevelJson.Parts[SelectedPart].width+=16;
 							LevelJson.Parts[SelectedPart].pos_x-=16;
-							refresh(LevelJson,true);
+							refresh(true);
 						}
 					}
 					if(div<-16)
@@ -1496,7 +1534,7 @@ const files={
 							LevelJson.Parts[SelectedPart].size--;
 							LevelJson.Parts[SelectedPart].width-=16;
 							LevelJson.Parts[SelectedPart].pos_x+=16;
-							refresh(LevelJson,true);
+							refresh(true);
 						}
 					}
 				}
@@ -1514,7 +1552,7 @@ const files={
 						{
 							LevelJson.Parts[SelectedPart].size++;
 							LevelJson.Parts[SelectedPart].width+=16;
-							refresh(LevelJson,true);
+							refresh(true);
 						}
 					}
 					if(div<-16)
@@ -1523,7 +1561,7 @@ const files={
 						{
 							LevelJson.Parts[SelectedPart].size--;
 							LevelJson.Parts[SelectedPart].width-=16;
-							refresh(LevelJson,true);
+							refresh(true);
 						}
 					}
 				}
@@ -1557,7 +1595,7 @@ const files={
 			}
 			else
 				DraggingObject.overlap=false;
-			refresh(LevelJson,true);
+			refresh(true);
 		}
 		else//over
 		{
@@ -1587,7 +1625,7 @@ const files={
 								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-2.cur'), auto";//drag cursor
 							onPartNo=part.no;
 							selectPart(part.no);
-							refresh(LevelJson,true);
+							refresh(true);
 							onDraggable=true;
 						}
 					}
@@ -1620,7 +1658,7 @@ const files={
 			{
 				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
 				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
-				refresh(LevelJson,true);
+				refresh(true);
 			}
 			
 		}
@@ -1765,7 +1803,7 @@ const files={
 			{
 				//apply gravity
 				//if(part.movingObj.mass2>0)
-					Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
+				Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
 
@@ -1794,7 +1832,7 @@ const files={
 	function afterRender()
 	{
 		//console.log("afterRender");
-		refresh(LevelJson, false);
+		refresh(false);
 		checkIfWin();
 	}
 	
@@ -1888,7 +1926,7 @@ const files={
 		World.remove(world, [_boby]);
 		
 		console.log("destroy ballon "+_boby.TimNo);
-		LevelJson.Parts[_boby.TimNo].is_moving=false;
+		LevelJson.Parts[_boby.TimNo].is_moving=0;
 		AnimPart(_boby.TimNo,true,0,0,true,true);
 	}
 	//--------------------------------------------------
@@ -1986,7 +2024,7 @@ const files={
 		canvas = document.getElementById("myCanvas");
 		wireframeCheckbox =  document.getElementById("wireframe");
 		if(wireframeCheckbox!=undefined)
-			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(LevelJson,true);})
+			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(true);})
 
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;
