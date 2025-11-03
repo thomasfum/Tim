@@ -14,10 +14,10 @@
 // animations
 // size 678x369
 // langage management
-// phisycs for inclined wood
 //---------------------------
 //bug
-//
+// ballon replay
+
 
 
 	var CurrentLevel=3;
@@ -45,6 +45,7 @@
 	var render =undefined;
 	var world=undefined;
 	var wireframe=false;
+	var Test=false;
 	
 	
 	const playgroundWidth=578-15;//578
@@ -96,7 +97,7 @@ const files={
 	"1":{"count":8},
 	"2":{"count":4,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
 	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
-	"3":{"count":3},
+	"3":{"count":3},//Teeter-totter 
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7},//ballon
 	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
@@ -233,7 +234,8 @@ const files={
 	
 	function refresh(json, allObjects)
 	{
-		
+		if(wireframe==true)
+			return;
 		//displayScore();
 		//console.log("Refresh "+allObjects);
 		if(allObjects==true)
@@ -462,15 +464,45 @@ const files={
 				}
 			}
 		});
+		//----------------
+		//string here
 		
 		
+		//--------------------------
 		//step 2 //cisor
 		json.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
+				if(part.TimType==37)
+				{
+					console.log("cisor 2");
+					
+					let flipH=0;
+					let flipV=0;
+					if(part.direction_r_to_l!=undefined)
+					{
+						let start=part.direction_r_to_l.indexOf('(');
+						let end=part.direction_r_to_l.indexOf(')');
+						flipV = part.direction_r_to_l.substring(start+1, end);
+						//console.log("flipV="+flipV);
+					}
+					
+					if(part.orientation!=undefined)
+					{
+						//console.log("orientation");
+						let start=part.orientation.indexOf('(');
+						let end=part.orientation.indexOf(')');
+						flipH = part.orientation.substring(start+1, end);
+						//console.log("flipH="+flipH);
+					}
+					if(flipH==1)
+						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,flipV,flipH);
+					else
+						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,flipV,flipH);
+				}
 			}
-		};//
+		});//
 		//display number in bin
 		for(var key in partsbin)
 		{
@@ -979,6 +1011,7 @@ const files={
 							flipH = part.orientation.substring(start+1, end);
 							//console.log("flipH="+flipH);
 						}
+						console.log("phy_poly.length="+files[part.TimType].phy_poly.length);
 						for(let i=0;i<files[part.TimType].phy_poly.length;i++)
 						{
 							
@@ -1866,7 +1899,7 @@ const files={
 	  event.pairs.forEach((collision) => {
 		  
 		//console.log("Collision Parts No: "+collision.bodyA.part.no +" - "+ collision.bodyB.part.no);
-		console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
+		//console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
 		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
 		{	
 			collision_mouse(collision.bodyA.TimNo);
@@ -1944,9 +1977,9 @@ const files={
 	//--------------------------------------------------
 	// init
 	//--------------------------------------------------
-	function init()
+	function init(_test)
 	{
-		
+		Test=_test;
 		//import { poly-decomp } from './decomp.js';
 		//Common.setDecomp('poly-decomp');
 		//Common.setDecomp(require('poly-decomp'));
