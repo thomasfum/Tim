@@ -97,12 +97,12 @@ const WinCondition={
 const files={			 
 	"0":{"count":1,"restitution":0.2,"mass":2},//Bowling ball
 	"1":{"count":8},
-	"2":{"count":4,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
+	"2":{"count":4,"FlipH":1,"FlipV":1,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
 	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
-	"3":{"count":3},//Teeter-totter 
+	"3":{"count":3,"FlipH":1},//Teeter-totter 
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7},//ballon
-	"5":{"count":35,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
-	"6":{"count":2,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
+	"5":{"count":35,"FlipH":1,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
+	"6":{"count":2,"FlipH":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
 	"7":{"count":4},
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.8,"mass":5},//Basketball 
@@ -112,7 +112,7 @@ const files={
 	"13":{"count":21},
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
 	"15":{"count":26},
-	"16":{"count":3,"nb_anim":3},//bellows (soufflet)
+	"16":{"count":3,"FlipH":1,"nb_anim":3},//bellows (soufflet)
 	"17":{"count":1},
 	"18":{"count":16},
 	"19":{"count":6},
@@ -433,7 +433,8 @@ const files={
 						ctx.drawImage(Boards[60], part.pos_x+playgroundOffsetX+part.width, part.pos_y+playgroundOffsetY+part.height/2-6);//expand
 					}
 					
-					if((part.orientation!=undefined)||(part.direction_r_to_l!=undefined))
+					//if((part.orientation!=undefined)||(part.direction_r_to_l!=undefined))
+					if((files[part.TimType].FlipH!=undefined)&&(files[part.TimType].FlipH==1))
 					{
 						ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
 					}
@@ -937,10 +938,13 @@ const files={
 				part.staticObj=undefined;
 				part.movingObj=undefined;
 				part.selected=0;
-				part.is_moving=LevelJsonOrigin.Parts[part.no].is_moving;
-				part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
-				part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
-				part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
+				if(LevelJsonOrigin!=undefined)
+				{
+					part.is_moving=LevelJsonOrigin.Parts[part.no].is_moving;
+					part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
+					part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
+					part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
+				}
 				part.anim=false;
 				part.animStep=0;
 				part.animDelay=0;
