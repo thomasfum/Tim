@@ -145,7 +145,7 @@ const files={
 	"40":{"count":4},
 	"41":{"count":6},
 	"42":{"count":2},
-	"43":{"count":1,"restitution":0.2,"mass":0.4},//canon ball
+	"43":{"count":1,"restitution":0.4,"mass":2},//canon ball
 	"44":{"count":1,"restitution":0.2,"mass":2},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
@@ -1073,7 +1073,7 @@ const files={
 					if(part.TimType==3)//"Teeter-totter (3)"
 					{
 						console.log("Teeter-totter=",part.no);
-						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width, 5, {
+						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
 							isStatic: false, 
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
@@ -1083,20 +1083,20 @@ const files={
 						else
 							Matter.Body.rotate(staticObj,0.3);
 						
-						staticObj.friction=1;
- 						staticObj.frictionAir=0.01*20;
-						staticObj.frictionStatic=0.5*40;
+						//staticObj.friction=1;
+ 						//staticObj.frictionAir=0.01*20;
+						//staticObj.frictionStatic=0.5*40;
 
 						Composite.add(world, [staticObj]);
 						part.staticObj=staticObj;
 						part.staticObjId=staticObj.id;
 						//console.log("id=",part.staticObjId);
 						
-						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+10,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
 							isStatic: true, 
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
-						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-10,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-12,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
 							isStatic: true, 
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
@@ -1988,15 +1988,49 @@ const files={
 		AnimPart(_boby.TimNo,true,0,0,true,true);
 	}
 	
-	function TeeterTotterTilt(_TeeterTotterBoby)
+	function TeeterTotterTilt(_TeeterTotterBoby,_impactorBody)
 	{
 		console.log("TT "+_TeeterTotterBoby.TimNo+"=> rotate ",_TeeterTotterBoby);
+		let  bodies = Composite.allBodies(engine.world);
+		const collisions = Matter.Query.collides(_TeeterTotterBoby, bodies);
+		console.log("collisions",collisions);
+		let vx=1.55;//2.3
+		let vy=-3.8;//2.5
+		collisions.forEach((collision) => {
+			if((collision.bodyA.isStatic==false)&&(collision.bodyA.id!=_impactorBody.id))
+			{
+				let scaleX=-1;
+				if(collision.bodyA.position.x>_TeeterTotterBoby.position.x)
+					scaleX=1;
+				console.log("collisions -> apply force 1");
+			//collision.body.isSleeping=true;
+			//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+			//Body.applyForce(collision.bodyA, collision.bodyA.position, { x:40, y: -40 });
+			Body.setVelocity(collision.bodyA, { x:vx*scaleX, y: vy });
+			//collision.body.TimDirectionX=scaleX;
+			//console.log("collisions ->",collision.body);
+			}
+			if((collision.bodyB.isStatic==false)&&(collision.bodyB.id!=_impactorBody.id))
+			{
+				let scaleX=-1;
+				if(collision.bodyB.position.x>_TeeterTotterBoby.position.x)
+					scaleX=1;
+				console.log("collisions -> apply force 2");
+			//console.log("collisions ->",collision.body);
+			//collision.body.isSleeping=true;
+			//Body.applyForce(collision.bodyB, collision.bodyB.position, { x:40, y: -40 });
+			Body.setVelocity(collision.bodyB, { x:vx*scaleX, y: vy });
+			//collision.body.TimDirectionX=scaleX;
+			//console.log("collisions ->",collision.body);
+			}
+		});
+		
 		//_TeeterTotterBoby.angle=_TeeterTotterBoby.angle*-1;
 		//_TeeterTotterBoby.isStatic=false;
 	}
 	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody)//Teeter-totter (3)
 	{
-		console.log("TT "+_TeeterTotterBoby.TimNo+"=> xt=" +_TeeterTotterBoby.position.x+" xi="+_impactorBody.position.x+" st="+LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep+" sw="+LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH);
+		//console.log("TT "+_TeeterTotterBoby.TimNo+"=> xt=" +_TeeterTotterBoby.position.x+" xi="+_impactorBody.position.x+" st="+LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep+" sw="+LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH);
 		
 		if(_impactorBody.position.x<_TeeterTotterBoby.position.x)
 		{
@@ -2010,7 +2044,7 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left, move=>");
-					TeeterTotterTilt(_TeeterTotterBoby);
+					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 					
 				}
 			}
@@ -2024,7 +2058,7 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped), move=>");
-					TeeterTotterTilt(_TeeterTotterBoby);
+					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 			}
 		}
@@ -2036,7 +2070,7 @@ const files={
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right, move=>");
-					TeeterTotterTilt(_TeeterTotterBoby);
+					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
 				{
@@ -2052,7 +2086,7 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left(swapped), move=>");
-					TeeterTotterTilt(_TeeterTotterBoby);
+					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 			}
 		}
