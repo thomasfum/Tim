@@ -1,0 +1,993 @@
+
+                 **********************************
+                 *  The TIM - TIM 3 level format  *
+                 **********************************
+
+Documentation for this file format is also available at Modding Wiki:
+
+https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Level_Format
+
+This section discusses the level format of The Incredible Machine, from the
+first DOS version (abbreviated as TIM 1) to TIM 3 (which is a 32-bit Windows
+game). Even if the format of some sections of the file vary significantly
+between the versions, the way how the parts are stored is highly similar.
+Level files have the extension .LEV.
+
+The machines/puzzles saved from the "freeform machine" mode or the built-in
+level editor are also discussed here. The format of files saved from built-in
+editor may be identical to or slightly different from the levels, depending
+on the game version. Such files are saved by the game with extension .TIM.
+
+The animated "title screen" (TITLE.GKC) and "credits screen" (CREDITS.GKC)
+files (inside the archive file) in TIM 1 and The Even More Incredible
+Machine (TEMIM) use a variant of the level file format, even if these
+are not playable levels.
+  
+== Magic number ==
+ 
+TIM-TIM 3 level and GKC files always start with a 4-byte magic number.
+The magic numbers found in various versions of the game are summarized below.
+
+Magic number (hex) / Usage in game versions
+
+ED AC 00 01:
+* Puzzles in TIM demo version.
+
+ED AC 02 01:
+* Puzzles in TIM.
+* Saved freeform machines in TIM.
+* GKC files in TIM.
+* CREDITS.GKC in TEMIM.
+
+EE AC 05 01:
+* New puzzles in TEMIM not found in TIM.
+* Saved freeform machines in TEMIM.
+* TITLE.GKC in TEMIM.
+
+EF AC 11 01, EF AC 12 01:
+* A small number of puzzles in TIM 2 and 3.
+
+EF AC 13 01:
+* The large majority of puzzles in TIM 2 and 3.
+* Puzzles saved from the built-in editor of TIM 2.
+
+EF AC 14 01:
+* A small number of puzzles in TIM 3.
+* Puzzles saved from the built-in editor of TIM 3.
+
+== Structure of puzzle and GKC files ==
+
+The level/puzzle/saved machine files consist of multiple sections.
+An overview of the file structure is provided below, separately
+for TIM / TEMIM and TIM 2 / TIM 3.
+
+=== TIM and TEMIM ===
+
+* Magic number, see above
+* Puzzle title, null-terminated string. missing in .GKC files and
+    "freeform machines" saved by the player.
+* Goal description, null-terminated string. Absent from .GKC files
+    and "saved freeform machines" with magic number of ED AC 02 01. Present
+    in TEMIM "saved freeform machines" (magic number EE AC 05 01). An empty
+    string in .GKC files with magic number EE AC 05 01.
+* Puzzle information data structure, see below
+* List of part entry structures for parts that cannot move ("fixed",
+    e.g. walls) and are not found initially to the parts bin.
+* List of part entry structures for parts that can move (e.g. balls),
+    not in the parts bin.
+* An additional 16-bit, little endian integer value in puzzles with a magic
+    number of EE AC 05 01. The meaning of this value is unclear. 0 in puzzles
+    from the game archive file. In saved freeform machines, 1 if there are
+    parts placed into the parts bin, 0 otherwise.
+* List of part entry structures for parts initially placed into the parts bin.
+
+=== TIM 2 and 3 ===
+
+* Magic number, see above
+* Two additional "header" bytes in files with magic number EF AC 13 01 or
+    EF AC 14 01. First byte is always 0, second is the background color
+    from the 16-color palette.
+* Puzzle title, null-terminated string
+* Goal description, null-terminated string
+* Hints, see below
+* Puzzle information data structure, see below
+* List of part entry structures for parts that cannot move
+* List of part entry structures for parts that can move
+* Solution information, see below
+
+== Hints ==
+
+Hints are supported only in TIM 2 and 3 puzzles. The first two bytes of
+the hint data contain the number of the hints in 16-bit little endian format.
+This is followed by 8 hint entries, some of them may be unused. A size of an
+unused entry is 7 bytes. One entry consists of three 16-bit integers and a
+null-terminated string containing the hint text. The three integer members
+are (all have a 16-bit little endian format):
+
+* ''position_x'': The X position of the hand icon for the hint.
+* ''position_y'': The Y position.
+* ''hint_icon_flip'': The hand icon of a hint can be flipped and can
+    have four different orientations. Possible values are 0-3.
+
+In TIM 2, there are 3 (?) puzzles with magic number EF AC 11 01. Neither of
+these files contain hints. However, the size of the empty hints section is 42
+bytes in them instead of the expected 58.
+
+== Puzzle information data structure ==
+
+=== In TIM and TEMIM ===
+
+In TIM and TEMIM, there are two different puzzle header information data
+structures, one is used by the puzzles, and the another is found in saved
+"freeform" machines and the GKC files.
+
+The information structure format in TIM / TEMIM puzzles:
+
+UINT16LE bonus_1;
+UINT16LE bonus_2;
+INT16LE pressure;
+INT16LE gravity;
+INT16LE unknown_8;
+INT16LE unknown_10;
+UINT16LE music;
+UINT16LE num_parts_fixed;
+UINT16LE num_parts_moving;
+UINT16LE num_parts_in_partsbin;
+
+The information structure format in saved "freeform" machines and GKC files:
+
+INT16LE pressure;
+INT16LE gravity;
+UINT16LE music;
+UINT16LE num_parts_fixed;
+UINT16LE num_parts_moving;
+UINT16LE num_parts_in_partsbin;
+
+* ''bonus_1'': The value of "Bonus 1" immediately after the puzzle is loaded
+    (its value is constantly decreasing while the player
+    is solving the puzzle).
+* ''bonus_2'': The value of "Bonus 2" for the puzzle.
+* ''pressure'': The pressure set for the puzzle, the default value is 67.
+* ''gravity'': Gravity set for the puzzle, the default value is 272.
+* ''unknown_8'', ''unknown_10'': The value of these two members is always -8.
+    Perhaps the top left corner of the screen in the coordinate system used 
+    or puzzle parts, which is also (-8, -8).
+* ''music'': ID of music track played. Valid values are 1001-1016 for TIM
+    and 1001-1021 for TEMIM.
+* ''num_parts_fixed'': Number of parts in the puzzles that cannot move
+    (e.g. walls), not in the "parts bin".
+* ''num_parts_moving'': Number of parts in the puzzles that move
+    (e.g. balls), not in the "parts bin".
+* ''num_parts_in_partsbin'': The number of parts that are placed into the
+    parts bin. (The player needs to position them in order
+    to solve the puzzle.)
+
+=== In TIM 2 and 3 ===
+
+The information structure format in TIM 2 and 3:
+
+INT16LE pressure;
+INT16LE gravity;
+UINT16LE unknown_4;
+UINT16LE unknown_6;
+UINT16LE music;
+UINT16LE num_parts_fixed;
+UINT16LE num_parts_moving;
+UINT16LE unknown_14;
+
+* ''pressure'': The pressure set for the puzzle, the default value is 67.
+* ''gravity'': Gravity set for the puzzle, the default value is 272.
+* ''music'': ID of music track played. Valid values are 1000-1023.
+* ''unknown_4'', ''unknown_6'': Meaning is unknown, always 0.
+* ''num_parts_fixed'': Number of parts in the puzzles that cannot move,
+    regardless of whether they are placed initially into the parts bin or not.
+* ''num_parts_moving'': Number of parts in the puzzles that can move.
+* ''unknown_14'': Value is always 0. Likely this member corresponds to
+    num_parts_in_partsbin in TIM / TEMIM puzzle header. Unlike TIM / TEMIM,
+    parts placed into the parts bin are not a separate section in TIM 2 / 3,
+    therefore, its value is always zero.
+
+== Puzzle part data ==
+
+As already discussed in the With the exception of TIM demo version
+(see below), the size of a part entry for the majority of puzzle parts is
+48 bytes. However, there are exceptions, which are discussed in separate
+sub-sections. The format of the "default" part entry:
+
+UINT16LE part_type_num;
+UINT16LE flags_1;
+UINT16LE flags_2;
+UINT16LE flags_3;
+UINT16LE appearance;
+UINT16LE unknown_10;
+UINT16LE width_1;
+UINT16LE height_1;
+UINT16LE width_2;
+UINT16LE height_2;
+INT16LE pos_x;
+INT16LE pos_y;
+UINT16LE behavior;
+UINT16LE unknown_26;
+BYTE belt_connect_pos_x;
+BYTE belt_connect_pos_y;
+UINT16LE belt_line_distance;
+UINT16LE unknown_32;
+BYTE rope_1_connect_pos_x;
+BYTE rope_1_connect_pos_y;
+UINT16LE unknown_36;
+BYTE rope_2_connect_pos_x;
+BYTE rope_2_connect_pos_y;
+INT16LE connected_1;
+INT16LE connected_2;
+INT16LE outlet_plugged_1;
+INT16LE outlet_plugged_2;
+
+* ''part_type_num'': A number associated with the type of the part (e.g.
+    0 - bowling ball). Required for identifying parts with an entry
+    size different from the default. 
+* ''flags_1'': A combination of flag bits.
+** TIM / TEMIM uses the following flag bits:
+*** 0x20: Unknown meaning, used for a few "moving" parts (bucket, candle)
+*** 0x40: Set if the part is a wall.
+*** 0x200: Part can be flipped vertically
+*** 0x400: Part can be flipped horizontally.
+*** 0x800: Part is placed initially into the parts bin (see
+    num_parts_in_partsbin in part information data structure)
+*** 0x1000: "Moving" part, not placed into the pars bin initially
+    (TODO, further testing needed)
+*** 0x2000: Part cannot move, in fixed position, not placed into
+    the pars bin initially (TODO, further testing needed)
+*** 0x4000: Part cannot move, in fixed position (see num_parts_fixed)
+*** 0x8000: Set when 0x800 is not set (TODO, further testing needed)
+
+** In TIM 2 / 3, the bits have a known meaning:
+*** 0x40: Meaning unclear, used for "moving" parts only, but not always set,
+    even for a single type of part.
+*** 0x200: Part can be flipped vertically
+*** 0x400: Part can be flipped horizontally.
+*** 0x1000: "Moving" part, affected by gravity.
+*** 0x2000, 0x4000: Used in combination for parts that do not move and are
+    not affected by gravity.
+    
+* ''flags_2'': Another word containing flag bits. The meaning of most flags
+    is the same in all game versions.
+** 0x1: A belt can be connected to the part.
+** 0x2: A belt is connected to the part.
+** 0x4: A rope can be connected to the part.
+** 0x8: A second rope can be connected to the part (teeter-totter)
+** 0x10: The part sprite is drawn horizontally flipped.
+** 0x20: The part sprite is drawn vertically flipped. Note on flip flags:
+    Flipping a part in the game does not necessarily mean that one of the
+    flip flags will be changed. For several parts, especially in TIM 2 / 3,
+    flipping will affect the value of the ''appearance'' member.
+** 0x40: Probably unused
+** 0x80: Part can be stretched in at least one direction: inclines,
+    conveyor belt, walls.
+** 0x100: Parts that can be stretched both horizontally and vertically,
+    the walls.
+    
+* ''flags_3'': Some flags are only present in TIM 2 / 3. This member of the
+    part data structure is missing in the demo version of TIM.
+** 0x1: The part can be plugged into an electric outlet.
+** 0x2: The part is an electric outlet.
+** 0x4: The part can burn (e.g. candle) or has a fuse that can be lit (e.g.
+    dynamite, cannon). Usually in combination with flag 0x8. 
+** 0x8: Meaning of this flag is unclear. Used for several part types, but
+    changing it has no apparent consequence (?) 
+    
+** Flags present only in TIM 2 / 3:
+*** 0x40: Part is "locked", i.e not placed into the part bin.
+*** 0x80: Sizable scenery part (?)
+*** 0x100: TODO, unknown meaning
+*** 0x400: A "program" icon is shown for the part (?)
+*** 0x1000: Scenery part
+*** 0x2000: Wall part (?)
+*** 0x8000: A "Puzzle solution" icon is shown for the part (?)
+
+* ''appearance'': An identifier for the sprite that is shown for a part
+    before the machine is started. (Once the machine is started, the state
+    of the part can change and so can the sprite shown.) The meaning is
+    different between TIM and TIM 2. In TIM, the sprite of some parts consist
+    of only one image, in this case, this is often the number of the sub-image
+    in the image resource file. (TODO: For other parts, this is probably an
+    internal identifier for the sprite (?)). In TIM 2 and 3, the meaning of
+    the appearance is an index in the A section of the animation file for the
+    part, or if this is absent, an index in the B section. "Programming"
+    a part in TIM 2 and 3 often results in the change of this field.
+* ''unknown_10'': Probably unused, usually 0.
+* ''width_1'', ''height_1'': The width and height of the selectable area of
+    the part (TODO, more reverse engineering  work needed)
+* ''width_2'', ''height_2'': At least in TIM 2, witdh_2 is used
+    for calculating the position of part sprite when the part is flipped
+    because of the horizontal flip bit is set in flags_2.
+* ''pos_x'', ''pos_y'': The position of the part, usually the top left corner
+    of the bounding rectangle.
+* ''behavior'': In TIM 2 and 3, a programmed behavior of the part. (However,
+    for many parts, "programming" modifies the ''appearance'' member.) For
+    example the number of shots of the phazer gun or character shown by the
+    message computer.  Meaning is different for rope parts, see below.
+    Unused in TIM and TEMIM (except for ropes).
+* ''unknown_26'': Probably unused, usually 0. Note that belt parts have a
+    value of 1 in this position.
+* ''belt_connect_pos_x'', ''belt_connect_pos_y'': The coordinates of the
+    point where a rope is connected to the part, relative to ''pos_x'' and
+    ''pos_y''. Always positive or 0, because ''pos_x'' and ''pos_y'' are the
+    coordinates of the top left corner where the sprite starts. Note that the
+    formulas required for calculating the exact position of the belt are
+    slightly different between TIM and TIM 2. Parts for which connection of
+    a belt is allowed have a distinct circular area in their sprite,
+    corresponding to the location where the belt is connected. In TIM / TEMIM,
+    ''belt_connect_pos_x'' and ''belt_connect_pos_y'' is approximately the
+    top left corner of its bounding rectangle, while in TIM 2 /3 it is close
+    to the center of the circle.
+* ''unknown_36'': Probably unused, usually 0.
+* ''belt_line_distance'': The belts in the game appear as two, usually not
+    perfectly parallel black (TIM / TEMIM) or gray (TIM 2 / 3) lines. This
+    parameter determines the distance between the two segments, More
+    precisely, it is either approximately the diameter of the circular area
+    mentioned at ''belt_connect_pos_x'' and ''belt_connect_pos_y'' (TIM /
+    TEMIM) or its radius (TIM 2 / 3).
+* ''unknown_32'': Probably unused, usually 0.
+* ''rope_1_connect_pos_x'', ''rope_1_connect_pos_y'': The coordinates of
+    the point where a rope is connected to the part, relative to ''pos_x''
+    and ''pos_y''. Similarly to belt_connect_pos_x/y, always positive or 0.
+* ''rope_2_connect_pos_x'', ''rope_2_connect_pos_y'': The same as
+    ''rope_1_connect_pos_x'', ''rope_1_connect_pos_y'', bit for another
+    connected rope part.
+* ''connected_1'', ''connected_2'': The index of one or two parts in the
+    puzzle that are connected to this part with a rope. If the rope runs
+    through pulleys, this is the part index of the first pulley. If no rope
+    is connected or this is not possible for the part, the value of both
+    structure members are -1. (Of course, if one rope is connected, the value
+    of one structure member (usually connected_rope_1) is the index of the
+    rope part and the other is -1)) In TIM 2 and 3, the "remote bomb" part
+    actually corresponds to two entries in the puzzle file. The
+    connected_rope_2 field contains the index of the another "element"
+    of the bomb, in both entries.
+* ''outlet_plugged_1'', ''outlet_plugged_2'': These structure members are
+    only meaningful for electric outlet parts. Electric outlets always have
+    2 "sockets" for parts requiring electricity. It contains the index/indices
+    of the part/parts plugged into the electric outlet, or -1 if the "socket"
+    is free. If the part does not support this, both values are -1.
+
+=== Belts ===
+
+Belt parts (part 8) (except in the demo version of TIM, see below) use a
+    52-byte entry, with the following format:
+
+UINT16LE part_type_num;  /* 8 for belts */
+UINT16LE flags_1;
+UINT16LE flags_2;
+UINT16LE flags_3;
+UINT16LE appearance;
+UINT16LE unknown_10;
+UINT16LE width_1;
+UINT16LE height_1;
+UINT16LE width_2;
+UINT16LE height_2;
+INT16LE pos_x;
+INT16LE pos_y;
+UINT16LE behavior;
+UINT16LE unknown_26;
+UINT16LE unknown_28;
+UINT16LE unknown_30;
+INT16LE belt_connected_part_1;
+INT16LE belt_connected_part_2;
+UINT16LE unknown_36;
+UINT16LE unknown_38;
+UINT16LE unknown_40;
+UINT16LE unknown_42;
+INT16LE connected_1;
+INT16LE connected_2;
+INT16LE outlet_plugged_1;
+INT16LE outlet_plugged_2;
+
+* ''flags'' (see meaning of the individual flags at the "default"
+    part data structure):
+** TIM / TEMIM: flags_1 = 0xe000 (or 0x4800 if in parts bin),
+    flags_2 = 0, flags_3 = 0
+** TIM 2 / 3: flags_1 = 0x6000, flags_2 = 0, flags_3 = 0x40
+    (or 0 if in parts bin)
+* ''appearance'': Always 0, belts have no true sprite
+    (represented by two lines).
+* ''unknown_10'': Not used, always 0.
+* ''width_1'', ''height_1'', ''width_2'', ''height_2'': Not used for
+    belts, always 0.
+* ''pos_x'', ''pos_y'' In TIM / TEMIM, either 0 or -1. In TIM 2, -1 or -100
+    (0xff9c). Meaning of these numbers is unclear, and the usage of the two
+    different values do not correlate with the flags.
+* ''behavior'': Not used, always 0.
+* ''unknown_26'': Always 1, perhaps indicates that the part is a belt.
+* ''unknown_28'', ''unknown_30'': Not used, always 0.
+* ''belt_connected_part_1'', ''belt_connected_part_2'': Index of the two
+    parts in the puzzle connected by this belt. In TIM and TEMIM, both are -1
+    if the belt is placed into the parts bin.
+* ''unknown_36'', ''unknown_38'', ''unknown_40'', ''unknown_42'':
+    Not used, always 0.
+* ''connected_1'', ''connected_2'', ''outlet_plugged_1'',
+    ''outlet_plugged_2'': Not used, always -1.
+
+=== Ropes ===
+
+Rope parts (part 10) (except in the demo version of TIM, see below) use a
+    54-byte entry. TIM 2 and 3 also have a "steel cable" part (part 76) which
+    also behaves as a rope and the size of the part entry is also identical.
+    The rope part entry has the following format:
+
+UINT16LE part_type_num;  /* 10 for rope, 76 for steel cable */
+UINT16LE flags_1;
+UINT16LE flags_2;
+UINT16LE flags_3;
+UINT16LE appearance;
+UINT16LE unknown_10;
+UINT16LE width_1;
+UINT16LE height_1;
+UINT16LE width_2;
+UINT16LE height_2;
+INT16LE pos_x;
+INT16LE pos_y;
+UINT16LE rope_segment_length;
+UINT16LE unknown_26;
+UINT16LE unknown_28;
+UINT16LE unknown_30;
+UINT16LE unknown_32;
+UINT16LE unknown_36;
+INT16LE rope_connected_part_1;
+INT16LE rope_connected_part_2;
+BYTE part_1_connect_field_usage;
+BYTE part_2_connect_field_usage;
+UINT16LE unknown_44;
+UINT16LE unknown_46;
+INT16LE connected_1;
+INT16LE connected_2;
+INT16LE outlet_plugged_1;
+INT16LE outlet_plugged_2;
+
+* ''flags'': Same flags used as in the belt part structure.
+* ''appearance'': Always 0, ropes have no true sprite (represented
+    by one or more line segments).
+* ''unknown_10'': Not used, always 0.
+* ''width_1'', ''height_1'', ''width_2'', ''height_2'': Not used for
+    ropes, always 0.
+* ''pos_x'', ''pos_y'': Similarly to belts, possible values are 0 and -1 in
+    TIM / TEMIM; and -1 and -100 in TIM 2 / 3.
+* ''rope_segment_length'': The length of the rope (Euclidean distance between
+    the two ends) if the rope does not run through pulleys. Otherwise, the
+    length of the rope segment between the part at one end 
+    (rope_connected_part_1 (?)) and the first pulley
+    (TODO, additional testing needed).
+* ''unknown_26'', ''unknown_28'', ''unknown_30'': Not used, always 0.
+* ''unknown_32'': Always 1, same value is used for pulleys.
+* ''unknown_36'': Not used, always 0.
+* ''rope_connected_part_1'', ''rope_connected_part_2'': Index of the two
+    parts in the puzzle connected by this rope (never the pulleys). In TIM
+    and TEMIM, both are -1 if the rope is placed into the parts bin.
+* ''part_1_connect_field_usage'', ''part_2_connect_field_usage'': Whether
+    connected_1 or connected_2 is used in the two connected parts for this
+    rope. 0 if connected_1, 1 if connected_2. (TODO, additional
+    testing needed)
+* ''unknown_44'', ''unknown_46'': Not used, always 0.
+* ''connected_1'', ''connected_2'', ''outlet_plugged_1'',
+    ''outlet_plugged_2'': Not used, always -1.
+
+=== Pulleys ===
+
+The format of the 56-byte puzzle part entry for the pulley (part 7):
+
+UINT16LE part_type_num;  /* 7 for pulley */
+UINT16LE flags_1;
+UINT16LE flags_2;
+UINT16LE flags_3;
+UINT16LE appearance;
+UINT16LE unknown_10;
+UINT16LE width_1;
+UINT16LE height_1;
+UINT16LE width_2;
+UINT16LE height_2;
+INT16LE pos_x;
+INT16LE pos_y;
+UINT16LE behavior;
+UINT16LE unknown_26;
+UINT16LE unknown_28;
+UINT16LE unknown_30;
+UINT16LE unknown_32;
+BYTE pulley_rope_1_connect_pos_x;
+BYTE pulley_rope_1_connect_pos_y;
+INT16LE unknown_36;
+INT16LE unknown_38;
+UINT16LE unknown_40;
+UINT16LE unknown_42;
+BYTE pulley_rope_2_connect_pos_x;
+BYTE pulley_rope_2_connect_pos_y;
+INT16LE pulley_connected_1;
+INT16LE pulley_connected_2;
+INT16LE unknown_50;
+INT16LE unknown_52;
+INT16LE rope_index;
+
+* ''flags'' (see meaning of the individual flags at the "default"
+    part data structure):
+** TIM / TEMIM: flags_1 = 0xe000 (or 0x4800 if in parts bin),
+    flags_2 = 0x4, flags_3 = 0x8 (0x0 in some cases)
+** TIM 2 / 3: flags_1 = 0x6000, flags_2 = 0x4, flags_3 = 0x48
+    (or 0x8 if in parts bin)
+* ''appearance'': Pulleys can have four different sprites depending
+    on the orientation. Possible values are 0-3.
+* ''unknown_10'': Not used, always 0.
+* ''width_1'', ''height_1'', ''width_2'', ''height_2'': The size of the
+    pulley sprite. In TIM 2 / 3, also depends on the orientation.
+* ''pos_x'', ''pos_y'': The position of the pulley, top left coordinates
+    of the bounding rectangle.
+* ''behavior'', ''unknown_26'', ''unknown_28'', ''unknown_30'':
+    Not used, always 0.
+* ''unknown_32'': Always 1, same value is used for ropes.
+* ''pulley_rope_1_connect_pos_x'', ''pulley_rope_1_connect_pos_y'': The
+    coordinates of the point where one rope segment is connected to the
+    pulley, relative to ''pos_x'' and ''pos_y''. Depends on the orientation
+    of the pulley, like ''appearance''.
+* ''unknown_36'', ''unknown_38'': Not used, always -1.
+* ''unknown_40'', ''unknown_42'': Not used, always 0.
+* ''pulley_rope_2_connect_pos_x'', ''pulley_rope_2_connect_pos_y'': The
+    coordinates of the point where the other rope segment is connected to
+    the pulley, relative to ''pos_x'' and ''pos_y''.
+* ''pulley_connected_1'', ''pulley_connected_2'': Either the index of part at
+    one of the two ends of the rope, or the index of next or previous pulley
+    the rope is running through.
+* ''unknown_50'', ''unknown_52'': Not used, always -1.
+* ''rope_index'': In TIM 2 / 3, the index of the rope part.
+    Not used (-1) in TIM and TEMIM.
+
+=== Programmable ball (TIM 2 / 3) ===
+
+The programmable ball part is present in TIM 2 and 3, and its part type
+number is 87. The size of the entry is 60 bytes in total. The first 48 bytes
+is the same as the default part data structure, which is followed by another,
+12-byte structure specific to this part. The format of the programmable
+ball data is:
+
+UINT16LE density;
+UINT16LE elasticity;
+UINT16LE friction;
+INT16LE gravity_buoyancy;
+UINT16LE mass;
+UINT16LE appearance_2;
+
+* ''density'': The density of the ball, affects the buoyant
+    force acting on the ball.
+* ''elasticity'': The elasticity of the ball.
+* ''friction'': The friction.
+* ''gravity_buoyancy'': A calculated parameter, using the density and the
+    mass of the ball, as well as the gravity and the pressure set for the
+    puzzle. If its value is negative, the ball will rise due to the buoyant
+    force rather than fall.
+* ''mass'': The mass of the ball.
+* ''appearance_2'': Has the same value as the ''appearance'' field.
+    The ball can have 7 different colors/patterns.
+
+The game has a dialog for setting the four physical properties (mass,
+elasticity, density, friction, in this order). However, the number stored in
+the data structure is not the same as the numbers shown on the program
+dialog. For example, if following settings are used for the ball: mass = 8,
+elasticity = 3, density = 7, friction = 3; and the default values are used
+for gravity/pressure, the puzzle file will contain the following values:
+density = 3000, elasticity = 128, friction = 16, gravity_buoyancy = 269,
+mass = 201. (Note: There is an inconsistency in the game here, the
+programmable ball part uses density = 2832 and mass = 200 by default,
+which does not correspond exactly to any value that can be set
+in the dialog.)
+
+=== TIM demo version ===
+
+In the demo version of the (original) TIM (available at several DOS
+shareware game websites), the ''flags_3'', ''outlet_plugged_1'' and
+''outlet_plugged_2'' fields are missing. Instead, the 42-byte part data (46
+for belts, 48 for ropes, 50 for pulleys) is followed by an another, variable
+length data structure of unknown significance consisting of 16-bit little
+endian integers. It is always at least 2 bytes long, and the first two bytes
+contain the number of additional 16-bit words after this size word. The
+reverse engineering of this structure is complicated by the fact that it is
+only present in a demo version containing only 8 puzzles.
+
+== Puzzle solution information ==
+
+Puzzle solution information is only present in TIM 2 and TIM 3 puzzles. Its
+size is always 132 bytes and can contain 8 different conditions that must be
+satisfied so that the game will recognize the puzzle as solved. The first two
+bytes contains the number of such conditions actually set, in a 16-bit little
+endian format. This is followed by 8 entries, 16 bytes each, containing the
+required information for solution checking by the game.
+The format of each entry is:
+
+INT16LE part_index;
+UINT16LE part_state_1;
+UINT16LE part_state_2;
+UINT16LE part_count;
+INT16LE position_rect_x;
+INT16LE position_rect_y;
+INT16LE position_rect_width;
+INT16LE position_rect_height;
+
+* ''part_index'': The index of the part in the puzzle file involved in the
+    solution. -1 (0xFF 0xFF) for unused entries.
+* ''part_state_1'': An ID for a "physical state" of a part (for example a
+    balloon was popped or a candle was lit). In many puzzles, one specific
+    part must be in a specified "physical state" in order to complete the
+    level. This is the same ID for a "part state" as the ''first_frame_id''
+    member found in the C section of the part's ANM file.
+* ''part_state_2'': Another ID for a "physical state", the exact
+    meaning is unclear.
+* ''part_count'': The value of the "Part count" option set in the "program
+    solution" dialog of the game.
+* ''position_rect_x'', ''position_rect_y'': The top left corner of the
+    "position rectangle". If such a solution specified puzzle part must be
+    located within this rectangle in order to solve the puzzle.
+* ''position_rect_width'', ''position_rect_height'': Width and height of the
+    "position rectangle", see above.
+
+For the last four members ("position rectangle"), there are "fixed"
+combinations of values with special meaning:
+
+* -1, -1, -1, -1: "Off screen", the part must leave the area visible on
+    the game screen.
+* -500, -2000, 1640, 2000: "Off top", the part must leave the visible
+    area at the top.
+* -500, 400, 1640, 3000: "Off bottom"
+* 0, 0, 0, 0: No such solution programmed, either this is "part state"
+    solution or an unused entry (part_index == -1).
+
+The last 2 bytes of the section contain the value of the "Delay" option set
+in the "program solution" dialog of the game, in 16-bit little endian format.
+
+
+'''Note on puzzle solution information in TIM and TEMIM''': TIM / TEMIM
+puzzle files do not contain such data. This can also be demonstrated by
+extracting e.g. L1.LEV from the archive file and rename the file to change
+the number. After starting the game, the level with the same number as the
+renamed file will be replaced with level 1. When playing the modified level,
+the game will not be able to check whether the puzzle is solved. Depending on
+its number, the level can become unwinnable or winnable by just clicking on
+the start machine button. Sometimes the game freezes.
+
+
+                 ***********************************
+                 *  The TIM 2 / 3 ANM file format  *
+                 ***********************************
+
+Documentation for this file format is also available at Modding Wiki:
+
+https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_2-3_ANM_File_Format
+                 
+The animation (.ANM) sub-files are found in the archive file of The Incredible
+Machine 2 and 3. They contain the information required for drawing puzzle part
+sprites, which are often comprised of multiple sub-images of image files and
+for animations of the puzzle parts. They are also used for animated parts of
+the game's user interface (for example the animated icons of the main menu).
+It can also contain commands for playing sound effects.
+
+Most .ANM files (all in TIM 2) contain two chunks, starting with "ANM:" and
+"TAG:", respectively. Both use the typical "Dynamix chunk" format, starting
+with the 4-byte chunk type (ANM:/TAG:, followed by the chunk size in 32-bit,
+little endian format. Unlike other Dynamix file formats, the most significant
+bit in the 32-bit size of the first chunk is not set. A small number of files
+in TIM 3 contain a third chunk, "LAB:", with an unclear meaning.
+
+== The "ANM:" chunk ==
+
+Not counting the chunk type and size, an "ANM:" chunk has five parts, a 16 or
+22 byte header, and four sections containing the actual sprite/animation
+frame/animation data, labeled here as A-D.
+
+=== Header ===
+
+The "ANM:" chunk (not counting the "ANM:" chunk type identifier and the chunk
+size) starts with a header, with a size of 16 or 22 bytes, depending on the
+magic number. It has the following Format:
+
+UINT16LE magic_number_1;
+UINT16LE magic_number_2;
+UINT16LE size_section_a;
+UINT16LE size_section_b;
+UINT16LE size_section_c;
+UINT16LE size_section_d;
+UINT16LE anm_width;
+UINT16LE anm_height;
+/* 3 members, found only in files with a magic number */
+/*     of 0x54 0x42 0xEA 0x03: */
+UINT16LE unknown_16;
+UINT16LE unknown_18;
+UINT16LE unknown_20;
+
+* ''magic_number_1'', ''magic_number_2'':  The header starts with a 4-byte
+magic number. The first two bytes are always 0x54 0x42. The second two bytes
+are a 16-bit little endian file version number. In TIM 2, the possible values
+1000 (0x3E8) or 1001 (0x3E9). There is no obvious difference in the format of
+the files using these two numbers, however, 0x3E9 is much more common and
+0x3E8 is mostly used for relatively small and simple files. In TIM 3, a small
+number of files use a newer version of the .ANM file format, with a
+magic_number_2 value of 1002 (0x3EA). Such files have a slightly different
+format compared to files with the other two numbers. The "newer" format
+is used in the user interface and the game menu, but never for
+puzzle part graphics.
+
+* ''size_section_a'': The number of entries in the A section of the "ANM:"
+    chunk, one entry is 2 byte (i.e. the section is an array of 16-bit
+    integers). Several files do not have an A section (size_section_a == 0)
+* ''size_section_b'': The number of entries in the B section. One entry is
+    12 bytes in the files in files with magic_number_2 == 0x3EA,
+    10 bytes in all other files.
+* ''size_section_c'': The number of entries in the C section,
+    one entry is 4 bytes.
+* ''size_section_d'': The size of the D section in bytes.
+* ''anm_width'', ''anm_height'': Width and height of the animation. In .ANM
+    files for puzzle parts, the two structure members usually have the same
+    value as width_1 and height_1 for the part in puzzle/level files.   
+
+Structure members found only in files with the longer header
+(magic_number_2 == 0x3EA):
+
+* ''unknown_16'': 0x14 in all files, perhaps the size of header
+    minus magic_number_1. Files with the longer header do not contain
+    additional section in "ANM:" chunk, so it cannot be a size of such a section.
+* ''unknown_18'': 0 in all files
+* ''unknown_20'': 0x17 in one file, 0 in all others. Clearly not the size of
+    an additional section in "ANM:" chunk.
+
+=== Section A ===
+
+Section A is empty in a large number of .ANM files. If present, it is an array
+of 16-bit little endian integers. It contains all numbers from 0 to the number
+of items in B section minus 1, in increasing order, with some numbers
+repeated. For example 0 1 1 1 2 means that the animation frame with index 1 in
+section B must be shown for the duration of 3 timer ticks instead of 1.
+
+=== Section B ===
+
+Section B is a list of structures containing 16 bit integer members, 6 if
+magic_number_2 is 0x3EA, 5 in the other versions of the file format. It
+contains essential information about each animation frame.
+One structure has the following members:
+
+INT16LE relative_pos_x;
+INT16LE relative_pos_y;
+UINT16LE width;
+UINT16LE height;
+UINT16LE section_d_offset;
+/* Note that the last member is only present in files with */
+/*     magic number 0x54 0x42 0xEA 0x03 */
+UINT16LE unknown_10;
+
+* ''relative_pos_x'', ''relative_pos_y'': The coordinates where the animation
+    frame must be drawn, relative to other frames. For the first item in the B
+    section, the value of both tare typically 0, however there are a few
+    exceptions. The relative position may be negative.
+* ''width'', ''height'': The width and the height of the graphics in the
+    specific animation frame.
+* ''section_d_offset'': An offset in section D, points to the first command
+    required for drawing the animation frame.
+* ''unknown_10'': The meaning is unclear. Often, but not always a number
+    divisible by 3.
+
+=== Section C ===
+
+A section C item has the following format:
+
+UINT16LE first_frame_id;
+UINT16LE state_id;
+
+* ''first_frame_id'': The meaning of ''first_frame_id'' is slightly different
+    between files containing or not containing an A section. If the A section
+    is not present, this is the index in section B for the first animation
+    frame for a particular animation. If there is an A section,
+    ''first_frame_id'' is an index in the A section, and the 16-bit array item
+    at this index is the required section B index. The section B indices
+    determined this way essentially divide the B section into sub-sectons.
+    One sub-section corresponds to the "animation" of a puzzle part or an user
+    interface element in one specific state. If an "animation" has only one
+    section B item, then the puzzle part or button/icon is not animated
+    in this state.
+* ''state_id'': An internal identifier used by the game for a state of the
+    puzzle part or an user interface element. In a specific "state", the
+    puzzle part (or user interface element) may or may not be animated, the
+    animation frames belonging to such a state must be determined using
+    the first_frame_id member.
+
+=== Section D ===
+
+The D section contains the instructions on how to draw each animation frame
+(or to play a sound). The section_d_offset field in the corresponding section
+B entry determines where the sequence of commands start for each animation
+frame. There are 6 different types of commands, numbered 0-5. Each command
+starts with its number in a 16-bit, little endian format. For commands 2-5,
+this is followed by a list of 16-bit integer parameters, the number of the
+parameters depends on command number.
+ 
+==== Command 0: End of animation frame ====
+
+Command 0 indicates the end of an animation frame in the file. It terminates
+the list of commands associated with a section B item. Command 0 has no
+parameters and is always 2 bytes long (the 16-bit command number).
+
+==== Command 1: End of "ANM:" chunk ====
+
+The last two bytes of section D (and the "ANM:" chunk) are always 01 00 (1 in
+16-bit little endian format). These two bytes can be interpreted as a 2-byte
+command that terminates section D and the entire "ANM:" chunk. Command 1 is
+not found anywhere else in section D.
+
+==== Command 2: Draw BMP sub-image ====
+
+Command 2 is an instruction for the  game engine to draw a sub-image from a
+.BMP image stored in the archive file of the game. It should be noted that a
+part sprite is often "cut into" multiple .BMP sub images, and in a few cases,
+they are stored in more than one file. Command 2 has five 16-bit integer
+parameters (size is 12 bytes, including the command number).
+
+UINT16LE command_num;  /* 2 */
+UINT16LE bmp_file_num;
+UINT16LE bmp_sub_image_num;
+INT16LE draw_pos_x;
+INT16LE draw_pos_y;
+UINT16LE flip;
+
+* ''bmp_file_num'': Index of the .BMP file in the "TAG:" chunk. The index of
+    the first image is 1.
+* ''bmp_sub_image_num'': The "sub-image" number of the .BMP file to draw.
+    .BMP images in TIM 2 can have multiple sub images.
+* ''draw_pos_x'', ''draw_pos_y'': The position of the image (top left corner),
+    relative to the x and y coordinates in the corresponding section B item.
+* ''flip'': The image can be drawn horizontally and/or vertically flipped
+    relative to its original orientation. 1 = vertical flip, 2 = horizontal
+    flip, 3 = both, 0 = no such transform is applied.
+
+==== Command 3: Draw rectangle ====
+
+Command 3 draws a rectangle with a border and fill color provided as
+arguments. It is mainly used in user interface elements and in the graphics
+shown in the part help screen, rarely in puzzle part graphics.
+It has the following format:
+
+UINT16LE command_num;  /* 3 */
+INT16LE draw_pos_x;
+INT16LE draw_pos_y;
+UINT16LE rect_width;
+UINT16LE rect_height;
+UINT16LE border_color;
+UINT16LE fill;
+
+* ''draw_pos_x'', ''draw_pos_y'': Coordinates of the top left corner
+    of the rectangle.
+* ''rect_width'', ''rect_height'': The width and height of the rectangle.
+* ''border_color'': The border color for the rectangle. In TIM 2, one color
+    from the 16-color palette.
+* ''fill'': The value of the ''fill'' parameter is either 0 - no fill, border
+    only - or a value between 0x8000 and 0x800f where the least significant
+    nibble contains the fill color.
+
+==== Command 4: Draw line ====
+
+Command 4 draws a line between two end points with a specific color. Like the
+rectangle command, it is mainly used for game interface graphics, not the
+puzzle parts. The format of the command is:
+
+UINT16LE command_num;  /* 4 */
+INT16LE x1;
+INT16LE y1;
+INT16LE x2;
+INT16LE y2;
+UINT16LE line_color;
+
+* ''x1'', ''y1'': The coordinates of one end point.
+* ''x2'', ''y2'': The coordinates of the other end point.
+* ''line_color'': The color of the line, one color from the 16-color
+    palette in TIM 2.
+
+==== Command 5: Play sound ====
+
+If the command list for an animation frame includes command 5, a sound effect
+will be played when the particular frame is shown. It has one 16-bit
+parameter, the ID of the sound. TIM 2 contains sounds in two different
+formats. Sounds with a number >= 3000 are stored in the archive file of the
+game (SX_3???.RAW). RAW files are uncompressed 8-bit PCM audio files without
+any header. The rest of the files (with numbers < 300) are found in TIM2.SX.
+TIM 3 has .WAV files instead in the archive file an there is no TIM2.SX.
+(TODO: TIM 3 sounds with numbers below 3000).
+
+== The "TAG:" chunk ==
+
+The "TAG:" chunk contains the names of the .BMP sub-files (in the archive
+file of the game) required for displaying the animation. Not counting the
+"TAG:" chunk type identifier and the 32-bit chunk size, the first two bytes
+of the data contains the number of image file names in 16-bit little endian
+format. The remaining part of the data is the list of image file name
+entries. A single entry is a 16-bit image ID followed by a null-terminated
+string containing the name of the image. In TIM 2, the ID of the first image
+is always 1, however, there are exceptions to this rule in TIM 3 (but never
+in part graphics). There is no gap in the numbering of the images, this makes
+the image ID field somewhat redundant.
+
+== The "LAB:" chunk ==
+
+The "LAB:" chunk is present in a small number of .ANM files in TIM 3. .ANM
+files for puzzle parts never contain such a chunk. The structure of the "LAB:"
+chunk is similar to "TAG:", it consists of the number of entries stored as
+16-bit integer, followed by item ID-null terminated string pairs. The strings
+are apparently not user interface texts visible to the player. 
+
+
+         **************************************************
+         *  The "BMP:"/"INF:"/"SCN:"/"OFS:" image format  *
+         **************************************************
+
+(This is a short summary for this file format. More complete documentation
+   is available on Modding Wiki, see link below)
+
+Special thanks to Nyerguds, the author of "Engine File Converter" 
+for conducting additional research on the Dynamix "BMP:"/"SCN:" file format
+and documenting it at ModdingWiki:
+
+https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Image_Format
+
+The file consists of four "typical" Dynamix chunks, a "BMP:" container
+chunk (the most significant bit of size is set), followed by an INF:",
+an "SCN:" and an "OFS:" chunk.
+
+The format of the "INF:" chunk is documented here:
+https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Image_Format
+and http://www.shikadi.net/moddingwiki/TIM_Resource_Format. It contains the
+number of "sub-images", followed by two arrays containing the width and
+height of each (all values are encoded in a 16-bit little-endian format).
+ 
+The "OFS:" chunk contains the starting positions for each sub-image in the
+"SCN:" chunk (each position is a 32-bit integer). The first is always zero.
+ 
+The "SCN:" chunk contains the actual pixel data. Basically, this chunk has
+run-length encoded format, with a special treatment of transparency. The
+number stored in the first byte of the data is added to the color index of
+each pixels. (NOTE: the game uses a 16-color graphics mode.) Its value is
+between 1 and 5 (inclusive) in the vast majority of cases. The value of
+this byte is 0xFF in some "empty" images containing only a few transparent
+pixels. The next byte is the first "control" byte. A control byte can
+encode four "commands" depending on its most significant two bits.
+ 
+  00......: Start a new line in the image, and move the current "x"
+    position to the left with a number of pixels stored in the least
+    significant 6 bits. The file may contain two consecutive bytes with 00
+    in the most significant 2 bits. This way, a single 12-byte offset can be
+    encoded, with bits 0-5 from the first byte and bits 6-11 from the second
+    byte. This is nearly always necessary for images that are at least 64 
+    pixels wide. However, if the second byte is 0, the two bytes are treated
+    as two separate "new line" commands. (A second byte for encoding an 
+    offset below 64 would be redundant.)
+ 
+  01......: Add transparent pixels, the number is determined by the least
+    significant 6 bits. Numbers greater than 63 can be encoded as e.g.
+    0x7F 0x47. A control byte of 0x40 is used as the terminator of a
+    sub-image. This byte is nearly always preceded by a 00 byte, however
+    there are a few exceptions to this.
+    
+  10......: Repeats a single pixel with the specified color. The repeat count
+    is stored in by the least significant 6 bits of the control byte. 
+    A single byte follows the control byte, containing the pixel color.
+    The color is in the less significant nibble, the higher 4 bits are zero
+    as this is a 16-color format.
+ 
+  11......: Copy a sequence of pixel values with a specified length.
+    The length (in pixels, not bytes) is determined by the least significant
+    6 bits of the "control" byte. The number of the "data" bytes after the
+    "control" byte can be calculated as: (length_in_pixels + 1) >> 1. Each
+    byte encodes two pixels, the color of leftmost pixel is stored in the
+    most significant nibble. If the number of pixels is odd, the most
+    significant 4 bits of the last byte contains the color of the last
+    pixel, and the less significant nibble is zero. 
+    
+(Note: According to the information published by Nyerguds, some Dynamix
+games use the "BMP:"/"SCN:" as a 8 BPP format, this is possible due
+to the first byte of the "SCN:" chunk, containing a number added to
+all pixel values.)
+    
+License
+=======
+
+This file is part of TIM level/image resource reader, version 0.2.
+Available under the Creative Commons Zero license.
+
