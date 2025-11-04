@@ -14,14 +14,15 @@
 // animations
 // size 678x369
 // langage management
-// welcome page with level info
+// finish welcome page with level info
+// souflet
 //---------------------------
 //bug
 
 
 
 
-	var CurrentLevel=3;
+	var CurrentLevel=4;
 
 	let Images={};
 	let Icons={};
@@ -47,6 +48,7 @@
 	var render =undefined;
 	var world=undefined;
 	var wireframe=false;
+	var ShowWinConditions=false;
 	var Test=false;
 	
 	
@@ -54,7 +56,7 @@
 	const playgroundHeight=369;
 	const playgroundOffsetX=10;
 	const playgroundOffsetY=5;
-	const MaxLevel=2;
+	const MaxLevel=3;
 	
 	
 	var BeltMode=0;
@@ -65,8 +67,10 @@
 	var BeltNoConnecting=-1;
 	
 	
+	
 	var CurrentLevelWinned=false;
 	var CurrentLevelRunning=false;
+	var loadingLevel=false;
 	var ExpandUnit=0;
 	var Score=0;
 	var Bonus1 =0;
@@ -83,6 +87,7 @@ let
 		Runner = Matter.Runner,
 		Composite = Matter.Composite,
 		Common = Matter.Common,
+		Constraint = Matter.Constraint,
 		World = Matter.World;
 
 //var decomp = require('poly-decomp');
@@ -91,21 +96,22 @@ let
 const WinCondition={
 	"1":{"Conditions":[{"unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
 	"2":{"Conditions":[{"unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]},
-	"3":{"Conditions":[{"unitNo":8},{"unitNo":9},{"unitNo":10}]}
+	"3":{"Conditions":[{"unitNo":8},{"unitNo":9},{"unitNo":10}]},
+	"4":{"Conditions":[{"unitNo":24,"x1":425,"y1":300,"dx":140,"dy":50}]},
 };	
 		
 const files={			 
-	"0":{"count":1,"restitution":0.2,"mass":2},//Bowling ball
+	"0":{"count":1,"restitution":0.2,"mass":10},//Bowling ball
 	"1":{"count":8},
 	"2":{"count":4,"FlipH":1,"FlipV":1,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
 	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
-	"3":{"count":3,"FlipH":1},//Teeter-totter 
+	"3":{"count":3,"FlipH":1,"specialTest":1,"mass":1,"nb_anim":3},//Teeter-totter 
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7},//ballon
 	"5":{"count":35,"FlipH":1,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"FlipH":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
 	"7":{"count":4},
 	"8":{"count":1},//belt
-	"9":{"count":1,"restitution":0.8,"mass":5},//Basketball 
+	"9":{"count":1,"restitution":0.8,"mass":4},//Basketball 
 	"10":{"count":1},//rope
 	"11":{"count":1},
 	"12":{"count":10},
@@ -124,7 +130,7 @@ const files={
 	"25":{"count":2},
 	"26":{"count":6},
 	"27":{"count":6},
-	"28":{"count":1,"restitution":0.2,"mass":2},//baseball
+	"28":{"count":1,"restitution":0.8,"mass":2},//baseball
 	"29":{"count":6},
 	"30":{"count":1},
 	"31":{"count":10},
@@ -133,13 +139,13 @@ const files={
 	"34":{"count":1},
 	"35":{"count":10},
 	"36":{"count":11},
-	"37":{"count":3},//cisore
+	"37":{"count":3,"FlipH":1},//cisore
 	"38":{"count":2},
 	"39":{"count":8},
 	"40":{"count":4},
 	"41":{"count":6},
 	"42":{"count":2},
-	"43":{"count":1,"restitution":0.2,"mass":2},//canon ball
+	"43":{"count":1,"restitution":0.2,"mass":0.4},//canon ball
 	"44":{"count":1,"restitution":0.2,"mass":2},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
@@ -215,6 +221,7 @@ const files={
 
 	function drawImage(img,x,y,flipV,flipH)
 	{
+		//console.log("flipH="+flipH+" flipV="+flipV);
 		x=x+playgroundOffsetX;
 		y=y+playgroundOffsetY;
 		if((flipV==0)&&(flipH==0))
@@ -230,10 +237,54 @@ const files={
 	function AllImagesLoaded()
 	{
 		console.log("All images loaded: "+NBImagesLoaded) ;
-		myTimer = setInterval(myTimerBonus1, 1000);
+		if(Test==true)
+			myTimer = setInterval(myTimerBonus1, 1000);
 		refresh(true);
 	}
-	
+	function GetFlipH(part)
+	{
+		let flipHs="0";
+		if(part.direction_r_to_l!=undefined)//top-down (0); bottom-up (1); 2 and 3 ???
+		{
+			let start=part.direction_r_to_l.indexOf('(');
+			let end=part.direction_r_to_l.indexOf(')');
+			let _flipHs = part.direction_r_to_l.substring(start+1, end);
+			console.log("flipHs="+_flipHs);
+			if(_flipHs=="2")
+				flipHs="0";
+			if(_flipHs=="3")
+				flipHs="1";
+		}
+		
+		if(part.orientation!=undefined)
+		{
+			//console.log("orientation");
+			let start=part.orientation.indexOf('(');
+			let end=part.orientation.indexOf(')');
+			flipHs = part.orientation.substring(start+1, end);
+			//console.log("flipH="+flipH);
+		}
+		if(flipHs=="0")
+			return 0;
+		else
+			return 1;
+	}
+	function GetFlipV(part)
+	{
+		let flipV=0;
+		if(part.direction_r_to_l!=undefined)//top-down (0); bottom-up (1)
+		{
+			let start=part.direction_r_to_l.indexOf('(');
+			let end=part.direction_r_to_l.indexOf(')');
+			let flipVs = part.direction_r_to_l.substring(start+1, end);
+			if(flipVs=="0")
+				flipV=0;
+			if(flipVs=="1")
+				flipV=1;
+			//console.log("flipV="+flipV);
+		}
+		return flipV;
+	}
 	function refresh( allObjects)
 	{
 		if(wireframe==true)
@@ -257,30 +308,12 @@ const files={
 			
 			if(part.in_partsbin==0)
 			{
-				if(part.no==9)
-					console.log("refresh 1 -"+part.no+ " m="+part.is_moving);
+				//if(part.no==9)
+				//	console.log("refresh 1 -"+part.no+ " m="+part.is_moving);
 				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 				{
-					if(part.no==9)
-						console.log("refresh 2 -",part.no);
-					let flipH=0;
-					let flipV=0;
-					if(part.direction_r_to_l!=undefined)
-					{
-						let start=part.direction_r_to_l.indexOf('(');
-						let end=part.direction_r_to_l.indexOf(')');
-						flipV = part.direction_r_to_l.substring(start+1, end);
-						//console.log("flipV="+flipV);
-					}
-					
-					if(part.orientation!=undefined)
-					{
-						//console.log("orientation");
-						let start=part.orientation.indexOf('(');
-						let end=part.orientation.indexOf(')');
-						flipH = part.orientation.substring(start+1, end);
-						//console.log("flipH="+flipH);
-					}
+					//if(part.no==9)
+					//	console.log("refresh 2 -",part.no);
 					if(part.TimType!=8)//not belt
 					{
 						if(part.appearance==undefined)
@@ -293,15 +326,15 @@ const files={
 								for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
 								{
 									if(index==0)
-										drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+										drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
 									else if(index==part.width/Images[part.TimType+"-0"].width-1)
-										drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+										drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
 									else
 									{
 										if(index%2==0)
-											drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+											drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
 										else
-											drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,flipV,flipH);
+											drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
 									}
 								}
 							}
@@ -313,15 +346,15 @@ const files={
 								for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
 								{
 									if(index==0)
-										drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+										drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
 									else if(index==part.height/Images[part.TimType+"-0"].height-1)
-										drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+										drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
 									else
 									{
 										if(index%2==0)
-											drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+											drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
 										else
-											drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,flipV,flipH);
+											drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
 									}
 								}
 							}
@@ -331,17 +364,17 @@ const files={
 								if(part.size!=undefined)
 									size=part.size;
 								if((part.anim==undefined)||(part.anim==false))
-									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,flipV,flipH);
+									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
 								else
 								{
 									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
 									//console.log("anim1 "+part.anim);
 									if((part.animOnce==true)&&(part.animStep==files[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 									{
-										console.log("1 no image for "+part.no+" : "+part.animStep);
+										//console.log("1 no image for "+part.no+" : "+part.animStep);
 									}
 									else
-										drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2,flipV,flipH);
+										drawImage(Images[part.TimType+"-"+(size+part.animStep)], part.pos_x, part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2,part.flipV,part.flipH);
 									//console.log("static part=",part.staticObj);
 									//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
 									//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
@@ -376,7 +409,7 @@ const files={
 							let subResult = part.appearance.substring(start+1, end);
 							//console.log(part.TimType+"_"+subResult);
 							if((part.anim==undefined)||(part.anim==false))
-								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,flipV,flipH);
+								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
 							else
 							{
 								//console.log("anim2 "+part.anim);
@@ -387,7 +420,7 @@ const files={
 									console.log("2 no image for "+part.no+" : "+part.animStep);
 								}
 								else
-									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,flipV,flipH);
+									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
 								//console.log("static part=",part.staticObj);
 								part.staticObj.height=Images[part.TimType+"-"+val].height;
 								
@@ -438,6 +471,10 @@ const files={
 					{
 						ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
 					}
+					if((files[part.TimType].FlipV!=undefined)&&(files[part.TimType].FlipV==1))
+					{
+						ctx.drawImage(Boards[63], part.pos_x+playgroundOffsetX+part.width, part.pos_y+part.height+playgroundOffsetY);//swap
+					}
 					//console.log("overlap",part);
 				}	
 		
@@ -484,29 +521,10 @@ const files={
 				if(part.TimType==37)
 				{
 					//console.log("cisor 2");
-					
-					let flipH=0;
-					let flipV=0;
-					if(part.direction_r_to_l!=undefined)
-					{
-						let start=part.direction_r_to_l.indexOf('(');
-						let end=part.direction_r_to_l.indexOf(')');
-						flipV = part.direction_r_to_l.substring(start+1, end);
-						//console.log("flipV="+flipV);
-					}
-					
-					if(part.orientation!=undefined)
-					{
-						//console.log("orientation");
-						let start=part.orientation.indexOf('(');
-						let end=part.orientation.indexOf(')');
-						flipH = part.orientation.substring(start+1, end);
-						//console.log("flipH="+flipH);
-					}
-					if(flipH==1)
-						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,flipV,flipH);
+					if(part.flipH==1)
+						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,part.flipV,part.flipH);
 					else
-						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,flipV,flipH);
+						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,part.flipV,part.flipH);
 				}
 			}
 		});//
@@ -560,7 +578,32 @@ const files={
 		});
 		displayScore();
 		displayBoard();
-		
+		if(ShowWinConditions==true)
+		{
+			if(WinCondition[CurrentLevel]!=undefined)
+			{
+				for (let index = 0; index < WinCondition[CurrentLevel].Conditions.length; ++index) 
+				{
+					ctx.fillStyle = "rgba(0,125,125,255)";
+					ctx.fillRect(WinCondition[CurrentLevel].Conditions[index].x1, WinCondition[CurrentLevel].Conditions[index].y1, WinCondition[CurrentLevel].Conditions[index].dx, WinCondition[CurrentLevel].Conditions[index].dy);
+				}
+			}
+		}
+		//level info after level load
+		if((Test==false)&&(loadingLevel==true))
+		{
+			ctx.fillStyle = "rgba(0,243,243,255)";
+			let w_with=400;
+			ctx.fillRect(canvas.width/2-w_with/2,canvas.height/2-60, w_with,120);
+			ctx.font = "10px Arial";
+			ctx.fillStyle = "purple";
+			ctx.fillText("Start level "+CurrentLevel,canvas.width/2-40,canvas.height/2-40);
+			
+			ctx.fillText( LevelJson.Title.EN,canvas.width/2-w_with/2+5,canvas.height/2-10);
+			ctx.fillText( LevelJson.Goal.EN,canvas.width/2-w_with/2+5,canvas.height/2+20);
+					
+			
+		}
 	}
 		
 	function drawLine(x1,y1,x2,y2, offset = 0) 
@@ -580,30 +623,12 @@ const files={
 
 	function GetNodePos(part)
 	{
-		let flipV=0;
-		let flipH=0;
-		if(part.direction_r_to_l!=undefined)
-		{
-			let start=part.direction_r_to_l.indexOf('(');
-			let end=part.direction_r_to_l.indexOf(')');
-			flipV = part.direction_r_to_l.substring(start+1, end);
-			//console.log("flipV="+flipV);
-		}
-		
-		if(part.orientation!=undefined)
-		{
-			//console.log("orientation");
-			let start=part.orientation.indexOf('(');
-			let end=part.orientation.indexOf(')');
-			flipH = part.orientation.substring(start+1, end);
-			//console.log("flipH="+flipH);
-		}
 		
 		var x=part.pos_x+(part.width*files[part.TimType].node_x/100);
 		let y=part.pos_y+(part.height*files[part.TimType].node_y/100);
 		//console.log("GetNodePos = "+x+":"+y);
 		
-		if(flipH!=0)
+		if(part.flipH!=0)
 		{
 			let nx=(part.width-(part.width*files[part.TimType].node_x/100));
 			x=part.pos_x+nx;
@@ -768,6 +793,8 @@ const files={
 			part.TimType=result;
 			part.movingObj=undefined;
 			part.selected=0;
+			part.flipH=GetFlipH(part);
+			part.flipV=GetFlipV(part);
 			if(part.in_partsbin==1)
 			{
 				part.pos_x=-1;
@@ -802,6 +829,9 @@ const files={
 
 	function LoadLevel(level)
 	{
+		loadingLevel=true;
+		if(document.getElementById("levelInput")!=null)
+			document.getElementById("levelInput").value=level;
 		CurrentLevel=level;
 		CurrentLevelWinned=false;
 		stop();
@@ -816,6 +846,19 @@ const files={
 			.then((json) => ReadJson(json));
 	}
 
+
+	function previousLevelClicked()
+	{
+		CurrentLevel--;
+		if(CurrentLevel<1)
+			CurrentLevel=1;
+		LoadLevel(CurrentLevel);
+	}
+	function nextLevelClicked()
+	{
+		CurrentLevel++;
+		LoadLevel(CurrentLevel);
+	}
 	function loadLevelClicked()
 	{
 		let l=document.getElementById("levelInput").value;
@@ -924,6 +967,7 @@ const files={
 	//--------------------------------------------------
 	function stop()
 	{
+		clearInterval(myTimer);
 		CurrentLevelRunning=false;
 		Render.stop(render)
 		if(runner!=undefined)
@@ -961,7 +1005,7 @@ const files={
 	function run()
 	{
 
-		//remocve the link with physics
+		//remove the link with physics
 		LevelJson.Parts.forEach(part => {
 			part.staticObj=undefined;
 			part.movingObj=undefined;
@@ -973,6 +1017,8 @@ const files={
 		//console.log("run! "+engine.world.gravity.y);
 		CurrentLevelWinned=false;
 		
+		selectPart(-1);
+		
 		//clean the World
 		cleanPhysics(false);
 		engine.world.gravity.y = 0;
@@ -980,7 +1026,6 @@ const files={
 			let start=part.name.indexOf('(');
 			let end=part.name.indexOf(')');
 			let result = part.name.substring(start+1, end);
-			
 			if(part.in_partsbin==0)
 			{
 				//console.log(part);
@@ -1020,33 +1065,56 @@ const files={
 						  }
 						  });
 					
-					World.add(world, [movingObj]);
+					Composite.add(world, [movingObj]);
 					part.movingObj=movingObj;
 				}
 				else
 				{
-					//if(part.TimType==2)//inclined wood
-					if(files[part.TimType].phy_poly!=undefined)
+					if(part.TimType==3)//"Teeter-totter (3)"
+					{
+						console.log("Teeter-totter=",part.no);
+						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width, 5, {
+							isStatic: false, 
+							TimNo:part.no,
+							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							});
+						if(part.flipH==0)
+							Matter.Body.rotate(staticObj,-0.3);
+						else
+							Matter.Body.rotate(staticObj,0.3);
+						
+						staticObj.friction=1;
+ 						staticObj.frictionAir=0.01*20;
+						staticObj.frictionStatic=0.5*40;
+
+						Composite.add(world, [staticObj]);
+						part.staticObj=staticObj;
+						part.staticObjId=staticObj.id;
+						//console.log("id=",part.staticObjId);
+						
+						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+10,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+							isStatic: true, 
+							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							});
+						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-10,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+							isStatic: true, 
+							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							});
+						Composite.add(world, [staticObjBloc1,staticObjBloc2]);	
+						 
+						 var constraint = Constraint.create({
+							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
+							bodyB: staticObj,
+							length: 0
+						});
+						Composite.add(world, [constraint]);
+						
+						
+					}
+					else if(files[part.TimType].phy_poly!=undefined)
 					{
 						console.log("poly");
-						let flipH=0;
-						let flipV=0;
 						
-						if(part.direction_r_to_l!=undefined)
-						{
-							let start=part.direction_r_to_l.indexOf('(');
-							let end=part.direction_r_to_l.indexOf(')');
-							flipV = part.direction_r_to_l.substring(start+1, end);
-							//console.log("flipV="+flipV);
-						}
-						if(part.orientation!=undefined)
-						{
-							//console.log("orientation");
-							let start=part.orientation.indexOf('(');
-							let end=part.orientation.indexOf(')');
-							flipH = part.orientation.substring(start+1, end);
-							//console.log("flipH="+flipH);
-						}
 						//console.log("phy_poly.length="+files[part.TimType].phy_poly.length);
 						for(let i=0;i<files[part.TimType].phy_poly.length;i++)
 						{
@@ -1071,9 +1139,9 @@ const files={
 							let scaleX=1;
 							let scaleY=1;
 							
-							if(flipH!=0)
+							if(part.flipH!=0)
 								scaleX=-1;
-							if(flipV!=0)
+							if(part.flipV!=0)
 								scaleY=-1;
 							if(part.TimType==47)
 							{
@@ -1090,19 +1158,17 @@ const files={
 									scaleY=-1;
 								}
 							}
-							
-							
 							Matter.Vertices.scale(verts, scaleX*part.width, scaleY*part.height);
 							let ox=part.pos_x+(part.width/2);
 							let oy=part.pos_y+(part.height/2);
 							if(files[part.TimType].phy_poly[i].x!=undefined)
 							{
-								console.log("ggg  x");
+								//console.log("ggg  x");
 								ox=ox-(files[part.TimType].phy_poly[i].x*part.width)*scaleX;
 							}
 							if(files[part.TimType].phy_poly[i].y!=undefined)
 							{
-								console.log("ggg  y");
+								//console.log("ggg  y");
 								oy=oy-(files[part.TimType].phy_poly[i].y*part.height)*scaleY;
 							}
 							
@@ -1111,10 +1177,10 @@ const files={
 								TimNo:part.no,
 								render: { fillStyle: "rgba(0, 0, 255, 0)"}
 								}, true, 0.001, 20);
-							World.add(world, [staticObj]);
+							Composite.add(world, [staticObj]);
 							part.staticObj=staticObj;
 							part.staticObjId=staticObj.id;
-							console.log("id=",part.staticObjId);
+							//console.log("id=",part.staticObjId);
 						}
 					}
 					else
@@ -1124,7 +1190,7 @@ const files={
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
-						World.add(world, [staticObj]);
+						Composite.add(world, [staticObj]);
 						part.staticObj=staticObj;
 						part.staticObjId=staticObj.id;
 						//console.log("id=",part.staticObjId);
@@ -1203,6 +1269,14 @@ const files={
 	}
 	function MouseClickUp(e)
 	{
+		
+		if((loadingLevel==true)&&(Test==false))
+		{
+			loadingLevel=false;
+			myTimer = setInterval(myTimerBonus1, 1000);
+			refresh(true);
+			return;
+		}
 		if(CurrentLevelWinned==true)
 		{
 			if(CurrentLevel<MaxLevel)
@@ -1212,10 +1286,6 @@ const files={
 		if(CurrentLevelRunning==true)
 		{	
 			stop();
-			
-			
-		
-			
 			myTimer = setInterval(myTimerBonus1, 1000);
 			refresh(true);
 			return;
@@ -1348,7 +1418,8 @@ const files={
 	
 	function MouseClickDown(e)
 	{
-		
+		if((loadingLevel==true)&&(Test==false))
+			return;
 		if(CurrentLevelWinned==true)
 			return;
 		if(CurrentLevelRunning==true)
@@ -1374,38 +1445,17 @@ const files={
 								LevelJson.Parts[SelectedPart].pos_y=-1;
 								refresh(true);
 							}
-							//flip
+							//flip H
 							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
 							{
 							
-								if(LevelJson.Parts[SelectedPart].direction_r_to_l!=undefined)
-								{
-									let start=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf('(');
-									let end=LevelJson.Parts[SelectedPart].direction_r_to_l.indexOf(')');
-									let flipV = LevelJson.Parts[SelectedPart].direction_r_to_l.substring(start+1, end);
-									//console.log("flipV="+flipV);
-									if(flipV==0)
-										flipV=1;
-									else
-										flipV=0;
-									LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";
-									refresh(true);
-								}
-								
-								if(LevelJson.Parts[SelectedPart].orientation!=undefined)
-								{
-									//console.log("orientation");
-									let start=LevelJson.Parts[SelectedPart].orientation.indexOf('(');
-									let end=LevelJson.Parts[SelectedPart].orientation.indexOf(')');
-									let flipH = LevelJson.Parts[SelectedPart].orientation.substring(start+1, end);
 									//console.log("flipH="+flipH);
-									if(flipH==0)
-										flipH=1;
+									if(LevelJson.Parts[SelectedPart].flipH==0)
+										LevelJson.Parts[SelectedPart].flipH=1;
 									else
-										flipH=0;
-									LevelJson.Parts[SelectedPart].orientation="("+flipH+")";
+										LevelJson.Parts[SelectedPart].flipH=0;
+									//LevelJson.Parts[SelectedPart].orientation="("+part.flipH+")";//not needed anymore
 									refresh(true);
-								}
 								
 							}
 							//expand left
@@ -1425,6 +1475,19 @@ const files={
 							{
 								//console.log("expand right");
 								ExpandUnit=1;
+							}
+							//flip V
+							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
+							{
+							
+									//console.log("flipV="+flipV);
+									if(LevelJson.Parts[SelectedPart].flipV==0)
+										LevelJson.Parts[SelectedPart].flipV=1;
+									else
+										LevelJson.Parts[SelectedPart].flipV=0;
+									//LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";//not needed anymore
+									refresh(true);
+							
 							}
 						}
 						
@@ -1501,6 +1564,8 @@ const files={
 	}
 	function MouseMove(e)
 	{
+		if((loadingLevel==true)&&(Test==false))
+			return;
 		if(CurrentLevelWinned==true)
 			return;
 		if(CurrentLevelRunning==true)
@@ -1586,7 +1651,7 @@ const files={
 			let overlap=false;
 			LevelJson.Parts.forEach(part => {
 					
-					if(doPartsOverlap(DraggingObject,part))
+					if(doPartsOverlaps(DraggingObject,part))
 					{
 						overlap=true;
 					}
@@ -1667,8 +1732,14 @@ const files={
 			
 		}
 	}
-	function doPartsOverlap(part1, part2)
+	function doPartsOverlaps(part1, part2)
 	{
+		if((files[part1.TimType].specialTest!=undefined)||(files[part2.TimType].specialTest!=undefined))
+		{
+			console.log("test overlap special test");
+			return false;
+		}
+		
 		if(part1.no==part2.no)
 			return false;
 		//if(part2.no==1)
@@ -1798,9 +1869,8 @@ const files={
 	//--------------------------------------------------
 	function beforeRender()
 	{
-			
-	//console.log("beforeRender");
-	LevelJson.Parts.forEach(part => {
+		//console.log("beforeRender");
+		LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
 		{
 			if(part.is_moving)
@@ -1810,22 +1880,37 @@ const files={
 				Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
-
-					if((LevelJson.Parts[body.TimNo].TimType==5)&&(LevelJson.Parts[body.TimNo].anim==true))//moving belt
+					if(body.TimNo!=undefined)
 					{
-						if (Matter.Collision.collides(part.movingObj, body) != null) 
+						if((LevelJson.Parts[body.TimNo].TimType==5)&&(LevelJson.Parts[body.TimNo].anim==true))//moving belt
 						{
-							// collision happened
-							//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
-							//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
-							if(LevelJson.Parts[body.TimNo].animDirectionX==0)
-								Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
-							if(LevelJson.Parts[body.TimNo].animDirectionX==1)
-								Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.001, y: 0 })
+							if (Matter.Collision.collides(part.movingObj, body) != null) 
+							{
+								// collision happened
+								//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
+								//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
+								if(LevelJson.Parts[body.TimNo].animDirectionX==0)
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
+								if(LevelJson.Parts[body.TimNo].animDirectionX==1)
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.001, y: 0 })
+							}
 						}
 					}
 				});
 			}
+			/*
+			if(part.TimType==3)//"Teeter-totter (3)"
+			{
+				if(part.movingObj!=undefined)
+				{
+					if(part.movingObj.angle>0.3)
+						part.movingObj.angle=0.3;
+					if(part.movingObj.angle<-0.3)
+						part.movingObj.angle=-0.3;
+				}
+				
+			}
+			*/
 		}
 		});
 		//checkIfWin();
@@ -1842,50 +1927,19 @@ const files={
 	
 	function collision_mouse(TimNo)
 	{
-		let flipH=0;
-			let flipV=0;
-			if(LevelJson.Parts[TimNo].direction_r_to_l!=undefined)
-			{
-				let start=LevelJson.Parts[TimNo].direction_r_to_l.indexOf('(');
-				let end=LevelJson.Parts[TimNo].direction_r_to_l.indexOf(')');
-				flipV = LevelJson.Parts[TimNo].direction_r_to_l.substring(start+1, end);
-				//console.log("flipV="+flipV);
-			}
-			if(LevelJson.Parts[TimNo].orientation!=undefined)
-			{
-				//console.log("orientation");
-				let start=LevelJson.Parts[TimNo].orientation.indexOf('(');
-				let end=LevelJson.Parts[TimNo].orientation.indexOf(')');
-				flipH = LevelJson.Parts[TimNo].orientation.substring(start+1, end);
-				//console.log("flipH="+flipH);
-			}
-			console.log("moving part direction "+flipH+" "+flipV);
-			AnimPart(TimNo,true,flipH,flipV,false,false);
+		
+			console.log("moving part direction "+LevelJson.Parts[TimNo].flipH+" "+LevelJson.Parts[TimNo].flipV);
+		
+			AnimPart(TimNo,true,LevelJson.Parts[TimNo].flipH,LevelJson.Parts[TimNo].flipV,false,false);
 	}
 	function collision_bellow(TimNo)
 	{
-		let flipH=0;
-		let flipV=0;
-		if(LevelJson.Parts[TimNo].direction_r_to_l!=undefined)
-		{
-			let start=LevelJson.Parts[TimNo].direction_r_to_l.indexOf('(');
-			let end=LevelJson.Parts[TimNo].direction_r_to_l.indexOf(')');
-			flipV = LevelJson.Parts[TimNo].direction_r_to_l.substring(start+1, end);
-			//console.log("flipV="+flipV);
-		}
-		if(LevelJson.Parts[TimNo].orientation!=undefined)
-		{
-			//console.log("orientation");
-			let start=LevelJson.Parts[TimNo].orientation.indexOf('(');
-			let end=LevelJson.Parts[TimNo].orientation.indexOf(')');
-			flipH = LevelJson.Parts[TimNo].orientation.substring(start+1, end);
-			//console.log("flipH="+flipH);
-		}
-		console.log("moving part direction "+flipH+" "+flipV);
-		AnimPart(TimNo,false,flipH,flipV,true,false);
+		
+		console.log("moving part direction "+LevelJson.Parts[TimNo].flipH+" "+LevelJson.Parts[TimNo].flipV);
+		AnimPart(TimNo,false,LevelJson.Parts[TimNo].flipH,LevelJson.Parts[TimNo].flipV,true,false);
 	
 		let scaleX=1;
-		if(flipH==1)
+		if(LevelJson.Parts[TimNo].flipH==1)
 			scaleX=-1;
 		
 		let startPoint = { x: LevelJson.Parts[TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[TimNo].width/2, y: LevelJson.Parts[TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[TimNo].height/2 };
@@ -1927,11 +1981,82 @@ const files={
 		
 		LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
 		LevelJson.Parts[_boby.TimNo].pos_y=_boby.position.y-28;
-		World.remove(world, [_boby]);
+		Composite.remove(world, [_boby]);
 		
 		console.log("destroy ballon "+_boby.TimNo);
 		LevelJson.Parts[_boby.TimNo].is_moving=0;
 		AnimPart(_boby.TimNo,true,0,0,true,true);
+	}
+	
+	function TeeterTotterTilt(_TeeterTotterBoby)
+	{
+		console.log("TT "+_TeeterTotterBoby.TimNo+"=> rotate ",_TeeterTotterBoby);
+		//_TeeterTotterBoby.angle=_TeeterTotterBoby.angle*-1;
+		//_TeeterTotterBoby.isStatic=false;
+	}
+	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody)//Teeter-totter (3)
+	{
+		console.log("TT "+_TeeterTotterBoby.TimNo+"=> xt=" +_TeeterTotterBoby.position.x+" xi="+_impactorBody.position.x+" st="+LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep+" sw="+LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH);
+		
+		if(_impactorBody.position.x<_TeeterTotterBoby.position.x)
+		{
+			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==0)
+			{
+				console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left");
+				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left, no move");
+				}
+				else
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left, move=>");
+					TeeterTotterTilt(_TeeterTotterBoby);
+					
+				}
+			}
+			else
+			{
+				console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped)");
+				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped), no move");
+				}
+				else
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped), move=>");
+					TeeterTotterTilt(_TeeterTotterBoby);
+				}
+			}
+		}
+		else
+		{
+			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==0)
+			{
+				console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right");
+				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right, move=>");
+					TeeterTotterTilt(_TeeterTotterBoby);
+				}
+				else
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right, no move");
+				}
+			}
+			else
+			{
+				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left(swapped), no move");
+				}
+				else
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left(swapped), move=>");
+					TeeterTotterTilt(_TeeterTotterBoby);
+				}
+			}
+		}
+		//AnimPart(_boby.TimNo,false,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipV,true,false);
 	}
 	//--------------------------------------------------
 	// collisionStart
@@ -1940,81 +2065,62 @@ const files={
 	{
 	  event.pairs.forEach((collision) => {
 		  
-		//console.log("Collision Parts No: "+collision.bodyA.part.no +" - "+ collision.bodyB.part.no);
-		//console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
-		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
-		{	
-			collision_mouse(collision.bodyA.TimNo);
-		}
-		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
+		if((collision.bodyA.TimNo!=undefined)&&(collision.bodyB.TimNo!=undefined))
 		{
-			collision_mouse(collision.bodyB.TimNo);
-		}
-		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)
-		{	
-			collision_bellow(collision.bodyA.TimNo);
-		}
-		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)
-		{
-			collision_bellow(collision.bodyB.TimNo);
-		}
-		
-		
-		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon
-		{
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==14)//gear
-			{
-				collision_ballon(collision.bodyA);
-			}
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor
-			{
-				let flipH=0
-				if(LevelJson.Parts[collision.bodyB.TimNo].orientation!=undefined)
-				{
-					//console.log("orientation");
-					let start=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf('(');
-					let end=LevelJson.Parts[collision.bodyB.TimNo].orientation.indexOf(')');
-					flipH = LevelJson.Parts[collision.bodyB.TimNo].orientation.substring(start+1, end);
-					if(flipH==0)
-						flipH=-1;
-					//console.log("flipH="+flipH);
-				}
-					
-				console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
-				
-				if(flipH==collision.bodyA.TimDirectionX)
-					collision_ballon(collision.bodyA);
-			}
-		}
-		
-		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==4)//baloon
-		{
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==14)//gear
-			{
-				collision_ballon(collision.bodyB);
-			}
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor
-			{
-				let flipH=0
-				if(LevelJson.Parts[collision.bodyA.TimNo].orientation!=undefined)
-				{
-					//console.log("orientation");
-					let start=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf('(');
-					let end=LevelJson.Parts[collision.bodyA.TimNo].orientation.indexOf(')');
-					flipH = LevelJson.Parts[collision.bodyA.TimNo].orientation.substring(start+1, end);
-					//console.log("flipH="+flipH);
-					if(flipH==0)
-						flipH=-1;
-				}
+			//console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
+				collision_mouse(collision.bodyA.TimNo);
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
+				collision_mouse(collision.bodyB.TimNo);
 
-				console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
-				if(flipH==collision.bodyB.TimDirectionX)
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)
+				collision_bellow(collision.bodyA.TimNo);
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)
+				collision_bellow(collision.bodyB.TimNo);
+			
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==3)
+				collision_TeeterTotter(collision.bodyA,collision.bodyB)//Teeter-totter (3)
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==3)
+				collision_TeeterTotter(collision.bodyB,collision.bodyA)//Teeter-totter (3)
+			
+			
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon
+			{
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==14)//gear
+				{
+					collision_ballon(collision.bodyA);
+				}
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor
+				{
+					let flipH=1;
+					if(LevelJson.Parts[collision.bodyB.TimNo].flipH==0)
+						flipH=-1;
+					console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
+					
+					if(flipH==collision.bodyA.TimDirectionX)
+						collision_ballon(collision.bodyA);
+				}
+			}
+			
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==4)//baloon
+			{
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==14)//gear
+				{
 					collision_ballon(collision.bodyB);
+				}
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor
+				{
+					let flipH=1;
+					if(LevelJson.Parts[collision.bodyA.TimNo].flipH==0)
+						flipH=-1;
+					console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
+					if(flipH==collision.bodyB.TimDirectionX)
+						collision_ballon(collision.bodyB);
+				}
 			}
 		}
-		
 		});
-		
+	  
 	}
 	//--------------------------------------------------
 	// init
@@ -2022,13 +2128,18 @@ const files={
 	function init(_test)
 	{
 		Test=_test;
+		if(Test==false)
+			CurrentLevel=1;
 		//import { poly-decomp } from './decomp.js';
 		//Common.setDecomp('poly-decomp');
 		//Common.setDecomp(require('poly-decomp'));
 		canvas = document.getElementById("myCanvas");
 		wireframeCheckbox =  document.getElementById("wireframe");
 		if(wireframeCheckbox!=undefined)
-			wireframeCheckbox.addEventListener('change', function(){console.log("ttt",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(true);})
+			wireframeCheckbox.addEventListener('change', function(){console.log("render.options:",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(true);})
+		winConditionCheckbox =  document.getElementById("winCondition");
+		if(winConditionCheckbox!=undefined)
+			winConditionCheckbox.addEventListener('change', function(){if(ShowWinConditions==true) ShowWinConditions=false; else ShowWinConditions=true;refresh(true);})
 
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;

@@ -10,9 +10,10 @@
 <body>
 
 <h1>TIM</h1>
-<input type="text" id="levelInput" name="levelInput"><br><br>
+<input id="levelMButton" type="button" value="-1" onclick="previousLevelClicked();" />
+<input type="text" id="levelInput" name="levelInput"  maxlength="4" size="4">
 <input id="loadLevelButton" type="button" value="Load Level" onclick="loadLevelClicked();" />
-
+<input id="levelMButton" type="button" value="+1" onclick="nextLevelClicked();" />
 <p id="title"></p>
 <p id="goal"></p>
 <canvas id="myCanvas" width="644" height="445" style="border:1px solid grey"></canvas>
@@ -20,8 +21,11 @@
 <input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson,true);" />
 <input id="runButton" type="button" value="Run" onclick="run()" />
 <input id="stopButton" type="button" value="Stop" onclick="stop();" />
-<input type="checkbox" id="wireframe" name="wireframe" value="wireframe">
-<label for="wireframe">Wireframe</label><br>
+<input type="checkbox" id="wireframe" name="wireframe">
+<label for="wireframe">Wireframe</label>
+<input type="checkbox" id="winCondition" name="winCondition">
+<label for="wireframe">Win Condition</label>
+<br>
 <script>
 init(true);
 </script>
