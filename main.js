@@ -2044,6 +2044,14 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left, move=>");
+					
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
+					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 					
 				}
@@ -2058,6 +2066,16 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped), move=>");
+					
+					
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
+								
+					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 			}
@@ -2070,6 +2088,14 @@ const files={
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right, move=>");
+					
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
+					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
@@ -2086,6 +2112,15 @@ const files={
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left(swapped), move=>");
+					
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
+					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
+					
+					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 			}
