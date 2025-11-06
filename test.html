@@ -19,6 +19,7 @@
 <canvas id="myCanvas" width="644" height="445" style="border:1px solid grey"></canvas>
 </br>
 <input id="refreshButton" type="button" value="Refresh" onclick="refresh(LevelJson,true);" />
+<input id="solutionButton" type="button" value="Solution" onclick="solution()" />
 <input id="runButton" type="button" value="Run" onclick="run()" />
 <input id="runButton" type="button" value="Run W" onclick="runWireframe()" />
 <input id="stopButton" type="button" value="Stop" onclick="stop();" />
@@ -26,6 +27,7 @@
 <label for="wireframe">Wireframe</label>
 <input type="checkbox" id="winCondition" name="winCondition">
 <label for="wireframe">Win Condition</label>
+<input id="saveSolutionButton" type="button" value="Save Solution" onclick="saveSolution()" />
 <br>
 <script>
 init(true);

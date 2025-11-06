@@ -16,14 +16,16 @@
 // langage management
 // finish welcome page with level info
 
+//balancoir reflect physics
 // managig pos of tooter
+//level 8
 //---------------------------
 //bug
 
 
 
 
-	var CurrentLevel=5;
+	var CurrentLevel=2;
 
 	let Images={};
 	let Icons={};
@@ -57,7 +59,7 @@
 	const playgroundHeight=369;
 	const playgroundOffsetX=10;
 	const playgroundOffsetY=5;
-	const MaxLevel=3;
+	const MaxLevel=5;
 	
 	
 	var BeltMode=0;
@@ -101,6 +103,14 @@ const WinCondition={
 	"4":{"Conditions":[{"unitNo":24,"x1":425,"y1":300,"dx":140,"dy":50}]},
 	"5":{"Conditions":[{"unitNo":23,"x1":30,"y1":250,"dx":70,"dy":30}]},
 };	
+const Solutions={
+	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
+	{"unitNo":18,"x":152,"y":280,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":19,"x":264,"y":200,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":20,"x":344,"y":72,"name":"Wood incline (2)","FlipH":0,"FlipV":0,"size":3,"width":64}]},
+	"2":{"Parts":[{"unitNo":25,"x":472,"y":56,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":26,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":27,"cp2":7},{"unitNo":27,"x":456,"y":104,"name":"Mouse cage (6)","FlipH":1,"FlipV":0}]},
+	"3":{"Parts":[{"unitNo":13,"x":424,"y":24,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":14,"x":456,"y":232,"name":"Tennis ball (44)","FlipH":0,"FlipV":0},{"unitNo":15,"x":408,"y":264,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":16,"x":376,"y":72,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":312,"y":264,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
+	"4":{"Parts":[{"unitNo":30,"x":184,"y":88,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":31,"x":88,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":32,"x":200,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":33,"x":312,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0}]},
+	"5":{"Parts":[ {"unitNo":29,"name":"Teeter-totter (3)","x":72,"y":104,"FlipH":0,"FlipV":0},{"unitNo":30,"name":"Teeter-totter (3)","x":296,"y":200,"FlipH":1,"FlipV":0},{"unitNo":31,"x":88,"y":168,"name":"Boxing glove (35)","FlipH":1,"FlipV":0},{"unitNo":32,"x":312,"y":264,"name":"Boxing glove (35)","FlipH":0,"FlipV":0}]},
+};
 		
 const files={			 
 	"0":{"count":1,"restitution":0.2,"mass":8},//Bowling ball
@@ -379,9 +389,16 @@ const files={
 										//let x=part.pos_x;
 										let x=part.pos_x;//
 										let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
-										if(files[part.TimType].animRight=1)
+										if(files[part.TimType].animRight==1)
 										{
-											x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+											if(part.flipH==1)
+											{
+												x=part.pos_x;
+											}
+											else
+											{
+												x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+											}
 											y=part.pos_y-38;
 										}
 										
@@ -971,6 +988,15 @@ const files={
 				allBody.push(body);
 		});
 		World.remove(world, allBody);
+		const allCosntraints= [];
+		console.log("engine.world.constraints",engine.world.constraints);
+		engine.world.constraints.forEach((constraint)=>{
+			if(all==false)
+			{
+				allCosntraints.push(constraint);
+			}
+		});
+		World.remove(world, allCosntraints);
 	}
 	
 	//--------------------------------------------------
@@ -1081,6 +1107,7 @@ const files={
 					
 					//movingObj.friction=1;
  					movingObj.frictionAir=0.02;
+					//movingObj.frictionAir=0.1;
 					//movingObj.sleepThreshold=2;
 
 					Composite.add(world, [movingObj]);
@@ -1135,8 +1162,10 @@ const files={
 						 var constraint = Constraint.create({
 							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
 							bodyB: staticObj,
-							length: 0
+							length: 0, 
+							render: { visible: false }
 						});
+						//console.log("constraint",constraint);
 						Composite.add(world, [constraint]);
 						
 						
@@ -1930,9 +1959,9 @@ const files={
 								//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
 								//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
 								if(LevelJson.Parts[body.TimNo].animDirectionX==0)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.001, y: 0 })
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.002, y: 0 })
 								if(LevelJson.Parts[body.TimNo].animDirectionX==1)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.001, y: 0 })
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.002, y: 0 })
 							}
 						}
 					}
@@ -1961,6 +1990,14 @@ const files={
 	function afterRender()
 	{
 		//console.log("afterRender");
+		engine.world.bodies.forEach((body)=>{
+			if(body.TimNo!=undefined)
+			{
+				if(LevelJson.Parts[body.TimNo].TimType==35)//Boxing glove (35)
+					boxing(body);
+			}
+		});
+		
 		refresh(false);
 		checkIfWin();
 	}
@@ -2043,7 +2080,7 @@ const files={
 		const collisions = Matter.Query.collides(_TeeterTotterBoby, bodies);
 		console.log("collisions",collisions);
 		let vx=1.8;//1.8
-		let vy=-7.0;//7.2
+		let vy=-6.5;//7.2
 		collisions.forEach((collision) => {
 			if((LevelJson.Parts[collision.bodyA.TimNo]!=undefined)&&(LevelJson.Parts[collision.bodyA.TimNo].TimType!=3)&&(collision.bodyA.id!=_impactorBody.id))
 			{
@@ -2183,36 +2220,54 @@ const files={
 		}
 		//AnimPart(_boby.TimNo,false,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipV,true,false);
 	}
-	
+	function boxing(BoxingBody)
+	{
+		if((LevelJson.Parts[BoxingBody.TimNo].animStep==undefined)||(LevelJson.Parts[BoxingBody.TimNo].animStep==0)||(LevelJson.Parts[BoxingBody.TimNo].animStep==10))
+			return;
+		
+		console.log("Boxing collision step",LevelJson.Parts[BoxingBody.TimNo].animStep);
+		let scaleX=-1;
+		let x=LevelJson.Parts[BoxingBody.TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[BoxingBody.TimNo].width;
+		
+		if(LevelJson.Parts[BoxingBody.TimNo].flipH==1)
+		{
+			scaleX=1;
+			x=LevelJson.Parts[BoxingBody.TimNo].pos_x;
+		}
+		if(LevelJson.Parts[BoxingBody.TimNo].animStep!=undefined)
+		{
+			console.log("w="+LevelJson.Parts[BoxingBody.TimNo].TimType+"-"+LevelJson.Parts[BoxingBody.TimNo].animStep);
+			let imageWidth=Images[LevelJson.Parts[BoxingBody.TimNo].TimType+"-"+LevelJson.Parts[BoxingBody.TimNo].animStep].width;
+			console.log("w="+imageWidth);
+			let startPoint = { x: x, y: LevelJson.Parts[BoxingBody.TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[BoxingBody.TimNo].height/2 };
+			var collisions = [];
+			let  bodies = Composite.allBodies(engine.world);
+			let  endPoint = { x:x +(imageWidth)*scaleX, y: LevelJson.Parts[BoxingBody.TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[BoxingBody.TimNo].height/2};
+			
+			
+			collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[BoxingBody.TimNo].height) ;
+			console.log("collisions",collisions);
+			collisions.forEach((collision) => {
+				if(collision.body.isStatic==false)
+				{
+				//console.log("collisions ->",collision.body);
+				//collision.body.isSleeping=true;
+				//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+				Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });
+				collision.body.TimDirectionX=scaleX;
+				//console.log("collisions ->",collision.body);
+				}
+			});
+		}
+	}
 	function collision_Boxing(BoxingBody)//Boxing glove (35)
 	{
 		if(LevelJson.Parts[BoxingBody.TimNo].animStep>=1)
 			return;
 		console.log("Boxing collision",BoxingBody);
 		AnimPart(BoxingBody.TimNo,false,LevelJson.Parts[BoxingBody.TimNo].flipH,LevelJson.Parts[BoxingBody.TimNo].flipV,true,false);
-		let scaleX=-1;
-		if(LevelJson.Parts[BoxingBody.TimNo].flipH==1)
-			scaleX=1;
+		boxing(BoxingBody);
 		
-		let startPoint = { x: LevelJson.Parts[BoxingBody.TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[BoxingBody.TimNo].width/2, y: LevelJson.Parts[BoxingBody.TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[BoxingBody.TimNo].height/2 };
-		var collisions = [];
-        let  bodies = Composite.allBodies(engine.world);
-        let  endPoint = { x: LevelJson.Parts[BoxingBody.TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[BoxingBody.TimNo].width/2+200*scaleX, y: LevelJson.Parts[BoxingBody.TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[BoxingBody.TimNo].height/2};
-		
-		
-		collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[BoxingBody.TimNo].height) ;
-		console.log("collisions",collisions);
-		collisions.forEach((collision) => {
-			if(collision.body.isStatic==false)
-			{
-			//console.log("collisions ->",collision.body);
-			//collision.body.isSleeping=true;
-			//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
-			Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });
-			collision.body.TimDirectionX=scaleX;
-			//console.log("collisions ->",collision.body);
-			}
-		});
 	}
 	//--------------------------------------------------
 	// collisionStart
@@ -2291,7 +2346,70 @@ const files={
 		});
 	  
 	}
+	function solution()
+	{
+		//"5":{"Parts":[{"unitNo":29,"name":"Teeter-totter","x":432,"y":155,"FlipH":0,"FlipV":0},{"unitNo":30,"name":"Teeter-totter","x":332,"y":155,"FlipH":0,"FlipV":0}]},
+		console.log("solution",Solutions[CurrentLevel]);
+		Solutions[CurrentLevel].Parts.forEach((sPart) => {
+				
+				console.log("solution part ->",sPart);
+				LevelJson.Parts.forEach(part => {
+					
+					if(part.no==sPart.unitNo)
+					{
+						part.pos_x=sPart.x;
+						part.pos_y=sPart.y;
+						part.flipH=sPart.FlipH;
+						part.flipV=sPart.FlipV;
+						part.in_partsbin=0;
+						if(part.TimType==8)//belt
+						{
+							part.connected_part_1=sPart.cp1;
+							part.connected_part_2=sPart.cp2;
+						}
+						if(part.TimType==2)//wood incilned
+						{
+							part.size=sPart.size;
+							part.width=sPart.width;
+						}
+					}
+				});
+				
+			});
+		refresh(true);
+	}
 	
+	function saveSolution()
+	{
+		console.log("solution",Solutions[CurrentLevel]);
+		Solutions[CurrentLevel].Parts.forEach((sPart) => {
+				
+				
+				LevelJson.Parts.forEach(part => {
+					
+					if(part.no==sPart.unitNo)
+					{
+						sPart.x=part.pos_x;;
+						sPart.y=part.pos_y;
+						sPart.name=part.name;
+						sPart.FlipH=part.flipH;
+						sPart.FlipV=part.flipV;
+						if(part.TimType==8)//belt
+						{
+							sPart.cp1=part.connected_part_1;
+							sPart.cp2=part.connected_part_2;
+						}
+						if(part.TimType==2)//wood incilned
+						{
+							sPart.size=part.size;
+							sPart.width=part.width;
+						}
+							
+					}
+				});
+				console.log("solution part ->", JSON.stringify(sPart));
+			});
+	}
 	function runWireframe()
 	{
 		wireframe=true;
