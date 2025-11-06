@@ -101,7 +101,7 @@ const WinCondition={
 };	
 		
 const files={			 
-	"0":{"count":1,"restitution":0.2,"mass":10},//Bowling ball
+	"0":{"count":1,"restitution":0.2,"mass":8},//Bowling ball
 	"1":{"count":8},
 	"2":{"count":4,"FlipH":1,"FlipV":1,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
 	//"2":{"count":4,"phy_poly":[[0, 0],  [1, 0.5],  [1, 1],  [0, 0.5],  [0, 0]] },//wood incline
@@ -145,7 +145,7 @@ const files={
 	"40":{"count":4},
 	"41":{"count":6},
 	"42":{"count":2},
-	"43":{"count":1,"restitution":0.0,"mass":15},//canon ball
+	"43":{"count":1,"restitution":0.0,"mass":16},//canon ball
 	"44":{"count":1,"restitution":0.2,"mass":2},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
@@ -1065,6 +1065,9 @@ const files={
 						  }
 						  });
 					
+					movingObj.friction=1;
+ 					movingObj.frictionAir=0.02;
+						
 					Composite.add(world, [movingObj]);
 					part.movingObj=movingObj;
 				}
@@ -1083,20 +1086,20 @@ const files={
 						else
 							Matter.Body.rotate(staticObj,0.3);
 						
-						//staticObj.friction=1;
- 						//staticObj.frictionAir=0.01*20;
-						//staticObj.frictionStatic=0.5*40;
+						staticObj.friction=1;
+ 						staticObj.frictionAir=0.01*20;
+						staticObj.frictionStatic=0.5*20;
 
 						Composite.add(world, [staticObj]);
 						part.staticObj=staticObj;
 						part.staticObjId=staticObj.id;
 						//console.log("id=",part.staticObjId);
 						
-						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
 							isStatic: true, 
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
-						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-12,playgroundOffsetY+part.pos_y+part.height+3, 5, 5, {
+						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
 							isStatic: true, 
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
@@ -1994,8 +1997,8 @@ const files={
 		let  bodies = Composite.allBodies(engine.world);
 		const collisions = Matter.Query.collides(_TeeterTotterBoby, bodies);
 		console.log("collisions",collisions);
-		let vx=3.5;//2.3
-		let vy=-6;//2.5
+		let vx=1.8;//2.3
+		let vy=-7.2;//2.5
 		collisions.forEach((collision) => {
 			if((LevelJson.Parts[collision.bodyA.TimNo]!=undefined)&&(LevelJson.Parts[collision.bodyA.TimNo].TimType!=3)&&(collision.bodyA.id!=_impactorBody.id))
 			{
@@ -2070,13 +2073,9 @@ const files={
 				//console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped)");
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
-					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling right (swapped), no move");
-				}
-				else
-				{
+					
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling right (swapped), move=>");
 					
-					/*
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
@@ -2084,8 +2083,11 @@ const files={
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
 								
-					*/
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
+				}
+				else
+				{
+					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling right (swapped), no move");
 				}
 			}
 		}
