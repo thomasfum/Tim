@@ -16,6 +16,7 @@
 // langage management
 // finish welcome page with level info
 // souflet
+// magig pos of tooter
 //---------------------------
 //bug
 
@@ -1065,7 +1066,7 @@ const files={
 						  }
 						  });
 					
-					movingObj.friction=1;
+					//movingObj.friction=1;
  					movingObj.frictionAir=0.02;
 						
 					Composite.add(world, [movingObj]);
@@ -1081,6 +1082,7 @@ const files={
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
+							
 						if(part.flipH==0)
 							Matter.Body.rotate(staticObj,-0.3);
 						else
@@ -1094,7 +1096,7 @@ const files={
 						part.staticObj=staticObj;
 						part.staticObjId=staticObj.id;
 						//console.log("id=",part.staticObjId);
-						
+						/*
 						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
 							isStatic: true, 
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
@@ -1104,7 +1106,12 @@ const files={
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
 						Composite.add(world, [staticObjBloc1,staticObjBloc2]);	
-						 
+						*/
+						 var staticObjBlocBottom = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height-3, part.width-6, 5, {
+							isStatic: true, 
+							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							});
+						Composite.add(world, [staticObjBlocBottom]);	
 						 var constraint = Constraint.create({
 							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
 							bodyB: staticObj,
