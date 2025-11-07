@@ -1,0 +1,435 @@
+
+	
+	function GetNodePos(part)
+	{
+		
+		var x=part.pos_x+(part.width*PartDef[part.TimType].node_x/100);
+		let y=part.pos_y+(part.height*PartDef[part.TimType].node_y/100);
+		//console.log("GetNodePos = "+x+":"+y);
+		
+		if(part.flipH!=0)
+		{
+			let nx=(part.width-(part.width*PartDef[part.TimType].node_x/100));
+			x=part.pos_x+nx;
+		}
+		return [x, y];
+	}
+
+	function flipHorizontally(img,x,y){
+		//console.log("fliiiiip horizontally");
+		// move to x + img's width
+		ctx.translate(x+img.width,y);
+
+		// scaleX by -1; this "trick" flips horizontally
+		ctx.scale(-1,1);
+		
+		// draw the img
+		// no need for x,y since we've already translated
+		ctx.drawImage(img,0,0);
+		
+		// always clean up -- reset transformations to default
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+
+	function flipVertically(img,x,y)
+	{
+
+		//console.log("fliiiiip vertically");
+		// move to y + img's height
+		ctx.translate(x,y+img.height);
+
+		// scaleY by -1; this "trick" flips vertically
+		ctx.scale(1,-1);
+		
+		// draw the img
+		// no need for x,y since we've already translated
+		ctx.drawImage(img,0,0);
+		
+		// always clean up -- reset transformations to default
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+	function flipBoth(img,x,y)
+	{
+
+		//console.log("fliiiiip vertically");
+		// move to y + img's height
+		ctx.translate(x+img.width,y+img.height);
+
+		// scaleY by -1; this "trick" flips vertically
+		ctx.scale(-1,-1);
+		
+		// draw the img
+		// no need for x,y since we've already translated
+		ctx.drawImage(img,0,0);
+		
+		// always clean up -- reset transformations to default
+		ctx.setTransform(1,0,0,1,0,0);
+	}
+
+	function drawImage(img,x,y,flipV,flipH)
+	{
+		//console.log("flipH="+flipH+" flipV="+flipV);
+		x=x+playgroundOffsetX;
+		y=y+playgroundOffsetY;
+		if((flipV==0)&&(flipH==0))
+			ctx.drawImage(img, x, y);
+		else if((flipV==1)&&(flipH==0))
+			flipVertically(img, x, y);
+		else if((flipV==0)&&(flipH==1))
+			flipHorizontally(img,x,y);
+		else
+			flipBoth(img,x,y);
+	}
+		
+	function drawLine(x1,y1,x2,y2, offset = 0) 
+	{
+		var [ox, oy] = [0, 0];  
+		if (offset) {
+			const [dx, dy] = [x1 - x2, y1 - y2];
+			const scale = offset / (dx * dx + dy * dy) ** 0.5;
+			[ox, oy] = [-dy * scale, dx * scale];
+		}
+		ctx.beginPath();
+		ctx.strokeStyle = 'black';
+		ctx.lineTo(ox + x1, oy + y1);
+		ctx.lineTo(ox + x2, oy + y2);
+		ctx.stroke();
+	}
+	function refresh( allObjects)
+	{
+		if(wireframe==true)
+			return;
+		//displayScore();
+		//console.log("Refresh "+allObjects);
+		if(allObjects==true)
+		{
+			ctx.fillStyle = "rgba(0,162,162,255)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
+			
+		}
+		ctx.fillStyle = "rgba(0,243,243,255)";
+		ctx.fillRect(72*8, 0,80, canvas.height-80);
+		
+		displayRightBoard();
+		partsbin={};
+		let partsbinPosY=0;
+		//step 1
+		LevelJson.Parts.forEach(part => {
+			
+			if(part.in_partsbin==0)
+			{
+				//if(part.no==9)
+				//	console.log("refresh 1 -"+part.no+ " m="+part.is_moving);
+				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
+				{
+					//if(part.no==9)
+					//	console.log("refresh 2 -",part.no);
+					if(part.TimType!=8)//not belt
+					{
+						if(part.appearance==undefined)
+						{
+							//if(part.no==17)
+							//	console.log("refresh 3 -",part.no);
+							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
+							{
+								//dupliquer en width
+								for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
+								{
+									if(index==0)
+										drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+									else if(index==part.width/Images[part.TimType+"-0"].width-1)
+										drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+									else
+									{
+										if(index%2==0)
+											drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+										else
+											drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+									}
+								}
+							}
+							else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
+							{
+
+								//dupliquer en height
+								//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
+								for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+								{
+									if(index==0)
+										drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									else if(index==part.height/Images[part.TimType+"-0"].height-1)
+										drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									else
+									{
+										if(index%2==0)
+											drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+										else
+											drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									}
+								}
+							}
+							else
+							{
+								let size=0;
+								if(part.size!=undefined)
+									size=part.size;
+								if((part.anim==undefined)||(part.anim==false))
+									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
+								else
+								{
+									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
+									//console.log("anim1 "+part.anim);
+									if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+									{
+										//console.log("1 no image for "+part.no+" : "+part.animStep);
+									}
+									else
+									{
+										//let x=part.pos_x;
+										let x=part.pos_x;//
+										let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+										if(PartDef[part.TimType].animRight==1)
+										{
+											if(part.flipH==1)
+											{
+												x=part.pos_x;
+											}
+											else
+											{
+												x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+											}
+											y=part.pos_y-38;
+										}
+										
+										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+									}
+									//console.log("static part=",part.staticObj);
+									//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
+									//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+									
+									//console.log("static part ici ("+part.TimType+")",part.staticObj);
+									
+									//part.staticObj.height=Images[part.TimType+"-"+(size+part.animStep)].height;
+									//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
+									//part.staticObj.position.y=100;
+									if(part.staticObj!=undefined)
+										part.staticObj.height=12;
+									part.animDelay++;
+									if(part.animDelay>10)
+									{
+										part.animDelay=0;
+										part.animStep++;
+										if(part.animStep>=PartDef[part.TimType].nb_anim)
+										{
+											part.animStep=0;
+											if(part.animOnce==true)
+												part.animStep=PartDef[part.TimType].nb_anim-1;
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							//console.log("refresh "+part.no+" "+part.anim);
+							let start=part.appearance.indexOf('(');
+							let end=part.appearance.indexOf(')');
+							let subResult = part.appearance.substring(start+1, end);
+							//console.log(part.TimType+"_"+subResult);
+							if((part.anim==undefined)||(part.anim==false))
+								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							else
+							{
+								//console.log("anim2 "+part.anim);
+								let val=part.animStep+parseInt(subResult);
+								//console.log(part.TimType+"_"+val);
+								if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+								{
+									console.log("2 no image for "+part.no+" : "+part.animStep);
+								}
+								else
+									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
+								//console.log("static part=",part.staticObj);
+								part.staticObj.height=Images[part.TimType+"-"+val].height;
+								
+								part.animDelay++;
+								if(part.animDelay>10)
+								{
+									part.animDelay=0;
+									part.animStep++;
+									if(part.animStep>=PartDef[part.TimType].nb_anim)
+									{
+										part.animStep=0;
+										if(part.animOnce==true)
+											part.animStep=PartDef[part.TimType].nb_anim-1;
+									}
+								}
+							}							
+						}
+					}
+				}
+				//selection
+				if((part.selected==1)&&(part.TimType!=8))
+				{
+					ctx.beginPath();
+					ctx.strokeStyle = 'lightgreen';
+					if(part.overlap==true)
+					{
+						//console.log("overlap");
+						ctx.strokeStyle = 'red';
+						ctx.moveTo(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2);
+						ctx.lineTo(part.pos_x+playgroundOffsetX-2+ part.width+4, part.pos_y+playgroundOffsetY-2+part.height+4);
+						
+						ctx.moveTo(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2+part.height+4);
+						ctx.lineTo(part.pos_x+playgroundOffsetX-2+ part.width+4, part.pos_y+playgroundOffsetY-2);
+					}
+					
+
+					ctx.rect(part.pos_x+playgroundOffsetX-2, part.pos_y+playgroundOffsetY-2, part.width+4, part.height+4);
+					ctx.stroke();
+					ctx.drawImage(Boards[59], part.pos_x+playgroundOffsetX-14, part.pos_y+playgroundOffsetY-12);//delette
+					if(part.size!=undefined)
+					{
+						ctx.drawImage(Boards[60], part.pos_x+playgroundOffsetX-14, part.pos_y+playgroundOffsetY+part.height/2-6);//expand
+						ctx.drawImage(Boards[60], part.pos_x+playgroundOffsetX+part.width, part.pos_y+playgroundOffsetY+part.height/2-6);//expand
+					}
+					
+					//if((part.orientation!=undefined)||(part.direction_r_to_l!=undefined))
+					if((PartDef[part.TimType].FlipH!=undefined)&&(PartDef[part.TimType].FlipH==1))
+					{
+						ctx.drawImage(Boards[62], part.pos_x+playgroundOffsetX-14, part.pos_y+part.height+playgroundOffsetY);//swap
+					}
+					if((PartDef[part.TimType].FlipV!=undefined)&&(PartDef[part.TimType].FlipV==1))
+					{
+						ctx.drawImage(Boards[63], part.pos_x+playgroundOffsetX+part.width, part.pos_y+part.height+playgroundOffsetY);//swap
+					}
+					//console.log("overlap",part);
+				}	
+		
+				
+			}
+			else//part.in_partsbin==1
+			{
+				part.canBeDragged=1;
+				if(partsbin[part.TimType]==undefined)
+				{
+					partsbin[part.TimType]={};
+					partsbin[part.TimType].count=1;
+					let x=playgroundOffsetX+playgroundWidth+28-Icons[part.TimType].width/2;
+					let y=playgroundOffsetY+partsbinPosY+110;
+					part.pos_x=x;
+					part.pos_y=y;
+					partsbin[part.TimType].pos_x=playgroundOffsetX+playgroundWidth+28;
+					partsbin[part.TimType].pos_y=y;
+					partsbin[part.TimType].height=Icons[part.TimType].height;
+					drawImage(Icons[part.TimType],x, y,0,0);	
+					partsbinPosY+=Icons[part.TimType].height;
+					partsbinPosY+=20;
+				}
+				else
+				{
+					//let x=playgroundOffsetX+playgroundWidth+28-Icons[part.TimType].width/2;
+					//let y=playgroundOffsetY+partsbinPosY+110
+					part.pos_x=-1;
+					part.pos_y=-1;
+					partsbin[part.TimType].count++;
+				}
+			}
+		});
+		//----------------
+		//string here
+		
+		
+		//--------------------------
+		//step 2 //cisor
+		LevelJson.Parts.forEach(part => {
+			
+			if(part.in_partsbin==0)
+			{
+				if(part.TimType==37)
+				{
+					//console.log("cisor 2");
+					if(part.flipH==1)
+						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,part.flipV,part.flipH);
+					else
+						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,part.flipV,part.flipH);
+				}
+			}
+		});//
+		//display number in bin
+		for(var key in partsbin)
+		{
+			ctx.font = "10px Arial";
+			ctx.fillStyle = "purple";
+			if (partsbin.hasOwnProperty(key))
+			{
+				var value=partsbin[key];
+				//console.log(key+" = ",value);
+				ctx.fillText(value.count,value.pos_x+5,value.pos_y+value.height+15);
+			}
+		}
+		//draw drag belt
+		if(BeltMode==2)
+		{
+			//console.log("BeltMode = 2");
+			ctx.strokeStyle = 'red';
+			if((MouseOnPart!=-1)&&(PartConnectionFree(MouseOnPart)==true))
+			{
+				//console.log("MouseOnPart = ",LevelJson.Parts[MouseOnPart].TimType);
+				if(PartDef[LevelJson.Parts[MouseOnPart].TimType].node_x!=undefined)
+					ctx.strokeStyle = 'lightgreen';
+			}
+			
+			
+			const  [x,y]=GetNodePos(LevelJson.Parts[beltStart]);
+			
+			ctx.beginPath();
+			//ctx.moveTo(LevelJson.Parts[beltStart].pos_x, LevelJson.Parts[beltStart].pos_y);
+			ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
+			ctx.lineTo(Mouse_pos_x+playgroundOffsetX, Mouse_pos_y+playgroundOffsetY);
+			ctx.stroke();
+		}
+		//draw belts
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==8)//belt
+			{
+				//console.log("belt");
+				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
+				{
+					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
+					const  [x1,y1]=GetNodePos(LevelJson.Parts[part.connected_part_1]);
+					const  [x2,y2]=GetNodePos(LevelJson.Parts[part.connected_part_2]);
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,8);
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,-8);
+				}
+			}
+		});
+		displayScore();
+		displayBoard();
+		if(ShowWinConditions==true)
+		{
+			if(WinCondition[CurrentLevel]!=undefined)
+			{
+				for (let index = 0; index < WinCondition[CurrentLevel].Conditions.length; ++index) 
+				{
+					ctx.fillStyle = "rgba(0,125,125,255)";
+					ctx.fillRect(WinCondition[CurrentLevel].Conditions[index].x1, WinCondition[CurrentLevel].Conditions[index].y1, WinCondition[CurrentLevel].Conditions[index].dx, WinCondition[CurrentLevel].Conditions[index].dy);
+				}
+			}
+		}
+		//level info after level load
+		if((Test==false)&&(loadingLevel==true))
+		{
+			ctx.fillStyle = "rgba(0,243,243,255)";
+			let w_with=400;
+			ctx.fillRect(canvas.width/2-w_with/2,canvas.height/2-60, w_with,120);
+			ctx.font = "10px Arial";
+			ctx.fillStyle = "purple";
+			ctx.fillText("Start level "+CurrentLevel,canvas.width/2-40,canvas.height/2-40);
+			
+			ctx.fillText( LevelJson.Title.EN,canvas.width/2-w_with/2+5,canvas.height/2-10);
+			ctx.fillText( LevelJson.Goal.EN,canvas.width/2-w_with/2+5,canvas.height/2+20);
+					
+			
+		}
+	}
