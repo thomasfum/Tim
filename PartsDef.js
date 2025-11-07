@@ -39,12 +39,12 @@ const PartDef={
 	"36":{"count":11},
 	"37":{"count":3,"FlipH":1},//cisore
 	"38":{"count":2},
-	"39":{"count":8},
-	"40":{"count":4},
+	"39":{"count":8,"phy_poly":[{"p":"0 0.5  1 0.5  1 1  0 1  0 0.5","y":0.25}],"nb_anim":6},//Trampoline (39)
+	"40":{"count":4,"FlipH":1,"node_x":50,"node_y":40,"node_d":20,"nb_anim":4},//Windmill (40)
 	"41":{"count":6},
 	"42":{"count":2},
 	"43":{"count":1,"restitution":0.0,"mass":1},//canon ball
-	"44":{"count":1,"restitution":0.2,"mass":2},//tenis ball
+	"44":{"count":1,"restitution":0.2,"mass":1},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
 	//"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 1  0.5 1 0.5 0.5 0 0.5  0 0"}]},//curved pipe wall

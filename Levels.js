@@ -1,9 +1,12 @@
 const WinCondition={
-	"1":{"Conditions":[{"unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
-	"2":{"Conditions":[{"unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]},
-	"3":{"Conditions":[{"unitNo":8},{"unitNo":9},{"unitNo":10}]},
-	"4":{"Conditions":[{"unitNo":24,"x1":425,"y1":300,"dx":140,"dy":50}]},
-	"5":{"Conditions":[{"unitNo":23,"x1":30,"y1":250,"dx":70,"dy":30}]},
+	"1":{"Conditions":[{"t":"p","unitNo":10,"x1":432,"y1":155,"dx":50,"dy":50}]},
+	"2":{"Conditions":[{"t":"p","unitNo":23,"x1":150,"y1":255,"dx":75,"dy":50},{"t":"p","unitNo":24,"x1":355,"y1":255,"dx":75,"dy":50}]},
+	"3":{"Conditions":[{"t":"d","unitNo":8},{"t":"d","unitNo":9},{"t":"d","unitNo":10}]},
+	"4":{"Conditions":[{"t":"p","unitNo":24,"x1":425,"y1":300,"dx":140,"dy":50}]},
+	"5":{"Conditions":[{"t":"p","unitNo":23,"x1":30,"y1":250,"dx":70,"dy":30}]},
+	
+	"6":{"Conditions":[{"t":"a","unitNo":0}]},
+	"8":{"Conditions":[{"t":"d","unitNo":11}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -12,6 +15,9 @@ const Solutions={
 	"3":{"Parts":[{"unitNo":13,"x":424,"y":24,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":14,"x":456,"y":232,"name":"Tennis ball (44)","FlipH":0,"FlipV":0},{"unitNo":15,"x":408,"y":264,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":16,"x":376,"y":72,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":312,"y":264,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
 	"4":{"Parts":[{"unitNo":30,"x":184,"y":88,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":31,"x":88,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":32,"x":200,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":33,"x":312,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0}]},
 	"5":{"Parts":[ {"unitNo":29,"name":"Teeter-totter (3)","x":72,"y":104,"FlipH":0,"FlipV":0},{"unitNo":30,"name":"Teeter-totter (3)","x":296,"y":200,"FlipH":1,"FlipV":0},{"unitNo":31,"x":88,"y":168,"name":"Boxing glove (35)","FlipH":1,"FlipV":0},{"unitNo":32,"x":312,"y":264,"name":"Boxing glove (35)","FlipH":0,"FlipV":0}]},
+	
+	"6":{"Parts":[ {"unitNo":4,"x":232,"y":216,"name":"Trampoline (39)","FlipH":0,"FlipV":0}, {"unitNo":5,"x":344,"y":152,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":6,"x":424,"y":104,"name":"Trampoline (39)","FlipH":0,"FlipV":0}]},
+	"8":{"Parts":[ {"unitNo":15,"x":104,"y":184,"name":"Bellows (16)","FlipH":0,"FlipV":0},{"unitNo":16,"x":392,"y":280,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":9},{"unitNo":18,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":6},{"unitNo":19,"x":296,"y":56,"name":"Windmill (40)","FlipH":1,"FlipV":0},{"unitNo":20,"x":200,"y":184,"name":"Windmill (40)","FlipH":0,"FlipV":0}]},
 };
 
 	function GetFlipH(part)
@@ -203,6 +209,7 @@ const Solutions={
 					if(body.TimNo==unitNo)
 					{
 						found=true;
+						
 						if((body.position.x>WinCondition[CurrentLevel].Conditions[index].x1)&&
 						(body.position.x<WinCondition[CurrentLevel].Conditions[index].x1+WinCondition[CurrentLevel].Conditions[index].dx)&&
 						(body.position.y>WinCondition[CurrentLevel].Conditions[index].y1)&&
@@ -210,13 +217,24 @@ const Solutions={
 						)
 						{
 							//console.log("test condition WIN");
-							win++;
+							if (WinCondition[CurrentLevel].Conditions[index].t=="p")//position
+								win++;
 						}
+						else if(WinCondition[CurrentLevel].Conditions[index].x1==undefined)
+						{
+							//console.log("test condition WIN");
+							if(LevelJson.Parts[body.TimNo].anim!=undefined)
+								if(LevelJson.Parts[body.TimNo].anim==true)
+									if (WinCondition[CurrentLevel].Conditions[index].t=="a")//anim
+										win++;
+						}
+						
 					}
 					
 				});
 				if(found==false)
-					win++;
+					if (WinCondition[CurrentLevel].Conditions[index].t=="d")//destroy
+						win++;
 			}
 		
 			if(win==WinCondition[CurrentLevel].Conditions.length)

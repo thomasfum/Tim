@@ -152,21 +152,56 @@
 							{
 
 								//dupliquer en height
-								//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
-								for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+								if(part.TimType==39)//Trampoline (39)'
 								{
-									if(index==0)
-										drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-									else if(index==part.height/Images[part.TimType+"-0"].height-1)
-										drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									let step=0;
+									let TrampolineAnim={"0":[0,1],"1":[2,3],"2":[4,5],"3":[6,1],"4":[7,1],"5":[0,1]};
+									if((part.anim==undefined)||(part.anim==false))
+										step=0;
 									else
+										step=part.animStep;
+									let currentHeight=0;
+									let p=TrampolineAnim[step];
+									for (let index = 0; currentHeight < part.height; ++index) 
 									{
-										if(index%2==0)
-											drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-										else
-											drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									
+										drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
+										currentHeight+=Images[part.TimType+"-"+p[index]].height;
+									}
+									part.animDelay++;
+									if(part.animDelay>2)//faster speed
+									{
+										part.animDelay=0;
+										part.animStep++;
+										if(part.animStep>=PartDef[part.TimType].nb_anim)
+										{
+											part.animStep=0;
+											if(part.animOnce==true)
+												part.animStep=PartDef[part.TimType].nb_anim-1;
+										}
 									}
 								}
+								else
+								{
+									//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
+									for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+									{
+										if(index==0)
+											drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+										else if(index==part.height/Images[part.TimType+"-0"].height-1)
+											drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+										else
+										{
+											if(index%2==0)
+												drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+											else
+												drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+										}
+									
+									}
+								}
+								
+								
 							}
 							else
 							{
@@ -213,7 +248,7 @@
 									//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
 									//part.staticObj.position.y=100;
 									if(part.staticObj!=undefined)
-										part.staticObj.height=12;
+										part.staticObj.height=12;//????
 									part.animDelay++;
 									if(part.animDelay>10)
 									{

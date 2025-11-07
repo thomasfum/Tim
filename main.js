@@ -16,16 +16,18 @@
 // langage management
 // finish welcome page with level info
 
+// refresh static first and with animation then
+//trampolin animation
 //balancoir reflect physics
-// managig pos of tooter
-//level 8
+//managig pos of tooter
+//level 7
 //---------------------------
 //bug
 
 
 
 
-	var CurrentLevel=2;
+	var CurrentLevel=6;
 
 	let Images={};
 	let Icons={};

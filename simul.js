@@ -23,6 +23,7 @@ let
 		LevelJson.Parts[PartNo].animDirectionX=flipH;
 		LevelJson.Parts[PartNo].animOnce=once;
 		LevelJson.Parts[PartNo].animCleanAtEnd=cleanAtEnd;
+	
 		if(forwardMessage==true)
 		{
 			let AutherExtremity=PartBeltExtremity(PartNo);
@@ -60,9 +61,9 @@ let
 								//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
 								//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
 								if(LevelJson.Parts[body.TimNo].animDirectionX==0)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.002, y: 0 })
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.003, y: 0 })
 								if(LevelJson.Parts[body.TimNo].animDirectionX==1)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.002, y: 0 })
+									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.003, y: 0 })
 							}
 						}
 					}
@@ -96,6 +97,8 @@ let
 			{
 				if(LevelJson.Parts[body.TimNo].TimType==35)//Boxing glove (35)
 					boxing(body);
+				if(LevelJson.Parts[body.TimNo].TimType==14)//gear
+					CheckGear(body);
 			}
 		});
 		
@@ -140,11 +143,21 @@ let
 			if(collision.body.isStatic==false)
 			{
 			//console.log("collisions ->",collision.body);
-			//collision.body.isSleeping=true;
-			//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
-			Body.setVelocity(collision.body, { x:5*scaleX, y: 0 });
-			collision.body.TimDirectionX=scaleX;
-			//console.log("collisions ->",collision.body);
+				//collision.body.isSleeping=true;
+				//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+				Body.setVelocity(collision.body, { x:5*scaleX, y: 0 });
+				collision.body.TimDirectionX=scaleX;
+				//console.log("collisions ->",collision.body);
+			}
+			else
+			{
+				//console.log("bellow blow Type->",LevelJson.Parts[collision.body.TimNo].TimType);
+				if(LevelJson.Parts[collision.body.TimNo].TimType==40)//Windmill (40)
+				{
+					console.log("bellow blow No->",collision.body.TimNo);
+					//collision.body.TimDirectionX=scaleX;
+					AnimPart(collision.body.TimNo,true,LevelJson.Parts[collision.body.TimNo].flipH,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
+				}
 			}
 		});
 		/*
@@ -321,6 +334,29 @@ let
 		}
 		//AnimPart(_boby.TimNo,false,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipV,true,false);
 	}
+	function CheckGear(GearBody)
+	{
+		//console.log("CheckGear");
+		if((LevelJson.Parts[GearBody.TimNo].anim==undefined)||(LevelJson.Parts[GearBody.TimNo].anim==false))
+			return;
+		//console.log("CheckGear rotating");
+		
+		LevelJson.Parts.forEach(part => {
+			//
+			if(part.TimType==4)//baloon
+			{
+				if(Matter.Collision.collides(GearBody, part.movingObj) != null)
+				{
+					if(part.anim==undefined)//ballon is not yet exploding
+					{
+						console.log("CheckGear touching ballon"+part.no);
+						collision_ballon(part.movingObj);
+					}
+				}
+			}
+		});
+	}
+	
 	function boxing(BoxingBody)
 	{
 		if((LevelJson.Parts[BoxingBody.TimNo].animStep==undefined)||(LevelJson.Parts[BoxingBody.TimNo].animStep==0)||(LevelJson.Parts[BoxingBody.TimNo].animStep==10))
@@ -370,6 +406,12 @@ let
 		boxing(BoxingBody);
 		
 	}
+	function collision_Trampoline(_TrampolineBoby,_impactorBody)
+	{
+		console.log("collision_Trampoline ->",_impactorBody);
+		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*4.9, y: -10 });
+		AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
+	}
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
@@ -400,7 +442,9 @@ let
 			{
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==14)//gear
 				{
-					collision_ballon(collision.bodyA);
+					if(LevelJson.Parts[collision.bodyB.TimNo].part!=undefined)
+						if(LevelJson.Parts[collision.bodyB.TimNo].part.anim==true)//only if rotating
+							collision_ballon(collision.bodyA);
 				}
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor
 				{
@@ -418,7 +462,9 @@ let
 			{
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==14)//gear
 				{
-					collision_ballon(collision.bodyB);
+					if(LevelJson.Parts[collision.bodyA.TimNo].part!=undefined)
+						if(LevelJson.Parts[collision.bodyA.TimNo].part.anim==true)//only if rotating
+							collision_ballon(collision.bodyB);
 				}
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor
 				{
@@ -433,15 +479,24 @@ let
 		
 		
 		
-		if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
-		{
-			collision_Boxing(collision.bodyA);
-		}
-		if(LevelJson.Parts[collision.bodyB.TimNo].TimType==35)//Boxing glove (35)
-		{
-			collision_Boxing(collision.bodyB);
-		}
 		
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
+			{
+				collision_Boxing(collision.bodyA);
+			}
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==35)//Boxing glove (35)
+			{
+				collision_Boxing(collision.bodyB);
+			}
+			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==39)//Trampoline (39)
+			{
+				collision_Trampoline(collision.bodyA,collision.bodyB);
+			}
+			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==39)//Trampoline (39)
+			{
+				collision_Trampoline(collision.bodyB,collision.bodyA);
+			}
+			
 		
 		}
 		});
