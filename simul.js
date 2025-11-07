@@ -29,7 +29,7 @@ let
 			let AutherExtremity=PartBeltExtremity(PartNo);
 			if(AutherExtremity!=-1)
 			{
-				console.log("from Part "+PartNo+" action on "+AutherExtremity);
+				//console.log("from Part "+PartNo+" action on "+AutherExtremity);
 				AnimPart(AutherExtremity,false,flipH,flipV,false,false)
 			}
 		}
@@ -69,19 +69,56 @@ let
 					}
 				});
 			}
-			/*
-			if(part.TimType==3)//"Teeter-totter (3)"
+			else //staticobj
 			{
-				if(part.movingObj!=undefined)
+				if(part.TimType==3)//"Teeter-totter (3)"
 				{
-					if(part.movingObj.angle>0.3)
-						part.movingObj.angle=0.3;
-					if(part.movingObj.angle<-0.3)
-						part.movingObj.angle=-0.3;
+					if(part.staticObj!=undefined)
+					{
+						part.anim=true;
+						part.animStep=1;
+						part.animDelay=0;
+						part.animDirectionX=0;
+						part.animOnce=false;
+						part.animCleanAtEnd=false;
+							
+						if(part.staticObj.angle>0.2)
+						{
+							if(part.flipH==0)
+							{
+								//console.log("Teeter-totter "+part.no+" >");
+								part.animStep=2;
+							}
+							else
+							{
+								//console.log("Teeter-totter "+part.no+" <");
+								part.animStep=0;
+							}
+								
+						}
+						if(part.staticObj.angle<-0.2)
+						{
+							if(part.flipH==0)
+							{
+								//console.log("Teeter-totter "+part.no+" <");
+								part.animStep=0;
+							}
+							else
+							{
+								//console.log("Teeter-totter "+part.no+" >");
+								part.animStep=2;
+							}
+						}
+						if((part.staticObj.angle>-0.05)&&(part.staticObj.angle<0.05))
+						{
+							//console.log("Teeter-totter "+part.no+" -");
+							part.animStep=1;
+						}
+					}
+					
 				}
-				
 			}
-			*/
+			
 		}
 		});
 		//checkIfWin();
@@ -138,7 +175,7 @@ let
 		
 		
 		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
-		console.log("collisions",collisions);
+		//console.log("collisions",collisions);
 		collisions.forEach((collision) => {
 			if(collision.body.isStatic==false)
 			{
@@ -252,14 +289,14 @@ let
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling left, move=>");
-					
+					/*
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					
+					*/
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 					
 				}
@@ -271,14 +308,14 @@ let
 				{
 					
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling right (swapped), move=>");
-					
+					/*
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-								
+						*/		
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
@@ -295,14 +332,14 @@ let
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling "+_impactorBody.TimNo+" right, move=>");
-					
+					/*
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					
+					*/
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
@@ -319,14 +356,14 @@ let
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling "+_impactorBody.TimNo+" left(swapped), move=>");
-					
+					/*
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
 					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					
+					*/
 					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
@@ -362,7 +399,7 @@ let
 		if((LevelJson.Parts[BoxingBody.TimNo].animStep==undefined)||(LevelJson.Parts[BoxingBody.TimNo].animStep==0)||(LevelJson.Parts[BoxingBody.TimNo].animStep==10))
 			return;
 		
-		console.log("Boxing collision step",LevelJson.Parts[BoxingBody.TimNo].animStep);
+		//console.log("Boxing collision step",LevelJson.Parts[BoxingBody.TimNo].animStep);
 		let scaleX=-1;
 		let x=LevelJson.Parts[BoxingBody.TimNo].pos_x+playgroundOffsetX+LevelJson.Parts[BoxingBody.TimNo].width;
 		
@@ -373,9 +410,9 @@ let
 		}
 		if(LevelJson.Parts[BoxingBody.TimNo].animStep!=undefined)
 		{
-			console.log("w="+LevelJson.Parts[BoxingBody.TimNo].TimType+"-"+LevelJson.Parts[BoxingBody.TimNo].animStep);
+			//console.log("w="+LevelJson.Parts[BoxingBody.TimNo].TimType+"-"+LevelJson.Parts[BoxingBody.TimNo].animStep);
 			let imageWidth=Images[LevelJson.Parts[BoxingBody.TimNo].TimType+"-"+LevelJson.Parts[BoxingBody.TimNo].animStep].width;
-			console.log("w="+imageWidth);
+			//console.log("w="+imageWidth);
 			let startPoint = { x: x, y: LevelJson.Parts[BoxingBody.TimNo].pos_y+playgroundOffsetY+LevelJson.Parts[BoxingBody.TimNo].height/2 };
 			var collisions = [];
 			let  bodies = Composite.allBodies(engine.world);
@@ -383,7 +420,7 @@ let
 			
 			
 			collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[BoxingBody.TimNo].height) ;
-			console.log("collisions",collisions);
+			//console.log("collisions",collisions);
 			collisions.forEach((collision) => {
 				if(collision.body.isStatic==false)
 				{
@@ -401,14 +438,14 @@ let
 	{
 		if(LevelJson.Parts[BoxingBody.TimNo].animStep>=1)
 			return;
-		console.log("Boxing collision",BoxingBody);
+		//console.log("Boxing collision",BoxingBody);
 		AnimPart(BoxingBody.TimNo,false,LevelJson.Parts[BoxingBody.TimNo].flipH,LevelJson.Parts[BoxingBody.TimNo].flipV,true,false);
 		boxing(BoxingBody);
 		
 	}
 	function collision_Trampoline(_TrampolineBoby,_impactorBody)
 	{
-		console.log("collision_Trampoline ->",_impactorBody);
+		console.log("collision_Trampoline ->"+_impactorBody.id,_impactorBody.velocity.x);
 		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*4.9, y: -10 });
 		AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
 	}
@@ -417,7 +454,10 @@ let
 	//--------------------------------------------------
 	function collisionStart(event)
 	{
-	  event.pairs.forEach((collision) => {
+		
+		const pairs = event.pairs;
+		console.log("Collision Pairs ",pairs);
+	  pairs.forEach((collision) => {
 		  
 		if((collision.bodyA.TimNo!=undefined)&&(collision.bodyB.TimNo!=undefined))
 		{
@@ -451,8 +491,7 @@ let
 					let flipH=1;
 					if(LevelJson.Parts[collision.bodyB.TimNo].flipH==0)
 						flipH=-1;
-					console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
-					
+					//console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
 					if(flipH==collision.bodyA.TimDirectionX)
 						collision_ballon(collision.bodyA);
 				}
@@ -471,7 +510,7 @@ let
 					let flipH=1;
 					if(LevelJson.Parts[collision.bodyA.TimNo].flipH==0)
 						flipH=-1;
-					console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
+					//console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
 					if(flipH==collision.bodyB.TimDirectionX)
 						collision_ballon(collision.bodyB);
 				}
@@ -511,8 +550,10 @@ let
 		CurrentLevelRunning=false;
 		Render.stop(render)
 		if(runner!=undefined)
+		{
+			console.log("Runner.stop");
 			Runner.stop(runner);
-		
+		}
 		
 		if(LevelJson!=undefined)
 		{
@@ -552,7 +593,7 @@ let
 		});
 		LevelJsonOrigin =JSON.parse(JSON.stringify(LevelJson));
 		
-		console.log("LevelJsonOrigin! ",LevelJsonOrigin);
+		//console.log("LevelJsonOrigin: ",LevelJsonOrigin);
 		CurrentLevelRunning=true;
 		//console.log("run! "+engine.world.gravity.y);
 		CurrentLevelWinned=false;
@@ -563,10 +604,11 @@ let
 		cleanPhysics(false);
 		engine.world.gravity.y = 0;
 		LevelJson.Parts.forEach(part => {
+			/*
 			let start=part.name.indexOf('(');
 			let end=part.name.indexOf(')');
 			let result = part.name.substring(start+1, end);
-			
+			*/
 			
 			
 			if(part.in_partsbin==0)
@@ -574,10 +616,10 @@ let
 				//console.log(part);
 				if(part.is_moving)
 				{
-					var restitution=PartDef[result].restitution;
+					var restitution=PartDef[part.TimType].restitution;
 					if(restitution==undefined)
 						restitution=0;
-					var mass=PartDef[result].mass;
+					var mass=PartDef[part.TimType].mass;
 					if(mass==undefined)
 						mass=1;
 					let ox=0;
@@ -675,8 +717,7 @@ let
 					}
 					else if(PartDef[part.TimType].phy_poly!=undefined)
 					{
-						console.log("poly");
-						
+						//console.log("poly");
 						//console.log("phy_poly.length="+PartDef[part.TimType].phy_poly.length);
 						for(let i=0;i<PartDef[part.TimType].phy_poly.length;i++)
 						{
@@ -744,7 +785,7 @@ let
 								}, true, 0.001, 20);
 							if(part.TimType==16)//bellows (soufflet)
 							{
-								console.log("bellows=",staticObj);
+								//console.log("bellows=",staticObj);
 								staticObj.friction=1;
 								staticObj.frictionStatic=0.8;
 							}
@@ -772,7 +813,8 @@ let
 		});
 		clearInterval(myTimer);
 		Render.run(render);
-		runner=Runner.create()
+		if(runner==undefined)
+			runner=Runner.create()
 		Runner.run(runner, engine);
 		
 	}
@@ -794,14 +836,14 @@ let
 			else
 				allBody.push(body);
 		});
-		World.remove(world, allBody);
+		Composite.remove(world, allBody);
 		const allCosntraints= [];
-		console.log("engine.world.constraints",engine.world.constraints);
+		//console.log("engine.world.constraints",engine.world.constraints);
 		engine.world.constraints.forEach((constraint)=>{
 			if(all==false)
 			{
 				allCosntraints.push(constraint);
 			}
 		});
-		World.remove(world, allCosntraints);
+		Composite.remove(world, allCosntraints);
 	}

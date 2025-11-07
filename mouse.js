@@ -311,69 +311,70 @@
 		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
 		if(BeltMode==0)
 		{
-			if(SelectedPart!=undefined)
+			if((SelectedPart!=undefined)&&(SelectedPart!=-1))
+			{
+				console.log("SelectedPart",SelectedPart);
+				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+				//left side
+				if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
+				{
+					//delete
+					if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
 					{
-						Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
-						Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
-						//left side
-						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
-						{
-							//delete
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y-14) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y))
-							{
-								//console.log("delete");
-								LevelJson.Parts[SelectedPart].in_partsbin=1;
-								LevelJson.Parts[SelectedPart].pos_x=-1;
-								LevelJson.Parts[SelectedPart].pos_y=-1;
-								refresh(true);
-							}
-							//flip H
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
-							{
-							
-									//console.log("flipH="+flipH);
-									if(LevelJson.Parts[SelectedPart].flipH==0)
-										LevelJson.Parts[SelectedPart].flipH=1;
-									else
-										LevelJson.Parts[SelectedPart].flipH=0;
-									//LevelJson.Parts[SelectedPart].orientation="("+part.flipH+")";//not needed anymore
-									refresh(true);
-								
-							}
-							//expand left
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
-							{
-								//console.log("expand left");
-								ExpandUnit=-1;
-							}
-						}
-						
-						//right side
-						if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width+14))
-						{
-							
-							//expand right
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
-							{
-								//console.log("expand right");
-								ExpandUnit=1;
-							}
-							//flip V
-							if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
-							{
-							
-									//console.log("flipV="+flipV);
-									if(LevelJson.Parts[SelectedPart].flipV==0)
-										LevelJson.Parts[SelectedPart].flipV=1;
-									else
-										LevelJson.Parts[SelectedPart].flipV=0;
-									//LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";//not needed anymore
-									refresh(true);
-							
-							}
-						}
+						//console.log("delete");
+						LevelJson.Parts[SelectedPart].in_partsbin=1;
+						LevelJson.Parts[SelectedPart].pos_x=-1;
+						LevelJson.Parts[SelectedPart].pos_y=-1;
+						refresh(true);
+					}
+					//flip H
+					if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
+					{
+					
+							//console.log("flipH="+flipH);
+							if(LevelJson.Parts[SelectedPart].flipH==0)
+								LevelJson.Parts[SelectedPart].flipH=1;
+							else
+								LevelJson.Parts[SelectedPart].flipH=0;
+							//LevelJson.Parts[SelectedPart].orientation="("+part.flipH+")";//not needed anymore
+							refresh(true);
 						
 					}
+					//expand left
+					if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+					{
+						//console.log("expand left");
+						ExpandUnit=-1;
+					}
+				}
+				
+				//right side
+				if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x+LevelJson.Parts[SelectedPart].width+14))
+				{
+					
+					//expand right
+					if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2-8) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height/2+8))
+					{
+						//console.log("expand right");
+						ExpandUnit=1;
+					}
+					//flip V
+					if((Mouse_pos_y>LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height) && (Mouse_pos_y<LevelJson.Parts[SelectedPart].pos_y+LevelJson.Parts[SelectedPart].height+14))
+					{
+					
+							//console.log("flipV="+flipV);
+							if(LevelJson.Parts[SelectedPart].flipV==0)
+								LevelJson.Parts[SelectedPart].flipV=1;
+							else
+								LevelJson.Parts[SelectedPart].flipV=0;
+							//LevelJson.Parts[SelectedPart].direction_r_to_l="("+flipV+")";//not needed anymore
+							refresh(true);
+					
+					}
+				}
+				
+			}
 			
 			
 			//-----------------------------

@@ -16,14 +16,12 @@
 // langage management
 // finish welcome page with level info
 
-// refresh static first and with animation then
-//trampolin animation
-//balancoir reflect physics
-//managig pos of tooter
+//trempolin active only if contact on top
+//managing pos of tooter
 //level 7
 //---------------------------
 //bug
-
+//restrating simul speed is increasing... see level 6 run+run+run
 
 
 
@@ -122,10 +120,10 @@
 	function showSolutionClicked()
 	{
 		//"5":{"Parts":[{"unitNo":29,"name":"Teeter-totter","x":432,"y":155,"FlipH":0,"FlipV":0},{"unitNo":30,"name":"Teeter-totter","x":332,"y":155,"FlipH":0,"FlipV":0}]},
-		console.log("solution",Solutions[CurrentLevel]);
+		//console.log("solution",Solutions[CurrentLevel]);
 		Solutions[CurrentLevel].Parts.forEach((sPart) => {
 				
-				console.log("solution part ->",sPart);
+				//console.log("solution part ->",sPart);
 				LevelJson.Parts.forEach(part => {
 					
 					if(part.no==sPart.unitNo)

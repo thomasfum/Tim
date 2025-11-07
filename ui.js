@@ -95,32 +95,17 @@
 		ctx.lineTo(ox + x2, oy + y2);
 		ctx.stroke();
 	}
-	function refresh( allObjects)
+	
+	
+	function RefreshPartially(allObjects, part,zIndex)
 	{
-		if(wireframe==true)
+		//console.log("RefreshPartially ",part.no);
+		if((zIndex==0)&&((PartDef[part.TimType].nb_anim!=undefined)&&(PartDef[part.TimType].nb_anim!=0)))
 			return;
-		//displayScore();
-		//console.log("Refresh "+allObjects);
-		if(allObjects==true)
-		{
-			ctx.fillStyle = "rgba(0,162,162,255)";
-			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
-			
-		}
-		ctx.fillStyle = "rgba(0,243,243,255)";
-		ctx.fillRect(72*8, 0,80, canvas.height-80);
+		if((zIndex==1)&&((PartDef[part.TimType].nb_anim==undefined)||(PartDef[part.TimType].nb_anim==0)))
+			return;
 		
-		displayRightBoard();
-		partsbin={};
-		let partsbinPosY=0;
-		//step 1
-		LevelJson.Parts.forEach(part => {
-			
-			if(part.in_partsbin==0)
-			{
-				//if(part.no==9)
-				//	console.log("refresh 1 -"+part.no+ " m="+part.is_moving);
-				if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
+		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 				{
 					//if(part.no==9)
 					//	console.log("refresh 2 -",part.no);
@@ -168,16 +153,23 @@
 										drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
 										currentHeight+=Images[part.TimType+"-"+p[index]].height;
 									}
-									part.animDelay++;
-									if(part.animDelay>2)//faster speed
+									
+									let animSpeed=10;
+									if(PartDef[part.TimType].animSpeed!=undefined)
+										animSpeed=PartDef[part.TimType].animSpeed;
+									if(animSpeed>0)
 									{
-										part.animDelay=0;
-										part.animStep++;
-										if(part.animStep>=PartDef[part.TimType].nb_anim)
+										part.animDelay++;
+										if(part.animDelay>animSpeed)//faster speed
 										{
-											part.animStep=0;
-											if(part.animOnce==true)
-												part.animStep=PartDef[part.TimType].nb_anim-1;
+											part.animDelay=0;
+											part.animStep++;
+											if(part.animStep>=PartDef[part.TimType].nb_anim)
+											{
+												part.animStep=0;
+												if(part.animOnce==true)
+													part.animStep=PartDef[part.TimType].nb_anim-1;
+											}
 										}
 									}
 								}
@@ -203,7 +195,7 @@
 								
 								
 							}
-							else
+							else //no duplication
 							{
 								let size=0;
 								if(part.size!=undefined)
@@ -249,22 +241,30 @@
 									//part.staticObj.position.y=100;
 									if(part.staticObj!=undefined)
 										part.staticObj.height=12;//????
-									part.animDelay++;
-									if(part.animDelay>10)
+									let animSpeed=10;
+									if(PartDef[part.TimType].animSpeed!=undefined)
+										animSpeed=PartDef[part.TimType].animSpeed;
+									//if(part.TimType==3)//balanc
+									//	console.log("balnce"+PartDef[part.TimType].animSpeed);
+									if(animSpeed>0)
 									{
-										part.animDelay=0;
-										part.animStep++;
-										if(part.animStep>=PartDef[part.TimType].nb_anim)
+										part.animDelay++;
+										if(part.animDelay>animSpeed)
 										{
-											part.animStep=0;
-											if(part.animOnce==true)
-												part.animStep=PartDef[part.TimType].nb_anim-1;
+											part.animDelay=0;
+											part.animStep++;
+											if(part.animStep>=PartDef[part.TimType].nb_anim)
+											{
+												part.animStep=0;
+												if(part.animOnce==true)
+													part.animStep=PartDef[part.TimType].nb_anim-1;
+											}
 										}
 									}
 								}
 							}
 						}
-						else
+						else //part.appearance == something
 						{
 							//console.log("refresh "+part.no+" "+part.anim);
 							let start=part.appearance.indexOf('(');
@@ -286,23 +286,71 @@
 									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
 								//console.log("static part=",part.staticObj);
 								part.staticObj.height=Images[part.TimType+"-"+val].height;
-								
-								part.animDelay++;
-								if(part.animDelay>10)
+								let animSpeed=10;
+								if(PartDef[part.TimType].animSpeed!=undefined)
+									animSpeed=PartDef[part.TimType].animSpeed;
+								if(animSpeed>0)
 								{
-									part.animDelay=0;
-									part.animStep++;
-									if(part.animStep>=PartDef[part.TimType].nb_anim)
+									part.animDelay++;
+
+									if(part.animDelay>animSpeed)
 									{
-										part.animStep=0;
-										if(part.animOnce==true)
-											part.animStep=PartDef[part.TimType].nb_anim-1;
+										part.animDelay=0;
+										part.animStep++;
+										if(part.animStep>=PartDef[part.TimType].nb_anim)
+										{
+											part.animStep=0;
+											if(part.animOnce==true)
+												part.animStep=PartDef[part.TimType].nb_anim-1;
+										}
 									}
 								}
 							}							
 						}
 					}
 				}
+	}
+	function refresh( allObjects)
+	{
+		if(wireframe==true)
+			return;
+		//displayScore();
+		//console.log("Refresh "+allObjects);
+		if(allObjects==true)
+		{
+			ctx.fillStyle = "rgba(0,162,162,255)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
+			
+		}
+		ctx.fillStyle = "rgba(0,243,243,255)";
+		ctx.fillRect(72*8, 0,80, canvas.height-80);
+		
+		displayRightBoard();
+		partsbin={};
+		let partsbinPosY=0;
+		//step 1
+		//z index 0
+		//console.log("-------------- 0 -------------" );
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin==0)
+			{
+				RefreshPartially(allObjects,part,0);
+			}
+		});//
+		//console.log("-------------- 1 -------------" );
+		//z index 1 (nb_anim>0)
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin==0)
+			{
+				RefreshPartially(allObjects,part,1);
+			}
+		});//
+		
+		//selection
+		LevelJson.Parts.forEach(part => {
+			
+			if(part.in_partsbin==0)
+			{
 				//selection
 				if((part.selected==1)&&(part.TimType!=8))
 				{
@@ -340,10 +388,12 @@
 					}
 					//console.log("overlap",part);
 				}	
-		
 				
 			}
-			else//part.in_partsbin==1
+		});
+		//part in bin
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin!=0)
 			{
 				part.canBeDragged=1;
 				if(partsbin[part.TimType]==undefined)

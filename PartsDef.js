@@ -3,7 +3,7 @@ const PartDef={
 	"0":{"count":1,"restitution":0.2,"mass":8},//Bowling ball
 	"1":{"count":8},
 	"2":{"count":4,"FlipH":1,"FlipV":1,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
-	"3":{"count":3,"FlipH":1,"specialTest":1,"mass":1,"nb_anim":3},//Teeter-totter 
+	"3":{"count":3,"FlipH":1,"specialTest":1,"mass":1,"nb_anim":3,"animSpeed":0},//Teeter-totter 
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7},//ballon
 	"5":{"count":35,"FlipH":1,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"FlipH":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
@@ -39,7 +39,7 @@ const PartDef={
 	"36":{"count":11},
 	"37":{"count":3,"FlipH":1},//cisore
 	"38":{"count":2},
-	"39":{"count":8,"phy_poly":[{"p":"0 0.5  1 0.5  1 1  0 1  0 0.5","y":0.25}],"nb_anim":6},//Trampoline (39)
+	"39":{"count":8,"phy_poly":[{"p":"0 0.5  1 0.5  1 1  0 1  0 0.5","y":0.25}],"nb_anim":6,"animSpeed":2},//Trampoline (39)
 	"40":{"count":4,"FlipH":1,"node_x":50,"node_y":40,"node_d":20,"nb_anim":4},//Windmill (40)
 	"41":{"count":6},
 	"42":{"count":2},
