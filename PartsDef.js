@@ -13,7 +13,7 @@ const PartDef={
 	"10":{"count":1},//rope
 	"11":{"count":1},
 	"12":{"count":10},
-	"13":{"count":21},
+	"13":{"count":21,"FlipH":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//jack in the box
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
 	"15":{"count":26},
 	"16":{"count":3,"FlipH":1,"nb_anim":3,"restitution":0.4,"phy_poly":[{"p":"0 0  1 0.4 1 0.6 0 1  0 0"}]},//bellows (soufflet)
@@ -47,8 +47,6 @@ const PartDef={
 	"44":{"count":1,"restitution":0.2,"mass":1},//tenis ball
 	"45":{"count":6},
 	"46":{"count":8},//pipe wall
-	//"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 1  0.5 1 0.5 0.5 0 0.5  0 0"}]},//curved pipe wall
-	//"47":{"count":4,"phy_poly":[[0,0],[1, 0], [1, 1], [0.5, 1] [0.5, 0.5], [0,0.5], [0, 0]]},//curved pipe wall
 	"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 0.5  0 0.5  0 0","y":0.25},{"p":"0.5 0  1 0  1 1  0.5 1  0.5 0","x":-0.25}]},//curved pipe wall
 	"48":{"count":8},//wood wall
 	"49":{"count":1},

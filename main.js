@@ -13,8 +13,6 @@
 // check all levels
 // animations
 // size 678x369
-// langage management
-// finish welcome page with level info
 
 //trempolin active only if contact on top
 //managing pos of tooter
@@ -25,7 +23,10 @@
 
 
 
-	var CurrentLevel=6;
+	var CurrentLevel=7;
+	const MaxLevel=7;
+	var CurrentLanguage="FR";
+	//var CurrentLanguage="EN";
 
 	let Images={};
 	let Icons={};
@@ -59,7 +60,7 @@
 	const playgroundHeight=369;
 	const playgroundOffsetX=10;
 	const playgroundOffsetY=5;
-	const MaxLevel=5;
+
 	
 	
 	var BeltMode=0;
@@ -76,6 +77,7 @@
 	var loadingLevel=false;
 	var ExpandUnit=0;
 	var Score=0;
+	var TotalBonus=0;
 	var Bonus1 =0;
 	var Bonus2 =0;
 	var myTimer;
@@ -187,6 +189,10 @@
 		render.options.wireframes=wireframe;
 		run();
 	}
+	function winClicked()
+	{
+		youWin(45891);
+	}
 	//--------------------------------------------------
 	// init
 	//--------------------------------------------------
@@ -195,6 +201,16 @@
 		Test=_test;
 		if(Test==false)
 			CurrentLevel=1;
+		
+		
+		let params = new URLSearchParams(document.location.search);
+		let CurrentLanguage = params.get("l"); // ?l=FR
+		console.log("language:",CurrentLanguage)
+		if((CurrentLanguage!="FR")&&(CurrentLanguage!="EN"))
+			CurrentLanguage="EN";
+		console.log("language:",CurrentLanguage)
+		
+		
 		//import { poly-decomp } from './decomp.js';
 		//Common.setDecomp('poly-decomp');
 		//Common.setDecomp(require('poly-decomp'));

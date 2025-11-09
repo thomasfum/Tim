@@ -44,7 +44,7 @@ let
 		LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
 		{
-			if(part.is_moving)
+			if(part.is_moving!=0)
 			{
 				//apply gravity
 				//if(part.movingObj.mass2>0)
@@ -456,7 +456,7 @@ let
 	{
 		
 		const pairs = event.pairs;
-		console.log("Collision Pairs ",pairs);
+		//console.log("Collision Pairs ",pairs);
 	  pairs.forEach((collision) => {
 		  
 		if((collision.bodyA.TimNo!=undefined)&&(collision.bodyB.TimNo!=undefined))
@@ -614,7 +614,7 @@ let
 			if(part.in_partsbin==0)
 			{
 				//console.log(part);
-				if(part.is_moving)
+				if(part.is_moving!=0)
 				{
 					var restitution=PartDef[part.TimType].restitution;
 					if(restitution==undefined)

@@ -3,10 +3,12 @@
 "Puzzle": {"Layers": "0,3,4,6","count_all": 25,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 90,"bonus_2": 110,"pressure": 66,"gravity": 272,"unknown_8": -8,"unkonwn_10": -8,"music": 1003,"num_parts_fixed": 22,"num_parts_moving": 3,"num_parts_partsbin": 3},
 "Title": {
-"EN":"TUTORIAL:  MIRROR IMAGES"
+"EN":"TUTORIAL:  MIRROR IMAGES",
+"FR":"TUTORAT:  IMAGES EN MIROIR"
 },
 "Goal":  {
-"EN":"Put both bowling balls into the metal baskets.  To solve this puzzle you must place and flip the mouse cage and then hook up the pulley belt to the conveyor belt."
+"EN":"Put both bowling balls into the metal baskets.  To solve this puzzle you must place and flip the mouse cage and then hook up the pulley belt to the conveyor belt.",
+"FR":"Mettez les deux boules de bowling dans les paniers métalliques.  Pour résoudre ce puzzle, il faut que vous placiez la cage à souris, puis que vous la tourniez, et ensuite que vous accrochiez la courroie au convoyeur."
 },
 "Parts":[
 {"no": 0,"name": "Belt (8)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 19,"connected_part_2": 16},

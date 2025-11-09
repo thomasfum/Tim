@@ -1,19 +1,26 @@
 
 
 
-	
+	//c'est la
 	function PartConnectionFree(part_no)
 	{
 		let partFree=true;
 		LevelJson.Parts.forEach(part => {
-			if(part.TimType==8)
+			if(part.TimType==8)//belt
 			{
 				if(part.connected_part_1==part_no)
+				{
 					partFree=false;
+					console.log("PartConnectionto  "+part.no);
+				}
 				if(part.connected_part_2==part_no)
+				{
+					console.log("PartConnectionto  "+part.no);
 					partFree=false;
+				}
 			}
 		});
+		//console.log("PartConnectionFree "+partFree,part_no);
 		return partFree;
 	}
 	
@@ -62,10 +69,13 @@
 
 	function doPartsOverlaps(part1, part2)
 	{
+		let offset=0;
 		if((PartDef[part1.TimType].specialTest!=undefined)||(PartDef[part2.TimType].specialTest!=undefined))
 		{
-			console.log("test overlap special test");
-			return false;
+			//console.log("test overlap special test");
+			if(part2.is_moving!=0)
+				return false;
+			offset=5;
 		}
 		
 		if(part1.no==part2.no)
@@ -73,14 +83,14 @@
 		//if(part2.no==1)
 		//{
 	
-		let max1x=part1.pos_x+part1.width;
-		let min1x=part1.pos_x;
+		let max1x=part1.pos_x+part1.width-offset;
+		let min1x=part1.pos_x+offset;
 		
 		let max2x=part2.pos_x+part2.width;
 		let min2x=part2.pos_x;
 		
-		let max1y=part1.pos_y+part1.height;
-		let min1y=part1.pos_y;
+		let max1y=part1.pos_y+part1.height-offset;
+		let min1y=part1.pos_y+offset;
 		
 		let max2y=part2.pos_y+part2.height;
 		let min2y=part2.pos_y;
@@ -120,7 +130,7 @@
 		let aAboveB = min1y > y;
 		let aBelowB = max1y < y;
 		
-		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB);
 		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
 	  
 	}
@@ -434,7 +444,7 @@
 						if(part.in_partsbin==1)
 						{
 							part.in_partsbin=0;
-							console.log("drag=",part);
+							//console.log("drag=",part);
 						}
 					}
 				}

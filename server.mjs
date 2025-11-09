@@ -1,7 +1,9 @@
 import { readFile, accessSync, constants } from 'fs';
 import { createServer } from 'http';
 import { join, normalize, resolve, extname } from 'path';
+import * as url from "url";
 const port = 3000;
+
 const directoryName = './';
 const types = {
   html: 'text/html',
@@ -18,7 +20,15 @@ const types = {
 const root = normalize(resolve(directoryName));
 const server = createServer((req, res) => {
   console.log(`${req.method} ${req.url}`);
-  const extension = extname(req.url).slice(1);
+  
+   const parsedUrl = url.parse(req.url, true);
+  // Get different parts of the URL
+  const pathname = parsedUrl.pathname; // The path without query string
+  const query = parsedUrl.query; // The query string as an object
+  //console.log('pathname='+pathname);
+  //console.log('query',query);
+  
+  const extension = extname(pathname).slice(1);
   const type = extension ? types[extension] : types.html;
   const supportedExtension = Boolean(type);
   if (!supportedExtension) {
@@ -26,14 +36,14 @@ const server = createServer((req, res) => {
     res.end('404: File not found');
     return;
   }
-  let fileName = req.url;
-  if (req.url === '/') fileName = 'index.html';
+  let fileName = pathname;
+  if (pathname === '/') fileName = 'index.html';
   else if (!extension) {
     try {
-      accessSync(join(root, req.url + '.html'), constants.F_OK);
-      fileName = req.url + '.html';
+      accessSync(join(root, pathname + '.html'), constants.F_OK);
+      fileName = pathnamel + '.html';
     } catch (e) {
-      fileName = join(req.url, 'index.html');
+      fileName = join(pathname, 'index.html');
     }
   }
   const filePath = join(root, fileName);

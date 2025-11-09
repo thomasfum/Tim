@@ -242,11 +242,9 @@ const Solutions={
 				if(CurrentLevelWinned==false)
 				{
 					CurrentLevelWinned=true;
-					Score=Score+Bonus1+Bonus2;
-					Bonus1=0;
-					Bonus2=0;
-					displayScore();
+					
 					setTimeout(function() { youWin(); }, 2000);
+					
 				}
 			}
 		}

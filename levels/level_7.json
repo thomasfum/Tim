@@ -3,10 +3,12 @@
 "Puzzle": {"Layers": "0,3,4,6","count_all": 18,"count_moving": 3,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 120,"bonus_2": 100,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1008,"num_parts_fixed": 15,"num_parts_moving": 3,"num_parts_partsbin": 3},
 "Title": {
-"EN":"'TUTORIAL:  JACK SAYS, ''HI BOB'''"
+"EN":"TUTORIAL:  JACK SAYS, 'HI BOB'",
+"FR":"TUTORAT:  LE DIABLE DIT: 'SALUT, BOB!'"
 },
 "Goal":  {
-"EN":"Make the jack-in-the-box break the fishbowl of Bob the Fish."
+"EN":"Make the jack-in-the-box break the fishbowl of Bob the Fish.",
+"FR":"Il faut que le diable à ressort casse le bocal de Bob le poisson."
 },
 "Parts":[
 {"no": 0,"name": "Jack-in-the-box (13)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 424,"pos_y": 216,"width": 32,"height": 32,"orientation": "clockwise (0)"},

@@ -3,10 +3,12 @@
 "Puzzle": {"Layers": "0,3,4,6","count_all": 4,"count_moving": 1,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 200,"bonus_2": 180,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1007,"num_parts_fixed": 3,"num_parts_moving": 1,"num_parts_partsbin": 3},
 "Title": {
-"EN":"TUTORIAL:  BOUNCING OVER TO MORT"
+"EN":"TUTORIAL:  BOUNCING OVER TO MORT",
+"FR":"TUTORAT:  BONDIR JUSQU'A LILI"
 },
 "Goal":  {
-"EN":"Make Mort the Mouse run in his cage by hitting the cage with the basketball."
+"EN":"Make Mort the Mouse run in his cage by hitting the cage with the basketball.",
+"FR":"Heurtez la cage de Lili la souris avec la balle de basket et Lili se mettra à courir."
 },
 "Parts":[
 {"no": 0,"name": "Mouse cage (6)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 472,"pos_y": 72,"width": 48,"height": 32,"orientation": "right (0)"},

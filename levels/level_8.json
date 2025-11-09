@@ -3,10 +3,12 @@
 "Puzzle": {"Layers": "0,3,4,6","count_all": 15,"count_moving": 4,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 250,"bonus_2": 200,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1009,"num_parts_fixed": 11,"num_parts_moving": 4,"num_parts_partsbin": 6},
 "Title": {
-"EN":"TUTORIAL:  TILTING AT WINDMILLS"
+"EN":"TUTORIAL:  TILTING AT WINDMILLS",
+"FR":"TUTORAT:  A L'ATTAQUE DES MOULINS"
 },
 "Goal":  {
-"EN":"All you need to do is pop the balloon.  Note that you must flip the windmill to select which direction it turns."
+"EN":"All you need to do is pop the balloon.  Note that you must flip the windmill to select which direction it turns.",
+"FR":"Tout ce que vous devez faire, c'est faire éclater le ballon. Remarquez qu'en retournant le moulin vous pouvez sélectioner dans quelle direction il va tourner."
 },
 "Parts":[
 {"no": 0,"name": "Belt (8)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0,"connected_part_1": 2,"connected_part_2": 1},

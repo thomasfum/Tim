@@ -456,7 +456,7 @@
 		//draw drag belt
 		if(BeltMode==2)
 		{
-			//console.log("BeltMode = 2");
+			//console.log("BeltMode = 2 "+MouseOnPart);
 			ctx.strokeStyle = 'red';
 			if((MouseOnPart!=-1)&&(PartConnectionFree(MouseOnPart)==true))
 			{
@@ -484,8 +484,8 @@
 					//console.log("belt from "+part.connected_part_1+" to "+part.connected_part_2);
 					const  [x1,y1]=GetNodePos(LevelJson.Parts[part.connected_part_1]);
 					const  [x2,y2]=GetNodePos(LevelJson.Parts[part.connected_part_2]);
-					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,8);
-					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,-8);
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,6);
+					drawLine(x1+playgroundOffsetX, y1+playgroundOffsetY,x2+playgroundOffsetX, y2+playgroundOffsetY,-6);
 				}
 			}
 		});
@@ -505,16 +505,8 @@
 		//level info after level load
 		if((Test==false)&&(loadingLevel==true))
 		{
-			ctx.fillStyle = "rgba(0,243,243,255)";
-			let w_with=400;
-			ctx.fillRect(canvas.width/2-w_with/2,canvas.height/2-60, w_with,120);
-			ctx.font = "10px Arial";
-			ctx.fillStyle = "purple";
-			ctx.fillText("Start level "+CurrentLevel,canvas.width/2-40,canvas.height/2-40);
 			
-			ctx.fillText( LevelJson.Title.EN,canvas.width/2-w_with/2+5,canvas.height/2-10);
-			ctx.fillText( LevelJson.Goal.EN,canvas.width/2-w_with/2+5,canvas.height/2+20);
-					
+			NewLevel();	
 			
 		}
 	}

@@ -3,10 +3,12 @@
 "Puzzle": {"Layers": "0,3,4,6","count_all": 30,"count_moving": 7,"count_in_partsbin": 0,"count_scenery": 0},
 "Puzzle_info": {"bonus_1": 150,"bonus_2": 150,"pressure": 67,"gravity": 268,"unknown_8": -8,"unkonwn_10": -8,"music": 1005,"num_parts_fixed": 23,"num_parts_moving": 7,"num_parts_partsbin": 4},
 "Title": {
-"EN":"'TUTORIAL:  FLIP, FLIP, FLIP'"
+"EN":"'TUTORIAL:  FLIP, FLIP, FLIP'",
+"FR":",TUTORAT:  BALLES ET BALANCOIRES"
 },
 "Goal":  {
-"EN":"Your goal is to make the bowling ball fall off the bottom of the screen."
+"EN":"Your goal is to make the bowling ball fall off the bottom of the screen.",
+"FR":"Votre but est de faire tomber la boule de bowling en bas de votre écran."
 },
 "Parts":[
 {"no": 0,"name": "Pipe wall (46)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 312,"pos_y": 328,"width": 64,"height": 16 },
