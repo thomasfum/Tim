@@ -107,13 +107,13 @@
 		
 		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 				{
-					//if(part.no==9)
+					//if(part.no==0)
 					//	console.log("refresh 2 -",part.no);
 					if(part.TimType!=8)//not belt
 					{
 						if(part.appearance==undefined)
 						{
-							//if(part.no==17)
+							//if(part.no==0)
 							//	console.log("refresh 3 -",part.no);
 							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 							{
@@ -135,9 +135,9 @@
 							}
 							else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
 							{
-
+								
 								//dupliquer en height
-								if(part.TimType==39)//Trampoline (39)'
+								if(part.TimType==39)//Trampoline (39)
 								{
 									let step=0;
 									let TrampolineAnim={"0":[0,1],"1":[2,3],"2":[4,5],"3":[6,1],"4":[7,1],"5":[0,1]};
@@ -173,8 +173,65 @@
 										}
 									}
 								}
+								if(part.TimType==13)//Jack-in-the-box (13)
+								{
+									//if(part.no==11)
+									//	console.log("--->reset1 "+part.anim);
+									
+									if((part.anim==undefined)||(part.anim==false))
+									{
+										//console.log("--->reset "+part.animStep);
+										part.animStep=0;
+										part.animStep2=0;
+										part.megaloop=0;
+										part.overY=0;
+										
+									}
+									//if(part.no==11)
+										//console.log("--->reset2 "+part.animStep2);
+									//console.log("--->"+index,+"-"+step+"-"+part.animStep);
+									drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+									if(part.animStep2==0)
+										drawImage(Images[part.TimType+"-"+1], part.pos_x, part.pos_y,part.flipV,part.flipH);
+									else 
+									{
+										drawImage(Images[part.TimType+"-"+(9+part.animStep2)], part.pos_x-5, part.pos_y-Images[part.TimType+"-"+(9+part.animStep2)].height,part.flipV,part.flipH);
+										part.overY=Images[part.TimType+"-"+(9+part.animStep2)].height;
+									}
+									
+									drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
+									
+									let animSpeed=10;
+									if(PartDef[part.TimType].animSpeed!=undefined)
+										animSpeed=PartDef[part.TimType].animSpeed;
+									if(animSpeed>0)
+									{
+										part.animDelay++;
+										if(part.animDelay>animSpeed)//faster speed
+										{
+											part.animDelay=0;
+											if(part.megaloop!=5)
+												part.animStep++;
+											else
+												if(part.animStep2<10)
+													part.animStep2++;
+											if(part.animStep>=PartDef[part.TimType].nb_anim)
+											{
+												part.animStep=0;
+												if(part.megaloop<=5)
+													part.megaloop++;
+												if(part.megaloop==5)
+													console.log("megaloop");
+												if(part.animOnce==true)
+													part.animStep=PartDef[part.TimType].nb_anim-1;
+											}
+										}
+									}
+								}
 								else
 								{
+									if(part.no==0)
+										console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
 									//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
 									for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
 									{
@@ -266,6 +323,9 @@
 						}
 						else //part.appearance == something
 						{
+							console.log("*****refresh apparence ("+part.no+") "+part.name);
+							//if(part.no==0)
+							//	console.log("refresh 5 -",part.no);
 							//console.log("refresh "+part.no+" "+part.anim);
 							let start=part.appearance.indexOf('(');
 							let end=part.appearance.indexOf(')');

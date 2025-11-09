@@ -26,11 +26,11 @@ let
 	
 		if(forwardMessage==true)
 		{
-			let AutherExtremity=PartBeltExtremity(PartNo);
-			if(AutherExtremity!=-1)
+			let otherExtremity=PartBeltExtremity(PartNo);
+			if(otherExtremity!=-1)
 			{
-				//console.log("from Part "+PartNo+" action on "+AutherExtremity);
-				AnimPart(AutherExtremity,false,flipH,flipV,false,false)
+				console.log("from Part "+PartNo+" action on "+otherExtremity);
+				AnimPart(otherExtremity,false,flipH,flipV,false,false)
 			}
 		}
 	}
@@ -48,7 +48,8 @@ let
 			{
 				//apply gravity
 				//if(part.movingObj.mass2>0)
-				Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
+				if(part.movingObj!=undefined)
+					Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
 					if(body.TimNo!=undefined)
@@ -117,6 +118,43 @@ let
 					}
 					
 				}
+			
+			
+				if(part.TimType==13)//Jack-in-the-box (13)
+				{
+					if(part.overY!=0)
+					{
+						//console.log("check Jack-in-the-box at "+(part.pos_y+part.overY));
+						LevelJson.Parts.forEach(part1 => {
+							if(part1.no!=part.no)
+							{
+								if(doPartsOverlapsPoint(part1, part.pos_x+part.width/2,part.pos_y-part.overY)==true)
+								{
+									//console.log("check Jack-in-the-box collide ("+part1.no+")",part1);
+									if(part1.TimType==15)//Aquarium (15)
+									{
+										console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
+									}
+									else
+										Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
+									//Body.setVelocity(part1.body, { x:5*scaleX, y: 0 });
+									//if(part1.TimType==3)//"Teeter-totter (3)"
+									//	collision_TeeterTotter(part1.staticObj,part.staticObj,false)
+								}
+								if(part1.movingObj!=undefined)
+								{
+									if (Matter.Collision.collides(part.staticObj, part1.movingObj) != null) 
+									{
+										console.log("-----------------check Jack-in-the-box at ("+part1.no+") "+part1.name);
+										Body.applyForce(part1.movingObj, {x:part1.pos_x, y:part1.pos_y}, { x:0.01, y: -0.02 });
+									}
+								}
+							}
+						});
+						
+					}
+				}
+			
 			}
 			
 		}
@@ -273,7 +311,7 @@ let
 		//_TeeterTotterBoby.angle=_TeeterTotterBoby.angle*-1;
 		//_TeeterTotterBoby.isStatic=false;
 	}
-	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody)//Teeter-totter (3)
+	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody,bFfromFop)//Teeter-totter (3)
 	{
 		//console.log("TT "+_TeeterTotterBoby.TimNo+"=> xt=" +_TeeterTotterBoby.position.x+" xi="+_impactorBody.position.x+" st="+LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep+" sw="+LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH);
 		
@@ -473,9 +511,9 @@ let
 				collision_bellow(collision.bodyB);
 			
 			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==3)
-				collision_TeeterTotter(collision.bodyA,collision.bodyB)//Teeter-totter (3)
+				collision_TeeterTotter(collision.bodyA,collision.bodyB,true)//Teeter-totter (3)
 			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==3)
-				collision_TeeterTotter(collision.bodyB,collision.bodyA)//Teeter-totter (3)
+				collision_TeeterTotter(collision.bodyB,collision.bodyA,true)//Teeter-totter (3)
 			
 			
 			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon
@@ -576,7 +614,7 @@ let
 				part.animDirectionX=0;
 				part.animOnce=false;
 				part.animCleanAtEnd=false;
-	
+
 			});
 		}
 	}
@@ -616,6 +654,7 @@ let
 				//console.log(part);
 				if(part.is_moving!=0)
 				{
+					
 					var restitution=PartDef[part.TimType].restitution;
 					if(restitution==undefined)
 						restitution=0;
@@ -638,10 +677,10 @@ let
 						mass:Math.abs(mass),
 						mass2:mass,
 						render: {
-						  sprite: { texture: part.Images[part.TimType+"-0"].src,/*, 
-						  xScale: ratio,
-						  yScale: ratio,
-						  */
+						  sprite: { texture: part.Images[part.TimType+"-0"].src, 
+						  //xScale: ratio,
+						  //yScale: ratio,
+						  
 						    
 							xOffset: ox,
 							yOffset: oy//-0.18
@@ -657,6 +696,7 @@ let
 
 					Composite.add(world, [movingObj]);
 					part.movingObj=movingObj;
+					
 				}
 				else
 				{
@@ -674,12 +714,17 @@ let
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
-							
+						//console.log("IIIIIIIIIIIIIIIIIIIII  Teeter-totter "+part.flipH);
 						if(part.flipH==0)
 							Matter.Body.rotate(staticObj,-0.3);
 						else
 							Matter.Body.rotate(staticObj,0.3);
-						
+						/*
+						if(part.flipH2==0)
+							Matter.Body.rotate(staticObj,-0.3);
+						else
+							Matter.Body.rotate(staticObj,0.3);
+						*/
 						staticObj.friction=1;
  						staticObj.frictionAir=0.01*20;
 						staticObj.frictionStatic=0.5*20;

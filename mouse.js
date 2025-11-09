@@ -67,6 +67,33 @@
 		return no;
 	}
 
+
+	function doPartsOverlapsPoint(part1, x,y)
+	{
+		let offset=0;
+		
+		let max1x=part1.pos_x+part1.width-offset;
+		let min1x=part1.pos_x+offset;
+		
+		let max2x=x;
+		let min2x=x;
+		
+		let max1y=part1.pos_y+part1.height-offset;
+		let min1y=part1.pos_y+offset;
+		
+		let max2y=y;
+		let min2y=y;
+		
+		let aLeftOfB = max1x <= min2x;
+		let aRightOfB = min1x >= max2x;
+		let aAboveB = min1y >= max2y;
+		let aBelowB = max1y <= min2y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB,part2);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  //}
+	}
+
 	function doPartsOverlaps(part1, part2)
 	{
 		let offset=0;

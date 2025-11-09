@@ -20,6 +20,30 @@ const Solutions={
 	"8":{"Parts":[ {"unitNo":15,"x":104,"y":184,"name":"Bellows (16)","FlipH":0,"FlipV":0},{"unitNo":16,"x":392,"y":280,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":9},{"unitNo":18,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":6},{"unitNo":19,"x":296,"y":56,"name":"Windmill (40)","FlipH":1,"FlipV":0},{"unitNo":20,"x":200,"y":184,"name":"Windmill (40)","FlipH":0,"FlipV":0}]},
 };
 
+
+	function GetFlipH2(part)
+	{
+		let flipHs="0";
+		
+		if(part.appearance!=undefined)
+		{
+			//appearance="top-down (2)"
+			let start=part.appearance.indexOf('(');
+			let end=part.appearance.indexOf(')');
+			let _flipHs = part.appearance.substring(start+1, end);
+			console.log("flipHs appearance="+_flipHs);
+			if(_flipHs=="2")
+				flipHs="1";
+			//if(_flipHs=="3")
+			//	flipHs="1";
+		}
+		
+		if(flipHs=="0")
+			return 0;
+		else
+			return 1;
+	}
+	
 	function GetFlipH(part)
 	{
 		let flipHs="0";
@@ -33,6 +57,19 @@ const Solutions={
 				flipHs="0";
 			if(_flipHs=="3")
 				flipHs="1";
+		}
+		
+		if((part.appearance!=undefined)&&(part.TimType==3))//balanceoire
+		{
+			//appearance="top-down (2)"
+			let start=part.appearance.indexOf('(');
+			let end=part.appearance.indexOf(')');
+			let _flipHs = part.appearance.substring(start+1, end);
+			console.log("flipHs appearance="+_flipHs);
+			if(_flipHs=="2")
+				flipHs="1";
+			//if(_flipHs=="3")
+			//	flipHs="1";
 		}
 		
 		if(part.orientation!=undefined)
@@ -139,9 +176,13 @@ const Solutions={
 			let end=part.name.indexOf(')');
 			let result = part.name.substring(start+1, end);
 			part.TimType=result;
+			
 			part.movingObj=undefined;
 			part.selected=0;
 			part.flipH=GetFlipH(part);
+			if(part.TimType==3)//balancoire
+				part.appearance=undefined;
+			//part.flipH2=GetFlipH2(part);
 			part.flipV=GetFlipV(part);
 			if(part.in_partsbin==1)
 			{
