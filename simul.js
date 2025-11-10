@@ -156,10 +156,16 @@ let
 										}
 									}
 									else
-										Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
-									//Body.setVelocity(part1.body, { x:5*scaleX, y: 0 });
-									//if(part1.TimType==3)//"Teeter-totter (3)"
-									//	collision_TeeterTotter(part1.staticObj,part.staticObj,false)
+									{
+										if(part1.TimType==3)//"Teeter-totter (3)"
+										{
+											collision_TeeterTotter(part1.staticObj,part.staticObj,false);
+											Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
+										}
+										else
+											Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
+											//Body.setVelocity(part1.body, { x:5*scaleX, y: 0 });
+									}
 								}
 								if(part1.movingObj!=undefined)
 								{
@@ -304,7 +310,14 @@ let
 			//collision.body.isSleeping=true;
 			//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
 			//Body.applyForce(collision.bodyA, collision.bodyA.position, { x:40, y: -40 });
-			Body.setVelocity(collision.bodyA, { x:vx*scaleX, y: vy });
+			console.log("TeeterTotterTilt mass ", PartDef[LevelJson.Parts[collision.bodyA.TimNo].TimType].mass);
+			if(PartDef[LevelJson.Parts[collision.bodyA.TimNo].TimType].mass>=1)
+				Body.setVelocity(collision.bodyA, { x:vx*scaleX, y: vy });
+			else
+			{
+				
+				Body.setVelocity(collision.bodyA, { x:vx*scaleX*1.6, y: vy*1.6 });
+			}
 			//collision.body.TimDirectionX=scaleX;
 			//console.log("collisions ->",collision.body);
 			}
@@ -322,7 +335,11 @@ let
 			//console.log("collisions ->",collision.body);
 			//collision.body.isSleeping=true;
 			//Body.applyForce(collision.bodyB, collision.bodyB.position, { x:40, y: -40 });
-			Body.setVelocity(collision.bodyB, { x:vx*scaleX, y: vy });
+			console.log("TeeterTotterTilt mass ", PartDef[LevelJson.Parts[collision.bodyA.TimNo].TimType].mass);
+			if(PartDef[LevelJson.Parts[collision.bodyB.TimNo].TimType].mass>=1)
+				Body.setVelocity(collision.bodyB, { x:vx*scaleX, y: vy });
+			else
+				Body.setVelocity(collision.bodyB, { x:vx*scaleX*1.6, y: vy*1.6 });
 			//collision.body.TimDirectionX=scaleX;
 			//console.log("collisions ->",collision.body);
 			}
@@ -331,13 +348,15 @@ let
 		//_TeeterTotterBoby.angle=_TeeterTotterBoby.angle*-1;
 		//_TeeterTotterBoby.isStatic=false;
 	}
-	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody,bFfromFop)//Teeter-totter (3)
+	function collision_TeeterTotter(_TeeterTotterBoby,_impactorBody,bFromTop)//Teeter-totter (3)
 	{
 		//console.log("TT "+_TeeterTotterBoby.TimNo+"=> xt=" +_TeeterTotterBoby.position.x+" xi="+_impactorBody.position.x+" st="+LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep+" sw="+LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH);
-		
+		let FlipH=0;
+		if(bFromTop==false)//revert logic
+			FlipH=1;
 		if(_impactorBody.position.x<_TeeterTotterBoby.position.x)
 		{
-			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==0)
+			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==FlipH)
 			{
 				//console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling left");
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
@@ -347,16 +366,7 @@ let
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling left, move=>");
-					/*
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					*/
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
-					
 				}
 			}
 			else
@@ -364,16 +374,7 @@ let
 				//console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right (swapped)");
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
-					
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> "+_impactorBody.TimNo+" falling right (swapped), move=>");
-					/*
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-						*/		
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
@@ -384,20 +385,12 @@ let
 		}
 		else
 		{
-			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==0)
+			if(LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH==FlipH)
 			{
 				//console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling right");
 				if((LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==undefined)||(LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep==0))
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling "+_impactorBody.TimNo+" right, move=>");
-					/*
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					*/
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 				else
@@ -414,20 +407,10 @@ let
 				else
 				{
 					console.log("TT "+_TeeterTotterBoby.TimNo+"=> falling "+_impactorBody.TimNo+" left(swapped), move=>");
-					/*
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].anim=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animStep=1;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDelay=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animDirectionX=0;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animOnce=true;
-					LevelJson.Parts[_TeeterTotterBoby.TimNo].animCleanAtEnd=false;
-					*/
-					
 					TeeterTotterTilt(_TeeterTotterBoby,_impactorBody);
 				}
 			}
 		}
-		//AnimPart(_boby.TimNo,false,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipH,LevelJson.Parts[_TeeterTotterBoby.TimNo].flipV,true,false);
 	}
 	function CheckGear(GearBody)
 	{
@@ -627,15 +610,6 @@ let
 					part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
 					part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
 					part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
-					
-					/*
-						part1.nb_anim=17;
-											part1.animStep=12;
-											part1.animOnce=true;
-											part1.fixed=0;
-											part1.pos_x=part1.pos_x-22;
-											part1.pos_y=part1.pos_y+7;
-					*/
 					part.fixed=LevelJsonOrigin.Parts[part.no].fixed;
 					
 				}

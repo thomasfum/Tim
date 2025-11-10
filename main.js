@@ -16,15 +16,14 @@
 
 //trempolin active only if contact on top
 //managing pos of tooter
-//level 7
 //---------------------------
 //bug
 //restrating simul speed is increasing... see level 6 run+run+run
 
 
 
-	var CurrentLevel=7;
-	const MaxLevel=7;
+	var CurrentLevel=6;
+	const MaxLevel=8;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 

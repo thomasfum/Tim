@@ -113,7 +113,7 @@
 					{
 						if(part.appearance==undefined)
 						{
-							//if(part.no==0)
+							//if(part.no==1)
 							//	console.log("refresh 3 -",part.no);
 							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 							{
@@ -139,6 +139,7 @@
 								//dupliquer en height
 								if(part.TimType==39)//Trampoline (39)
 								{
+									
 									let step=0;
 									let TrampolineAnim={"0":[0,1],"1":[2,3],"2":[4,5],"3":[6,1],"4":[7,1],"5":[0,1]};
 									if((part.anim==undefined)||(part.anim==false))
@@ -149,7 +150,7 @@
 									let p=TrampolineAnim[step];
 									for (let index = 0; currentHeight < part.height; ++index) 
 									{
-									
+										//console.log("refresh 3 -",index);
 										drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
 										currentHeight+=Images[part.TimType+"-"+p[index]].height;
 									}
@@ -173,7 +174,7 @@
 										}
 									}
 								}
-								if(part.TimType==13)//Jack-in-the-box (13)
+								else if(part.TimType==13)//Jack-in-the-box (13)
 								{
 									//if(part.no==11)
 									//	console.log("--->reset1 "+part.anim);
@@ -273,7 +274,8 @@
 								else
 								{
 									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
-									//console.log("anim1 "+part.no+ " "+part.fixed);
+									//if(part.no==10)
+									//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
 									if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 									{
 										//console.log("1 no image for "+part.no+" : "+part.animStep);
@@ -281,6 +283,8 @@
 									else
 									{
 										
+										
+										//console.log("anim1 "+part.no+ " "+part.name);
 										//let x=part.pos_x;
 										let x=part.pos_x;//
 										let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
@@ -299,7 +303,8 @@
 										if(part.fixed==1)//background
 											drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
 											
-										
+										//if(part.no==10)
+										//		console.log("anim1 "+(size+part.animStep));
 										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
 									}
 									//console.log("static part=",part.staticObj);
@@ -325,8 +330,12 @@
 										{
 											part.animDelay=0;
 											part.animStep++;
-											if(part.animStep>=part.nb_anim-1)
+											//if(part.no==10)
+											//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
+											if(part.animStep>=part.nb_anim)
 											{
+												//if(part.no==10)
+												//	console.log("anim1 rset to "+part.fixed +" car "+part.animStep+" >="+(part.nb_anim-1));
 												part.animStep=part.fixed;
 												if(part.animOnce==true)
 													part.animStep=part.nb_anim-1;
@@ -338,7 +347,7 @@
 						}
 						else //part.appearance == something
 						{
-							console.log("*****refresh apparence ("+part.no+") "+part.name);
+							//console.log("*****refresh apparence ("+part.no+") "+part.name);
 							//if(part.no==0)
 							//	console.log("refresh 5 -",part.no);
 							//console.log("refresh "+part.no+" "+part.anim);
