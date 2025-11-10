@@ -15,7 +15,7 @@
 {"no": 3,"name": "Rope (10)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": -1,"pos_y": -1,"width": 0,"height": 0,"connected_part_1": 2,"connected_part_2": 9},
 {"no": 4,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 333,"pos_y": 37,"width": 16,"height": 16,"appearance": "top (2)"},
 {"no": 5,"name": "Pulley (7)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 428,"pos_y": 144,"width": 16,"height": 16,"appearance": "right (3)"},
-{"no": 6,"name": "Rope (10)"},
+{"no": 6,"name": "Rope (10)","s_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 0,"pos_y": 0,"width": 0,"height": 0,"connected_part_1": 11,"connected_part_2": 10,"pulleys": "4,5"},
 {"no": 7,"name": "Scrissors (37)","is_moving": 0,"in_partsbin": 0,"is_scenery": 0,"pos_x": 385,"pos_y": 76,"width": 40,"height": 34,"orientation": "left (1)"},
 {"no": 8,"name": "Baseball (28)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 405,"pos_y": 141,"width": 16,"height": 15 },
 {"no": 9,"name": "Bucket (17)","is_moving": 1,"in_partsbin": 0,"is_scenery": 0,"pos_x": 225,"pos_y": 199,"width": 40,"height": 48 },

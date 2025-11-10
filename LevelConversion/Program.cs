@@ -58,13 +58,14 @@ namespace LevelConversion
             //Console.ReadLine();
             DirectoryInfo d = new DirectoryInfo(@".\In");
             FileInfo[] Files = d.GetFiles("*.csv");
-            //manageFile(Files[0]);
-
+            manageFile(Files[86]);
+            /*
             foreach (FileInfo file in Files)
             {
                 manageFile(file);
             }
-
+            */
+            
         }
 
         static void manageFile(FileInfo f)
@@ -135,7 +136,12 @@ namespace LevelConversion
             List<string> split2List = split1List[1].Split(',').ToList();
             string no=split2List[0].Substring(5);
             string name = split2List[1].TrimStart();
+
+            int cpt = split1List.Count;
+
             string rest = split1List[2].Substring(1);
+            if(cpt==5)///" fort the right part
+                rest = split1List[3].Substring(1);
             string rest_clean2 = rest.Replace(" (", "(");
             List<string> splitRestList = rest_clean2.Split(' ').ToList();
             json += "{\"no\": "+ no+ ",\"name\": \""+name+"\",";
