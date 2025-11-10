@@ -4,8 +4,8 @@ const WinCondition={
 	"3":{"Conditions":[{"t":"d","unitNo":8},{"t":"d","unitNo":9},{"t":"d","unitNo":10}]},
 	"4":{"Conditions":[{"t":"p","unitNo":24,"x1":425,"y1":300,"dx":140,"dy":50}]},
 	"5":{"Conditions":[{"t":"p","unitNo":23,"x1":30,"y1":250,"dx":70,"dy":30}]},
-	
 	"6":{"Conditions":[{"t":"a","unitNo":0}]},
+	"7":{"Conditions":[{"t":"d","unitNo":5}]},
 	"8":{"Conditions":[{"t":"d","unitNo":11}]},
 };	
 const Solutions={
@@ -15,8 +15,8 @@ const Solutions={
 	"3":{"Parts":[{"unitNo":13,"x":424,"y":24,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":14,"x":456,"y":232,"name":"Tennis ball (44)","FlipH":0,"FlipV":0},{"unitNo":15,"x":408,"y":264,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":16,"x":376,"y":72,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":312,"y":264,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
 	"4":{"Parts":[{"unitNo":30,"x":184,"y":88,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":31,"x":88,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":32,"x":200,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":33,"x":312,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0}]},
 	"5":{"Parts":[ {"unitNo":29,"name":"Teeter-totter (3)","x":72,"y":104,"FlipH":0,"FlipV":0},{"unitNo":30,"name":"Teeter-totter (3)","x":296,"y":200,"FlipH":1,"FlipV":0},{"unitNo":31,"x":88,"y":168,"name":"Boxing glove (35)","FlipH":1,"FlipV":0},{"unitNo":32,"x":312,"y":264,"name":"Boxing glove (35)","FlipH":0,"FlipV":0}]},
-	
 	"6":{"Parts":[ {"unitNo":4,"x":232,"y":216,"name":"Trampoline (39)","FlipH":0,"FlipV":0}, {"unitNo":5,"x":344,"y":152,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":6,"x":424,"y":104,"name":"Trampoline (39)","FlipH":0,"FlipV":0}]},
+	"7":{"Parts":[ {"unitNo":18,"x":616,"y":136,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":0},{"unitNo":19,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":7,"cp2":6},{"unitNo":20,"x":360,"y":184,"name":"Mouse cage (6)","FlipH":0,"FlipV":0}]},
 	"8":{"Parts":[ {"unitNo":15,"x":104,"y":184,"name":"Bellows (16)","FlipH":0,"FlipV":0},{"unitNo":16,"x":392,"y":280,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":9},{"unitNo":18,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":6},{"unitNo":19,"x":296,"y":56,"name":"Windmill (40)","FlipH":1,"FlipV":0},{"unitNo":20,"x":200,"y":184,"name":"Windmill (40)","FlipH":0,"FlipV":0}]},
 };
 
@@ -114,6 +114,8 @@ const Solutions={
 		console.log("All images loaded: "+NBImagesLoaded) ;
 		if(Test==true)
 			myTimer = setInterval(myTimerBonus1, 1000);
+		
+		
 		refresh(true);
 	}
 

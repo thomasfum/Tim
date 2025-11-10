@@ -15,7 +15,7 @@ const PartDef={
 	"12":{"count":10},
 	"13":{"count":21,"FlipH":1,"node_x":50,"node_y":50,"node_d":20,"nb_anim":8,"animSpeed":5},//jack in the box
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
-	"15":{"count":26},
+	"15":{"count":26,"nb_anim":12,"autoAnim":1,"fixed":1},//"Aquarium (15)"
 	"16":{"count":3,"FlipH":1,"nb_anim":3,"restitution":0.4,"phy_poly":[{"p":"0 0  1 0.4 1 0.6 0 1  0 0"}]},//bellows (soufflet)
 	"17":{"count":1},
 	"18":{"count":16},

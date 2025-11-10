@@ -257,18 +257,30 @@
 								let size=0;
 								if(part.size!=undefined)
 									size=part.size;
+								
+									
 								if((part.anim==undefined)||(part.anim==false))
+								{
+									part.fixed=0;
+									if(PartDef[part.TimType].fixed!=undefined)
+										part.fixed=PartDef[part.TimType].fixed;
+								
+									part.nb_anim=PartDef[part.TimType].nb_anim;
 									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
+									if(part.fixed==1)//background
+										drawImage(Images[part.TimType+"-1"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+								}
 								else
 								{
 									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
-									//console.log("anim1 "+part.anim);
+									//console.log("anim1 "+part.no+ " "+part.fixed);
 									if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 									{
 										//console.log("1 no image for "+part.no+" : "+part.animStep);
 									}
 									else
 									{
+										
 										//let x=part.pos_x;
 										let x=part.pos_x;//
 										let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
@@ -284,6 +296,9 @@
 											}
 											y=part.pos_y-38;
 										}
+										if(part.fixed==1)//background
+											drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+											
 										
 										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
 									}
@@ -310,11 +325,11 @@
 										{
 											part.animDelay=0;
 											part.animStep++;
-											if(part.animStep>=PartDef[part.TimType].nb_anim)
+											if(part.animStep>=part.nb_anim-1)
 											{
-												part.animStep=0;
+												part.animStep=part.fixed;
 												if(part.animOnce==true)
-													part.animStep=PartDef[part.TimType].nb_anim-1;
+													part.animStep=part.nb_anim-1;
 											}
 										}
 									}
@@ -486,18 +501,29 @@
 		
 		
 		//--------------------------
-		//step 2 //cisor
+		//step 2 //cisor, aquarium
 		LevelJson.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
-				if(part.TimType==37)
+				if(part.TimType==37)//cisor
 				{
 					//console.log("cisor 2");
 					if(part.flipH==1)
 						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,part.flipV,part.flipH);
 					else
 						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,part.flipV,part.flipH);
+				}
+				if(part.TimType==15)//aquarium
+				{
+					if(part.animOnce!=true)
+					{
+					//console.log("aquarium");
+					if(part.flipH==1)
+						drawImage(Images[part.TimType+"-12"], part.pos_x-10, part.pos_y+part.height/2+3,part.flipV,part.flipH);
+					else
+						drawImage(Images[part.TimType+"-12"], part.pos_x+10, part.pos_y+part.height/2+3,part.flipV,part.flipH);
+					}
 				}
 			}
 		});//

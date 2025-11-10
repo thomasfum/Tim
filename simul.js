@@ -133,7 +133,27 @@ let
 									//console.log("check Jack-in-the-box collide ("+part1.no+")",part1);
 									if(part1.TimType==15)//Aquarium (15)
 									{
-										console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
+										if(part1.animOnce==false)
+										{
+											console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
+											Composite.remove(world, [part1.staticObj]);
+											part1.nb_anim=17;
+											part1.animStep=12;
+											part1.animOnce=true;
+											part1.fixed=0;
+											part1.pos_x=part1.pos_x-22;
+											part1.pos_y=part1.pos_y+7;
+
+											/*
+											LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
+											LevelJson.Parts[_boby.TimNo].pos_y=_boby.position.y-28;
+											Composite.remove(world, [_boby]);
+											
+											console.log("destroy ballon "+_boby.TimNo);
+											LevelJson.Parts[_boby.TimNo].is_moving=0;
+											AnimPart(_boby.TimNo,true,0,0,true,true);
+											*/
+										}
 									}
 									else
 										Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
@@ -607,6 +627,17 @@ let
 					part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
 					part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
 					part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
+					
+					/*
+						part1.nb_anim=17;
+											part1.animStep=12;
+											part1.animOnce=true;
+											part1.fixed=0;
+											part1.pos_x=part1.pos_x-22;
+											part1.pos_y=part1.pos_y+7;
+					*/
+					part.fixed=LevelJsonOrigin.Parts[part.no].fixed;
+					
 				}
 				part.anim=false;
 				part.animStep=0;
@@ -856,6 +887,12 @@ let
 				}
 			}
 		});
+		
+		LevelJson.Parts.forEach(part => {
+			if(PartDef[part.TimType].autoAnim!=undefined)
+				AnimPart(part.no,true,part.flipH,part.flipV,false,false);
+		});
+		
 		clearInterval(myTimer);
 		Render.run(render);
 		if(runner==undefined)
