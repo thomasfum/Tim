@@ -75,10 +75,12 @@ const Solutions={
 		if(part.orientation!=undefined)
 		{
 			//console.log("orientation");
-			let start=part.orientation.indexOf('(');
-			let end=part.orientation.indexOf(')');
-			flipHs = part.orientation.substring(start+1, end);
+			//let start=part.orientation.indexOf('(');
+			//let end=part.orientation.indexOf(')');
+			//flipHs = part.orientation.substring(start+1, end);
 			//console.log("flipH="+flipH);
+			if(part.orientation=="left (1)")
+				return 1;
 		}
 		if(flipHs=="0")
 			return 0;
@@ -98,6 +100,16 @@ const Solutions={
 			if(flipVs=="1")
 				flipV=1;
 			//console.log("flipV="+flipV);
+		}
+		if(part.orientation!=undefined)
+		{
+			console.log("orientationV " + part.orientation);
+			//let start=part.orientation.indexOf('(');
+			//let end=part.orientation.indexOf(')');
+			//flipVs = part.orientation.substring(start+1, end);
+			//console.log("flipH="+flipH);
+			if(part.orientation=="top (1)")
+				flipV=1;
 		}
 		return flipV;
 	}
@@ -123,8 +135,9 @@ const Solutions={
 	{
 		NBImagesToLoad++;
 		//console.log("load: "+filename) ;
-		Images[filename] = new Image();  
-		part.Images[filename]=Images[filename];
+		Images[filename] = new Image(); 
+		if(part!=undefined)
+			part.Images[filename]=Images[filename];
 		if(imgType==0)
 			Images[filename].src = './images/PARTS/PART'+filename+".png";  
 		else
@@ -153,7 +166,15 @@ const Solutions={
 			}
 		};
 	}	
-
+	function parsePulleys(pulleys)
+	{
+		let array=[];
+		if(pulleys==undefined)
+			return array;
+		array = pulleys.split(',');
+		//console.log("parsePulleys",array);
+		return array;
+	}
 	function ReadJson(json)
 	{
 		//LevelJsonOrigin = structuredClone(LevelJson);
@@ -182,6 +203,8 @@ const Solutions={
 			part.movingObj=undefined;
 			part.selected=0;
 			part.flipH=GetFlipH(part);
+			part.TimPulleys=parsePulleys(part.pulleys);
+
 			if(part.TimType==3)//balancoire
 				part.appearance=undefined;
 			//part.flipH2=GetFlipH2(part);
@@ -194,6 +217,10 @@ const Solutions={
 			part.Images={};
 			//console.log(part.name +" =>"+result+":"+PartDef[result]) ;
 			//console.log(part);
+			
+			Images["8-0"]=0;
+			loadImage("8-0",undefined,0);
+			
 			for (let index = 0; index < PartDef[result].count; ++index) 
 			{
 				let filename=result+"-"+index;

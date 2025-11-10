@@ -106,294 +106,337 @@
 			return;
 		
 		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
+		{
+			//if(part.no==0)
+			//	console.log("refresh 2 -",part.no);
+			if((part.TimType!=8)&&(part.TimType!=10))//not belt & not rope
+			{
+				if(part.appearance==undefined)
 				{
-					//if(part.no==0)
-					//	console.log("refresh 2 -",part.no);
-					if(part.TimType!=8)//not belt
+					//if(part.no==1)
+					//	console.log("refresh 3 -",part.no);
+					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
 					{
-						if(part.appearance==undefined)
+						//dupliquer en width
+						for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
 						{
-							//if(part.no==1)
-							//	console.log("refresh 3 -",part.no);
-							if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
+							if(index==0)
+								drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+							else if(index==part.width/Images[part.TimType+"-0"].width-1)
+								drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+							else
 							{
-								//dupliquer en width
-								for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
-								{
-									if(index==0)
-										drawImage(Images[part.TimType+"-0"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
-									else if(index==part.width/Images[part.TimType+"-0"].width-1)
-										drawImage(Images[part.TimType+"-3"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
-									else
-									{
-										if(index%2==0)
-											drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
-										else
-											drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
-									}
-								}
+								if(index%2==0)
+									drawImage(Images[part.TimType+"-1"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
+								else
+									drawImage(Images[part.TimType+"-2"], part.pos_x+Images[part.TimType+"-0"].width*index, part.pos_y,part.flipV,part.flipH);
 							}
-							else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
+						}
+					}
+					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
+					{
+						
+						//dupliquer en height
+						if(part.TimType==39)//Trampoline (39)
+						{
+							
+							let step=0;
+							let TrampolineAnim={"0":[0,1],"1":[2,3],"2":[4,5],"3":[6,1],"4":[7,1],"5":[0,1]};
+							if((part.anim==undefined)||(part.anim==false))
+								step=0;
+							else
+								step=part.animStep;
+							let currentHeight=0;
+							let p=TrampolineAnim[step];
+							for (let index = 0; currentHeight < part.height; ++index) 
 							{
-								
-								//dupliquer en height
-								if(part.TimType==39)//Trampoline (39)
+								//console.log("refresh 3 -",index);
+								drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
+								currentHeight+=Images[part.TimType+"-"+p[index]].height;
+							}
+							
+							let animSpeed=10;
+							if(PartDef[part.TimType].animSpeed!=undefined)
+								animSpeed=PartDef[part.TimType].animSpeed;
+							if(animSpeed>0)
+							{
+								part.animDelay++;
+								if(part.animDelay>animSpeed)//faster speed
 								{
-									
-									let step=0;
-									let TrampolineAnim={"0":[0,1],"1":[2,3],"2":[4,5],"3":[6,1],"4":[7,1],"5":[0,1]};
-									if((part.anim==undefined)||(part.anim==false))
-										step=0;
-									else
-										step=part.animStep;
-									let currentHeight=0;
-									let p=TrampolineAnim[step];
-									for (let index = 0; currentHeight < part.height; ++index) 
+									part.animDelay=0;
+									part.animStep++;
+									if(part.animStep>=PartDef[part.TimType].nb_anim)
 									{
-										//console.log("refresh 3 -",index);
-										drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
-										currentHeight+=Images[part.TimType+"-"+p[index]].height;
-									}
-									
-									let animSpeed=10;
-									if(PartDef[part.TimType].animSpeed!=undefined)
-										animSpeed=PartDef[part.TimType].animSpeed;
-									if(animSpeed>0)
-									{
-										part.animDelay++;
-										if(part.animDelay>animSpeed)//faster speed
-										{
-											part.animDelay=0;
-											part.animStep++;
-											if(part.animStep>=PartDef[part.TimType].nb_anim)
-											{
-												part.animStep=0;
-												if(part.animOnce==true)
-													part.animStep=PartDef[part.TimType].nb_anim-1;
-											}
-										}
-									}
-								}
-								else if(part.TimType==13)//Jack-in-the-box (13)
-								{
-									//if(part.no==11)
-									//	console.log("--->reset1 "+part.anim);
-									
-									if((part.anim==undefined)||(part.anim==false))
-									{
-										//console.log("--->reset "+part.animStep);
 										part.animStep=0;
-										part.animStep2=0;
-										part.megaloop=0;
-										part.overY=0;
-										
-									}
-									//if(part.no==11)
-										//console.log("--->reset2 "+part.animStep2);
-									//console.log("--->"+index,+"-"+step+"-"+part.animStep);
-									drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
-									if(part.animStep2==0)
-										drawImage(Images[part.TimType+"-"+1], part.pos_x, part.pos_y,part.flipV,part.flipH);
-									else 
-									{
-										drawImage(Images[part.TimType+"-"+(9+part.animStep2)], part.pos_x-5, part.pos_y-Images[part.TimType+"-"+(9+part.animStep2)].height,part.flipV,part.flipH);
-										part.overY=Images[part.TimType+"-"+(9+part.animStep2)].height;
-									}
-									
-									drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
-									
-									let animSpeed=10;
-									if(PartDef[part.TimType].animSpeed!=undefined)
-										animSpeed=PartDef[part.TimType].animSpeed;
-									if(animSpeed>0)
-									{
-										part.animDelay++;
-										if(part.animDelay>animSpeed)//faster speed
-										{
-											part.animDelay=0;
-											if(part.megaloop!=5)
-												part.animStep++;
-											else
-												if(part.animStep2<10)
-													part.animStep2++;
-											if(part.animStep>=PartDef[part.TimType].nb_anim)
-											{
-												part.animStep=0;
-												if(part.megaloop<=5)
-													part.megaloop++;
-												if(part.megaloop==5)
-													console.log("megaloop");
-												if(part.animOnce==true)
-													part.animStep=PartDef[part.TimType].nb_anim-1;
-											}
-										}
-									}
-								}
-								else
-								{
-									if(part.no==0)
-										console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
-									//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
-									for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
-									{
-										if(index==0)
-											drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-										else if(index==part.height/Images[part.TimType+"-0"].height-1)
-											drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-										else
-										{
-											if(index%2==0)
-												drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-											else
-												drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
-										}
-									
-									}
-								}
-								
-								
-							}
-							else //no duplication
-							{
-								let size=0;
-								if(part.size!=undefined)
-									size=part.size;
-								
-									
-								if((part.anim==undefined)||(part.anim==false))
-								{
-									part.fixed=0;
-									if(PartDef[part.TimType].fixed!=undefined)
-										part.fixed=PartDef[part.TimType].fixed;
-								
-									part.nb_anim=PartDef[part.TimType].nb_anim;
-									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
-									if(part.fixed==1)//background
-										drawImage(Images[part.TimType+"-1"],part.pos_x,part.pos_y,part.flipV,part.flipH);
-								}
-								else
-								{
-									//console.log("draw "+part.TimType+"-"+(size+part.animStep));
-									//if(part.no==10)
-									//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
-									if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
-									{
-										//console.log("1 no image for "+part.no+" : "+part.animStep);
-									}
-									else
-									{
-										
-										
-										//console.log("anim1 "+part.no+ " "+part.name);
-										//let x=part.pos_x;
-										let x=part.pos_x;//
-										let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
-										if(PartDef[part.TimType].animRight==1)
-										{
-											if(part.flipH==1)
-											{
-												x=part.pos_x;
-											}
-											else
-											{
-												x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
-											}
-											y=part.pos_y-38;
-										}
-										if(part.fixed==1)//background
-											drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
-											
-										//if(part.no==10)
-										//		console.log("anim1 "+(size+part.animStep));
-										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
-									}
-									//console.log("static part=",part.staticObj);
-									//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
-									//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
-									
-									//console.log("static part ici ("+part.TimType+")",part.staticObj);
-									
-									//part.staticObj.height=Images[part.TimType+"-"+(size+part.animStep)].height;
-									//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
-									//part.staticObj.position.y=100;
-									if(part.staticObj!=undefined)
-										part.staticObj.height=12;//????
-									let animSpeed=10;
-									if(PartDef[part.TimType].animSpeed!=undefined)
-										animSpeed=PartDef[part.TimType].animSpeed;
-									//if(part.TimType==3)//balanc
-									//	console.log("balnce"+PartDef[part.TimType].animSpeed);
-									if(animSpeed>0)
-									{
-										part.animDelay++;
-										if(part.animDelay>animSpeed)
-										{
-											part.animDelay=0;
-											part.animStep++;
-											//if(part.no==10)
-											//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
-											if(part.animStep>=part.nb_anim)
-											{
-												//if(part.no==10)
-												//	console.log("anim1 rset to "+part.fixed +" car "+part.animStep+" >="+(part.nb_anim-1));
-												part.animStep=part.fixed;
-												if(part.animOnce==true)
-													part.animStep=part.nb_anim-1;
-											}
-										}
+										if(part.animOnce==true)
+											part.animStep=PartDef[part.TimType].nb_anim-1;
 									}
 								}
 							}
 						}
-						else //part.appearance == something
+						else if(part.TimType==13)//Jack-in-the-box (13)
 						{
-							//console.log("*****refresh apparence ("+part.no+") "+part.name);
-							//if(part.no==0)
-							//	console.log("refresh 5 -",part.no);
-							//console.log("refresh "+part.no+" "+part.anim);
-							let start=part.appearance.indexOf('(');
-							let end=part.appearance.indexOf(')');
-							let subResult = part.appearance.substring(start+1, end);
-							//console.log(part.TimType+"_"+subResult);
+							//if(part.no==11)
+							//	console.log("--->reset1 "+part.anim);
+							
 							if((part.anim==undefined)||(part.anim==false))
-								drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
-							else
 							{
-								//console.log("anim2 "+part.anim);
-								let val=part.animStep+parseInt(subResult);
-								//console.log(part.TimType+"_"+val);
-								if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+								//console.log("--->reset "+part.animStep);
+								part.animStep=0;
+								part.animStep2=0;
+								part.megaloop=0;
+								part.overY=0;
+								
+							}
+							//if(part.no==11)
+								//console.log("--->reset2 "+part.animStep2);
+							//console.log("--->"+index,+"-"+step+"-"+part.animStep);
+							drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							if(part.animStep2==0)
+								drawImage(Images[part.TimType+"-"+1], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							else 
+							{
+								drawImage(Images[part.TimType+"-"+(9+part.animStep2)], part.pos_x-5, part.pos_y-Images[part.TimType+"-"+(9+part.animStep2)].height,part.flipV,part.flipH);
+								part.overY=Images[part.TimType+"-"+(9+part.animStep2)].height;
+							}
+							
+							drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
+							
+							let animSpeed=10;
+							if(PartDef[part.TimType].animSpeed!=undefined)
+								animSpeed=PartDef[part.TimType].animSpeed;
+							if(animSpeed>0)
+							{
+								part.animDelay++;
+								if(part.animDelay>animSpeed)//faster speed
 								{
-									console.log("2 no image for "+part.no+" : "+part.animStep);
-								}
-								else
-									drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
-								//console.log("static part=",part.staticObj);
-								part.staticObj.height=Images[part.TimType+"-"+val].height;
-								let animSpeed=10;
-								if(PartDef[part.TimType].animSpeed!=undefined)
-									animSpeed=PartDef[part.TimType].animSpeed;
-								if(animSpeed>0)
-								{
-									part.animDelay++;
-
-									if(part.animDelay>animSpeed)
-									{
-										part.animDelay=0;
+									part.animDelay=0;
+									if(part.megaloop!=5)
 										part.animStep++;
-										if(part.animStep>=PartDef[part.TimType].nb_anim)
-										{
-											part.animStep=0;
-											if(part.animOnce==true)
-												part.animStep=PartDef[part.TimType].nb_anim-1;
-										}
+									else
+										if(part.animStep2<10)
+											part.animStep2++;
+									if(part.animStep>=PartDef[part.TimType].nb_anim)
+									{
+										part.animStep=0;
+										if(part.megaloop<=5)
+											part.megaloop++;
+										if(part.megaloop==5)
+											console.log("megaloop");
+										if(part.animOnce==true)
+											part.animStep=PartDef[part.TimType].nb_anim-1;
 									}
 								}
-							}							
+							}
+						}
+						else
+						{
+							if(part.no==0)
+								console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
+							//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
+							for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
+							{
+								if(index==0)
+									drawImage(Images[part.TimType+"-4"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+								else if(index==part.height/Images[part.TimType+"-0"].height-1)
+									drawImage(Images[part.TimType+"-7"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+								else
+								{
+									if(index%2==0)
+										drawImage(Images[part.TimType+"-5"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+									else
+										drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
+								}
+							
+							}
+						}
+						
+						
+					}
+					else //no duplication
+					{
+						let size=0;
+						if(part.size!=undefined)
+							size=part.size;
+						
+							
+						if((part.anim==undefined)||(part.anim==false))
+						{
+							part.fixed=0;
+							if(PartDef[part.TimType].fixed!=undefined)
+								part.fixed=PartDef[part.TimType].fixed;
+						
+							part.nb_anim=PartDef[part.TimType].nb_anim;
+							drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							if(part.fixed==1)//background
+								drawImage(Images[part.TimType+"-1"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+						}
+						else
+						{
+							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
+							//if(part.no==10)
+							//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
+							if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+							{
+								//console.log("1 no image for "+part.no+" : "+part.animStep);
+							}
+							else
+							{
+								
+								
+								//console.log("anim1 "+part.no+ " "+part.name);
+								//let x=part.pos_x;
+								let x=part.pos_x;//
+								let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+								if(PartDef[part.TimType].animRight==1)
+								{
+									if(part.flipH==1)
+									{
+										x=part.pos_x;
+									}
+									else
+									{
+										x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+									}
+									y=part.pos_y-38;
+								}
+								if(part.fixed==1)//background
+									drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+									
+								//if(part.no==10)
+								//		console.log("anim1 "+(size+part.animStep));
+								drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+							}
+							//console.log("static part=",part.staticObj);
+							//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
+							//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+							
+							//console.log("static part ici ("+part.TimType+")",part.staticObj);
+							
+							//part.staticObj.height=Images[part.TimType+"-"+(size+part.animStep)].height;
+							//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
+							//part.staticObj.position.y=100;
+							if(part.staticObj!=undefined)
+								part.staticObj.height=12;//????
+							let animSpeed=10;
+							if(PartDef[part.TimType].animSpeed!=undefined)
+								animSpeed=PartDef[part.TimType].animSpeed;
+							//if(part.TimType==3)//balanc
+							//	console.log("balnce"+PartDef[part.TimType].animSpeed);
+							if(animSpeed>0)
+							{
+								part.animDelay++;
+								if(part.animDelay>animSpeed)
+								{
+									part.animDelay=0;
+									part.animStep++;
+									//if(part.no==10)
+									//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
+									if(part.animStep>=part.nb_anim)
+									{
+										//if(part.no==10)
+										//	console.log("anim1 rset to "+part.fixed +" car "+part.animStep+" >="+(part.nb_anim-1));
+										part.animStep=part.fixed;
+										if(part.animOnce==true)
+											part.animStep=part.nb_anim-1;
+									}
+								}
+							}
 						}
 					}
 				}
+				else //part.appearance == something
+				{
+					//console.log("*****refresh apparence ("+part.no+") "+part.name);
+					//if(part.no==0)
+					//	console.log("refresh 5 -",part.no);
+					//console.log("refresh "+part.no+" "+part.anim);
+					let start=part.appearance.indexOf('(');
+					let end=part.appearance.indexOf(')');
+					let subResult = part.appearance.substring(start+1, end);
+					//console.log(part.TimType+"_"+subResult);
+					if((part.anim==undefined)||(part.anim==false))
+						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
+					else
+					{
+						//console.log("anim2 "+part.anim);
+						let val=part.animStep+parseInt(subResult);
+						//console.log(part.TimType+"_"+val);
+						if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
+						{
+							console.log("2 no image for "+part.no+" : "+part.animStep);
+						}
+						else
+							drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
+						//console.log("static part=",part.staticObj);
+						part.staticObj.height=Images[part.TimType+"-"+val].height;
+						let animSpeed=10;
+						if(PartDef[part.TimType].animSpeed!=undefined)
+							animSpeed=PartDef[part.TimType].animSpeed;
+						if(animSpeed>0)
+						{
+							part.animDelay++;
+
+							if(part.animDelay>animSpeed)
+							{
+								part.animDelay=0;
+								part.animStep++;
+								if(part.animStep>=PartDef[part.TimType].nb_anim)
+								{
+									part.animStep=0;
+									if(part.animOnce==true)
+										part.animStep=PartDef[part.TimType].nb_anim-1;
+								}
+							}
+						}
+					}							
+				}
+			}
+		}
 	}
+	
+	function getPosXRope(partNo,to)
+	{
+		let rx=0.5;
+		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
+			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+		let ox=LevelJson.Parts[partNo].width*rx;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			{
+				if(to==false)
+					ox=ox+7;
+				else
+					ox=ox-7;
+			}
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				ox=ox+3;
+			}
+		}	
+		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+	}
+	function getPosYRope(partNo,to)
+	{
+		let ry=0.5;
+		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
+			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
+		let oy=LevelJson.Parts[partNo].height*ry;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				if(to==false)
+					oy=oy+7;
+				else
+					oy=oy-7;
+			}
+		}
+		
+		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+	}
+	
 	function refresh( allObjects)
 	{
 		if(wireframe==true)
@@ -507,7 +550,27 @@
 		});
 		//----------------
 		//string here
-		
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)//rope
+			{
+				ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
+				console.log("rope("+part.no+"): ",part);
+				ctx.beginPath();
+				ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
+				for(var key in part.TimPulleys)
+				{
+					ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
+					ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
+				}
+				ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
+				ctx.stroke();
+				
+				
+				//part8-0
+				drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
+				drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
+			}
+		});
 		
 		//--------------------------
 		//step 2 //cisor, aquarium
@@ -519,9 +582,9 @@
 				{
 					//console.log("cisor 2");
 					if(part.flipH==1)
-						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,part.flipV,part.flipH);
+						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,false,part.flipH);
 					else
-						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,part.flipV,part.flipH);
+						drawImage(Images[part.TimType+"-1"], part.pos_x+50, part.pos_y+part.height/2,false,part.flipH);
 				}
 				if(part.TimType==15)//aquarium
 				{
