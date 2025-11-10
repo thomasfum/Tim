@@ -455,6 +455,51 @@
 		displayRightBoard();
 		partsbin={};
 		let partsbinPosY=0;
+		
+		
+		
+		//--------------------------
+		//step 0 //cisor
+		LevelJson.Parts.forEach(part => {
+			
+			if(part.in_partsbin==0)
+			{
+				if(part.TimType==37)//cisor
+				{
+					//console.log("cisor 2");
+					if(part.flipH==1)
+						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,false,part.flipH);
+					else
+						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,false,part.flipH);
+				}
+			
+			}
+		});//
+		
+		//----------------
+		//string here
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)//rope
+			{
+				ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
+				console.log("rope("+part.no+"): ",part);
+				ctx.beginPath();
+				ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
+				for(var key in part.TimPulleys)
+				{
+					ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
+					ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
+				}
+				ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
+				ctx.stroke();
+				
+				
+				//part8-0
+				drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
+				drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
+			}
+		});
+		
 		//step 1
 		//z index 0
 		//console.log("-------------- 0 -------------" );
@@ -548,36 +593,17 @@
 				}
 			}
 		});
-		//----------------
-		//string here
-		LevelJson.Parts.forEach(part => {
-			if(part.TimType==10)//rope
-			{
-				ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
-				console.log("rope("+part.no+"): ",part);
-				ctx.beginPath();
-				ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
-				for(var key in part.TimPulleys)
-				{
-					ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
-					ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
-				}
-				ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
-				ctx.stroke();
-				
-				
-				//part8-0
-				drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
-				drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
-			}
-		});
+		
+		
+	
 		
 		//--------------------------
-		//step 2 //cisor, aquarium
+		//step 2 aquarium
 		LevelJson.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
 			{
+				/*
 				if(part.TimType==37)//cisor
 				{
 					//console.log("cisor 2");
@@ -586,6 +612,7 @@
 					else
 						drawImage(Images[part.TimType+"-1"], part.pos_x+50, part.pos_y+part.height/2,false,part.flipH);
 				}
+				*/
 				if(part.TimType==15)//aquarium
 				{
 					if(part.animOnce!=true)

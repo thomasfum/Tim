@@ -22,7 +22,7 @@
 
 
 
-	var CurrentLevel=9;
+	var CurrentLevel=3;
 	const MaxLevel=8;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
@@ -244,7 +244,15 @@
 		Events.on(render, "beforeRender", (event) => {beforeRender();});
 		Events.on(render, "afterRender", (event) => {afterRender();});
 		Events.on(engine,"collisionStart", (event) => {collisionStart(event);});
-			
+		
+		document.addEventListener('keypress', e => {
+			console.log('show solutions:'+e.key);
+			if (e.key === 'q') {
+				showSolutionClicked();
+			}
+		});
+
+		
 		LoadBoard();
 		document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 	}
