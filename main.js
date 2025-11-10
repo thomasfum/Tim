@@ -22,8 +22,8 @@
 
 
 
-	var CurrentLevel=3;
-	const MaxLevel=8;
+	var CurrentLevel=8;
+	const MaxLevel=9;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 

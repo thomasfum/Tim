@@ -171,7 +171,11 @@ const Solutions={
 		let array=[];
 		if(pulleys==undefined)
 			return array;
-		array = pulleys.split(',');
+		console.log("parsePulleys",pulleys);
+		if (typeof pulleys === 'string' || pulleys instanceof String)
+			array = pulleys.split(',');
+		else 
+			array.push(pulleys);
 		//console.log("parsePulleys",array);
 		return array;
 	}
