@@ -6,6 +6,13 @@
 //https://classicreload.com/play/dosx-the-incredible-machine.html
 //https://www.cursor.cc/?
 
+//rope
+//https://jsbin.com/tovoraqima/edit?js,output
+//https://labs.phaser.io/edit.html?src=src\physics\matterjs\chain.js
+//https://labs.phaser.io/view.html?src=src%5Cphysics%5Cmatterjs%5Cchain.js
+//https://hinosstudio.itch.io/matter-js-cut-the-rope-demo
+//https://codepen.io/rudtjd2548/pen/rNrxopK
+
 //---------------------------
 //Todo
 // get all levels in french
