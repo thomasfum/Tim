@@ -307,17 +307,17 @@
 								//		console.log("anim1 "+(size+part.animStep));
 								drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
 							}
-							//console.log("static part=",part.staticObj);
+							//console.log("static part=",part.MatterBody);
 							//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
-							//part.staticObj.position.y=part.staticObj.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+							//part.MatterBody.position.y=part.MatterBody.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
 							
-							//console.log("static part ici ("+part.TimType+")",part.staticObj);
+							//console.log("static part ici ("+part.TimType+")",part.MatterBody);
 							
-							//part.staticObj.height=Images[part.TimType+"-"+(size+part.animStep)].height;
-							//part.staticObj.bounds.min.y=100;//.position.y=part.staticObj.position.y-5;
-							//part.staticObj.position.y=100;
-							if(part.staticObj!=undefined)
-								part.staticObj.height=12;//????
+							//part.MatterBody.height=Images[part.TimType+"-"+(size+part.animStep)].height;
+							//part.MatterBody.bounds.min.y=100;//.position.y=part.MatterBody.position.y-5;
+							//part.MatterBody.position.y=100;
+							if(part.MatterBody!=undefined)
+								part.MatterBody.height=12;//????
 							let animSpeed=10;
 							if(PartDef[part.TimType].animSpeed!=undefined)
 								animSpeed=PartDef[part.TimType].animSpeed;
@@ -368,8 +368,8 @@
 						}
 						else
 							drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
-						//console.log("static part=",part.staticObj);
-						part.staticObj.height=Images[part.TimType+"-"+val].height;
+						//console.log("static part=",part.MatterBody);
+						part.MatterBody.height=Images[part.TimType+"-"+val].height;
 						let animSpeed=10;
 						if(PartDef[part.TimType].animSpeed!=undefined)
 							animSpeed=PartDef[part.TimType].animSpeed;

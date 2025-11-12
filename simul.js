@@ -47,24 +47,24 @@ let
 			if(part.is_moving!=0)
 			{
 				//apply gravity
-				//if(part.movingObj.mass2>0)
-				if(part.movingObj!=undefined)
-					Body.applyForce(part.movingObj, part.movingObj.position, { x: part.movingObj.force.x, y: part.movingObj.mass2 * 0.0005 })
+				//if(part.MatterBody.mass2>0)
+				if(part.MatterBody!=undefined)
+					Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 })
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
 					if(body.TimNo!=undefined)
 					{
 						if((LevelJson.Parts[body.TimNo].TimType==5)&&(LevelJson.Parts[body.TimNo].anim==true))//moving belt
 						{
-							if (Matter.Collision.collides(part.movingObj, body) != null) 
+							if (Matter.Collision.collides(part.MatterBody, body) != null) 
 							{
 								// collision happened
 								//console.log("moving part"+part.no +"on a moving belt"+body.TimNo);
 								//console.log("moving part direction "+LevelJson.Parts[body.TimNo].animDirectionX);
 								if(LevelJson.Parts[body.TimNo].animDirectionX==0)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: 0.003, y: 0 })
+									Body.applyForce(part.MatterBody, part.MatterBody.position, { x: 0.003, y: 0 })
 								if(LevelJson.Parts[body.TimNo].animDirectionX==1)
-									Body.applyForce(part.movingObj, part.movingObj.position, { x: -0.003, y: 0 })
+									Body.applyForce(part.MatterBody, part.MatterBody.position, { x: -0.003, y: 0 })
 							}
 						}
 					}
@@ -74,7 +74,7 @@ let
 			{
 				if(part.TimType==3)//"Teeter-totter (3)"
 				{
-					if(part.staticObj!=undefined)
+					if(part.MatterBody!=undefined)
 					{
 						part.anim=true;
 						part.animStep=1;
@@ -83,7 +83,7 @@ let
 						part.animOnce=false;
 						part.animCleanAtEnd=false;
 							
-						if(part.staticObj.angle>0.2)
+						if(part.MatterBody.angle>0.2)
 						{
 							if(part.flipH==0)
 							{
@@ -97,7 +97,7 @@ let
 							}
 								
 						}
-						if(part.staticObj.angle<-0.2)
+						if(part.MatterBody.angle<-0.2)
 						{
 							if(part.flipH==0)
 							{
@@ -110,7 +110,7 @@ let
 								part.animStep=2;
 							}
 						}
-						if((part.staticObj.angle>-0.05)&&(part.staticObj.angle<0.05))
+						if((part.MatterBody.angle>-0.05)&&(part.MatterBody.angle<0.05))
 						{
 							//console.log("Teeter-totter "+part.no+" -");
 							part.animStep=1;
@@ -136,7 +136,7 @@ let
 										if(part1.animOnce==false)
 										{
 											console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
-											Composite.remove(world, [part1.staticObj]);
+											Composite.remove(world, [part1.MatterBody]);
 											part1.nb_anim=17;
 											part1.animStep=12;
 											part1.animOnce=true;
@@ -159,20 +159,20 @@ let
 									{
 										if(part1.TimType==3)//"Teeter-totter (3)"
 										{
-											collision_TeeterTotter(part1.staticObj,part.staticObj,false);
-											Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
+											collision_TeeterTotter(part1.MatterBody,part.MatterBody,false);
+											Body.applyForce(part1.MatterBody, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
 										}
 										else
-											Body.applyForce(part1.staticObj, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
+											Body.applyForce(part1.MatterBody, {x:part.pos_x+part.width/2, y:part.pos_y-part.overY}, { x:0, y: -2 });
 											//Body.setVelocity(part1.body, { x:5*scaleX, y: 0 });
 									}
 								}
-								if(part1.movingObj!=undefined)
+								if(part1.MatterBody!=undefined)
 								{
-									if (Matter.Collision.collides(part.staticObj, part1.movingObj) != null) 
+									if (Matter.Collision.collides(part.MatterBody, part1.MatterBody) != null) 
 									{
-										console.log("-----------------check Jack-in-the-box at ("+part1.no+") "+part1.name);
-										Body.applyForce(part1.movingObj, {x:part1.pos_x, y:part1.pos_y}, { x:0.01, y: -0.02 });
+										//console.log("-----------------check Jack-in-the-box at ("+part1.no+") "+part1.name);
+										Body.applyForce(part1.MatterBody, {x:part1.pos_x, y:part1.pos_y}, { x:0.01, y: -0.02 });
 									}
 								}
 							}
@@ -441,12 +441,12 @@ let
 			//
 			if(part.TimType==4)//baloon
 			{
-				if(Matter.Collision.collides(GearBody, part.movingObj) != null)
+				if(Matter.Collision.collides(GearBody, part.MatterBody) != null)
 				{
 					if(part.anim==undefined)//ballon is not yet exploding
 					{
 						console.log("CheckGear touching ballon"+part.no);
-						destroy_ballon(part.movingObj);
+						destroy_ballon(part.MatterBody);
 					}
 				}
 			}
@@ -591,8 +591,8 @@ let
 			console.log("reset LevelJson");
 			LevelJson.Parts.forEach(part => {
 				
-				part.staticObj=undefined;
-				part.movingObj=undefined;
+				part.MatterBody=undefined;
+				part.MatterBody=undefined;
 				part.selected=0;
 				if(LevelJsonOrigin!=undefined)
 				{
@@ -621,8 +621,8 @@ let
 
 		//remove the link with physics
 		LevelJson.Parts.forEach(part => {
-			part.staticObj=undefined;
-			part.movingObj=undefined;
+			part.MatterBody=undefined;
+			part.MatterBody=undefined;
 		});
 		LevelJsonOrigin =JSON.parse(JSON.stringify(LevelJson));
 		
@@ -667,7 +667,7 @@ let
 							ox=PartDef[part.TimType].ox;
 						if(PartDef[part.TimType].oy!=undefined)
 							oy=PartDef[part.TimType].oy;
-						var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
+						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
 							TimNo:part.no,
 							isSleeping: false,
 							isStatic: false,
@@ -687,13 +687,13 @@ let
 							  }
 							  });
 						
-						//movingObj.friction=1;
-						movingObj.frictionAir=0.02;
-						//movingObj.frictionAir=0.1;
-						//movingObj.sleepThreshold=2;
+						//MatterBody.friction=1;
+						MatterBody.frictionAir=0.02;
+						//MatterBody.frictionAir=0.1;
+						//MatterBody.sleepThreshold=2;
 
-						Composite.add(world, [movingObj]);
-						part.movingObj=movingObj;
+						Composite.add(world, [MatterBody]);
+						part.MatterBody=MatterBody;
 					}
 					
 				}
@@ -708,29 +708,29 @@ let
 					if(part.TimType==3)//"Teeter-totter (3)"
 					{
 						console.log("Teeter-totter=",part.no);
-						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
+						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
 						//console.log("IIIIIIIIIIIIIIIIIIIII  Teeter-totter "+part.flipH);
 						if(part.flipH==0)
-							Matter.Body.rotate(staticObj,-0.3);
+							Matter.Body.rotate(MatterBody,-0.3);
 						else
-							Matter.Body.rotate(staticObj,0.3);
+							Matter.Body.rotate(MatterBody,0.3);
 						/*
 						if(part.flipH2==0)
-							Matter.Body.rotate(staticObj,-0.3);
+							Matter.Body.rotate(MatterBody,-0.3);
 						else
-							Matter.Body.rotate(staticObj,0.3);
+							Matter.Body.rotate(MatterBody,0.3);
 						*/
-						staticObj.friction=1;
- 						staticObj.frictionAir=0.01*20;
-						staticObj.frictionStatic=0.5*20;
+						MatterBody.friction=1;
+ 						MatterBody.frictionAir=0.01*20;
+						MatterBody.frictionStatic=0.5*20;
 
-						Composite.add(world, [staticObj]);
-						part.staticObj=staticObj;
-						part.staticObjId=staticObj.id;
+						Composite.add(world, [MatterBody]);
+						part.MatterBody=MatterBody;
+						part.staticObjId=MatterBody.id;
 						//console.log("id=",part.staticObjId);
 						/*
 						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
@@ -750,7 +750,7 @@ let
 						Composite.add(world, [staticObjBlocBottom]);	
 						 var constraint = Constraint.create({
 							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
-							bodyB: staticObj,
+							bodyB: MatterBody,
 							length: 0, 
 							render: { visible: false }
 						});
@@ -822,34 +822,34 @@ let
 								oy=oy-(PartDef[part.TimType].phy_poly[i].y*part.height)*scaleY;
 							}
 							
-							var staticObj =Bodies.fromVertices(playgroundOffsetX+ox, playgroundOffsetY+oy, verts, {
+							var MatterBody =Bodies.fromVertices(playgroundOffsetX+ox, playgroundOffsetY+oy, verts, {
 								isStatic: _isStatic, 
 								TimNo:part.no,
 								render: { fillStyle: "rgba(0, 0, 255, 0)"}
 								}, true, 0.001, 20);
 							if(part.TimType==16)//bellows (soufflet)
 							{
-								//console.log("bellows=",staticObj);
-								staticObj.friction=1;
-								staticObj.frictionStatic=0.8;
+								//console.log("bellows=",MatterBody);
+								MatterBody.friction=1;
+								MatterBody.frictionStatic=0.8;
 							}
-							Composite.add(world, [staticObj]);
-							part.staticObj=staticObj;
-							part.staticObjId=staticObj.id;
+							Composite.add(world, [MatterBody]);
+							part.MatterBody=MatterBody;
+							part.staticObjId=MatterBody.id;
 							//console.log("id=",part.staticObjId);
 							
 						}
 					}
 					else
 					{
-						var staticObj = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
+						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" }
 							});
-						Composite.add(world, [staticObj]);
-						part.staticObj=staticObj;
-						part.staticObjId=staticObj.id;
+						Composite.add(world, [MatterBody]);
+						part.MatterBody=MatterBody;
+						part.staticObjId=MatterBody.id;
 						//console.log("id=",part.staticObjId);
 					}
 				}

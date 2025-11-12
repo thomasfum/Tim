@@ -204,7 +204,7 @@ const Solutions={
 			let result = part.name.substring(start+1, end);
 			part.TimType=result;
 			
-			part.movingObj=undefined;
+			part.MatterBody=undefined;
 			part.selected=0;
 			part.flipH=GetFlipH(part);
 			part.TimPulleys=parsePulleys(part.pulleys);
