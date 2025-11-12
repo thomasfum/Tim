@@ -192,30 +192,9 @@
 								drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
 								currentHeight+=Images[part.TimType+"-"+p[index]].height;
 							}
-							//*-*-*-*-*-*-*-*-*-
 							part.nb_anim=PartDef[part.TimType].nb_anim;
-							AdvanceAnimation(part);
-							/*
-							let animSpeed=10;
-							if(PartDef[part.TimType].animSpeed!=undefined)
-								animSpeed=PartDef[part.TimType].animSpeed;
-							if(animSpeed>0)
-							{
-								part.animDelay++;
-								if(part.animDelay>animSpeed)//faster speed
-								{
-									part.animDelay=0;
-									part.animStep++;
-									if(part.animStep>=PartDef[part.TimType].nb_anim)
-									{
-										part.animStep=0;
-										if(part.animOnce==true)
-											part.animStep=PartDef[part.TimType].nb_anim-1;
-									}
-								}
-							}
-							*/
-							//*-*-*-*-*-*-*-*-*-
+							//AdvanceAnimation(part);
+
 						}
 						else if(part.TimType==13)//Jack-in-the-box (13)
 						{
@@ -245,37 +224,7 @@
 							}
 							
 							drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
-							//*-*-*-*-*-*-*-*-*-
-							AdvanceAnimation(part);
-							/*
-							let animSpeed=10;
-							if(PartDef[part.TimType].animSpeed!=undefined)
-								animSpeed=PartDef[part.TimType].animSpeed;
-							if(animSpeed>0)
-							{
-								part.animDelay++;
-								if(part.animDelay>animSpeed)//faster speed
-								{
-									part.animDelay=0;
-									if(part.megaloop!=5)
-										part.animStep++;
-									else
-										if(part.animStep2<10)
-											part.animStep2++;
-									if(part.animStep>=PartDef[part.TimType].nb_anim)
-									{
-										part.animStep=0;
-										if(part.megaloop<=5)
-											part.megaloop++;
-										if(part.megaloop==5)
-											console.log("megaloop");
-										if(part.animOnce==true)
-											part.animStep=PartDef[part.TimType].nb_anim-1;
-									}
-								}
-							}
-							*/
-							//*-*-*-*-*-*-*-*-*-
+							//AdvanceAnimation(part);
 						}
 						else
 						{
@@ -350,47 +299,6 @@
 								//		console.log("anim1 "+(size+part.animStep));
 								drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
 							}
-							//console.log("static part=",part.MatterBody);
-							//console.log("static part ("+part.TimType+") "+part.height/2+" / "+Images[part.TimType+"-"+(size+part.animStep)].height/2);
-							//part.MatterBody.position.y=part.MatterBody.position.y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
-							
-							//console.log("static part ici ("+part.TimType+")",part.MatterBody);
-							
-							//part.MatterBody.height=Images[part.TimType+"-"+(size+part.animStep)].height;
-							//part.MatterBody.bounds.min.y=100;//.position.y=part.MatterBody.position.y-5;
-							//part.MatterBody.position.y=100;
-							if(part.MatterBody!=undefined)
-								part.MatterBody.height=12;//????
-							
-							//*-*-*-*-*-*-*-*-*-
-							AdvanceAnimation(part);
-							/*
-							let animSpeed=10;
-							if(PartDef[part.TimType].animSpeed!=undefined)
-								animSpeed=PartDef[part.TimType].animSpeed;
-							//if(part.TimType==3)//balanc
-							//	console.log("balnce"+PartDef[part.TimType].animSpeed);
-							if(animSpeed>0)
-							{
-								part.animDelay++;
-								if(part.animDelay>animSpeed)
-								{
-									part.animDelay=0;
-									part.animStep++;
-									//if(part.no==10)
-									//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
-									if(part.animStep>=part.nb_anim)
-									{
-										//if(part.no==10)
-										//	console.log("anim1 rset to "+part.fixed +" car "+part.animStep+" >="+(part.nb_anim-1));
-										part.animStep=part.fixed;
-										if(part.animOnce==true)
-											part.animStep=part.nb_anim-1;
-									}
-								}
-							}
-							*/
-							//*-*-*-*-*-*-*-*-*-
 						}
 					}
 				}
@@ -418,32 +326,12 @@
 						else
 							drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
 						//console.log("static part=",part.MatterBody);
+						
+						//ici !!!!
 						part.MatterBody.height=Images[part.TimType+"-"+val].height;
-						//*-*-*-*-*-*-*-*-*-
+						
 						part.nb_anim=PartDef[part.TimType].nb_anim;
-						AdvanceAnimation(part);
-						/*
-						let animSpeed=10;
-						if(PartDef[part.TimType].animSpeed!=undefined)
-							animSpeed=PartDef[part.TimType].animSpeed;
-						if(animSpeed>0)
-						{
-							part.animDelay++;
-
-							if(part.animDelay>animSpeed)
-							{
-								part.animDelay=0;
-								part.animStep++;
-								if(part.animStep>=PartDef[part.TimType].nb_anim)
-								{
-									part.animStep=0;
-									if(part.animOnce==true)
-										part.animStep=PartDef[part.TimType].nb_anim-1;
-								}
-							}
-						}
-						*/
-						//*-*-*-*-*-*-*-*-*-
+						//AdvanceAnimation(part);
 					}							
 				}
 			}

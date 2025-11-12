@@ -205,6 +205,11 @@ let
 		});
 		
 		refresh(false);
+		LevelJson.Parts.forEach(part => {
+			AdvanceAnimation(part);
+			//part.MatterBody.height=Images[part.TimType+"-"+val].height;
+		});
+		
 		checkIfWin();
 	}
 	
