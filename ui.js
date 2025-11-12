@@ -97,6 +97,44 @@
 	}
 	
 	
+	function AdvanceAnimation(part)
+	{
+		let animSpeed=10;
+		
+		//if(part.megaloop==undefined)
+		//	part.megaloop=0;
+		if(PartDef[part.TimType].animSpeed!=undefined)
+			animSpeed=PartDef[part.TimType].animSpeed;
+		if(animSpeed>0)
+		{
+			part.animDelay++;
+			if(part.animDelay>animSpeed)
+			{
+				part.animDelay=0;
+				//{
+					if(part.megaloop!=5)
+						part.animStep++;
+					else
+						if(part.animStep2<10)
+							part.animStep2++;
+				//}
+				if(part.animStep>=part.nb_anim)
+				{
+					part.animStep=0;
+					if(part.megaloop!=undefined)
+					{
+						if(part.megaloop<=5)
+							part.megaloop++;
+						if(part.megaloop==5)
+							console.log("megaloop");
+					}
+					if(part.animOnce==true)
+						part.animStep=part.nb_anim-1;
+				}
+			}
+		}
+	}
+	
 	function RefreshPartially(allObjects, part,zIndex)
 	{
 		//console.log("RefreshPartially ",part.no);
@@ -154,7 +192,10 @@
 								drawImage(Images[part.TimType+"-"+p[index]], part.pos_x, part.pos_y+currentHeight,part.flipV,part.flipH);
 								currentHeight+=Images[part.TimType+"-"+p[index]].height;
 							}
-							
+							//*-*-*-*-*-*-*-*-*-
+							part.nb_anim=PartDef[part.TimType].nb_anim;
+							AdvanceAnimation(part);
+							/*
 							let animSpeed=10;
 							if(PartDef[part.TimType].animSpeed!=undefined)
 								animSpeed=PartDef[part.TimType].animSpeed;
@@ -173,6 +214,8 @@
 									}
 								}
 							}
+							*/
+							//*-*-*-*-*-*-*-*-*-
 						}
 						else if(part.TimType==13)//Jack-in-the-box (13)
 						{
@@ -186,6 +229,7 @@
 								part.animStep2=0;
 								part.megaloop=0;
 								part.overY=0;
+								part.nb_anim=PartDef[part.TimType].nb_anim;
 								
 							}
 							//if(part.no==11)
@@ -201,7 +245,9 @@
 							}
 							
 							drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
-							
+							//*-*-*-*-*-*-*-*-*-
+							AdvanceAnimation(part);
+							/*
 							let animSpeed=10;
 							if(PartDef[part.TimType].animSpeed!=undefined)
 								animSpeed=PartDef[part.TimType].animSpeed;
@@ -228,6 +274,8 @@
 									}
 								}
 							}
+							*/
+							//*-*-*-*-*-*-*-*-*-
 						}
 						else
 						{
@@ -247,11 +295,8 @@
 									else
 										drawImage(Images[part.TimType+"-6"], part.pos_x, part.pos_y+Images[part.TimType+"-0"].height*index,part.flipV,part.flipH);
 								}
-							
 							}
 						}
-						
-						
 					}
 					else //no duplication
 					{
@@ -282,8 +327,6 @@
 							}
 							else
 							{
-								
-								
 								//console.log("anim1 "+part.no+ " "+part.name);
 								//let x=part.pos_x;
 								let x=part.pos_x;//
@@ -318,6 +361,10 @@
 							//part.MatterBody.position.y=100;
 							if(part.MatterBody!=undefined)
 								part.MatterBody.height=12;//????
+							
+							//*-*-*-*-*-*-*-*-*-
+							AdvanceAnimation(part);
+							/*
 							let animSpeed=10;
 							if(PartDef[part.TimType].animSpeed!=undefined)
 								animSpeed=PartDef[part.TimType].animSpeed;
@@ -342,6 +389,8 @@
 									}
 								}
 							}
+							*/
+							//*-*-*-*-*-*-*-*-*-
 						}
 					}
 				}
@@ -370,6 +419,10 @@
 							drawImage(Images[part.TimType+"-"+val], part.pos_x, part.pos_y,part.flipV,part.flipH);
 						//console.log("static part=",part.MatterBody);
 						part.MatterBody.height=Images[part.TimType+"-"+val].height;
+						//*-*-*-*-*-*-*-*-*-
+						part.nb_anim=PartDef[part.TimType].nb_anim;
+						AdvanceAnimation(part);
+						/*
 						let animSpeed=10;
 						if(PartDef[part.TimType].animSpeed!=undefined)
 							animSpeed=PartDef[part.TimType].animSpeed;
@@ -389,6 +442,8 @@
 								}
 							}
 						}
+						*/
+						//*-*-*-*-*-*-*-*-*-
 					}							
 				}
 			}

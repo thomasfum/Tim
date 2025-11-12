@@ -133,6 +133,7 @@ let
 									//console.log("check Jack-in-the-box collide ("+part1.no+")",part1);
 									if(part1.TimType==15)//Aquarium (15)
 									{
+										//console.log("check Jack-in-the-box collide aquarium("+part1.no+")",part1);
 										if(part1.animOnce==false)
 										{
 											console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
