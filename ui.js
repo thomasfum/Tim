@@ -398,7 +398,7 @@
 	function getPosXRope(partNo,to)
 	{
 		let rx=0.5;
-		console.log("getPosXRope",partNo);
+		//console.log("getPosXRope",partNo);
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
 			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
 		let ox=LevelJson.Parts[partNo].width*rx;
@@ -467,11 +467,14 @@
 			{
 				if(part.TimType==37)//cisor
 				{
-					//console.log("cisor 2");
-					if(part.flipH==1)
-						drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,false,part.flipH);
-					else
-						drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,false,part.flipH);
+					if(part.anim!=true)
+					{
+						//console.log("cisor 2");
+						if(part.flipH==1)
+							drawImage(Images[part.TimType+"-1"], part.pos_x-5, part.pos_y+part.height/2,false,part.flipH);
+						else
+							drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,false,part.flipH);
+					}
 				}
 			
 			}
@@ -486,7 +489,7 @@
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
 					ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
-					console.log("rope("+part.no+"): ",part);
+					//console.log("rope("+part.no+"): ",part);
 					ctx.beginPath();
 					ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
 					for(var key in part.TimPulleys)

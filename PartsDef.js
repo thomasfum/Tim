@@ -37,7 +37,7 @@ const PartDef={
 	"34":{"count":1},
 	"35":{"count":10,"FlipH":1,"nb_anim":10,"animRight":1},//Boxing glove (35)
 	"36":{"count":11},
-	"37":{"count":3,"FlipH":1},//cisore
+	"37":{"count":3,"FlipH":1,"nb_anim":3},//cisor
 	"38":{"count":2},
 	"39":{"count":8,"phy_poly":[{"p":"0 0.5  1 0.5  1 1  0 1  0 0.5","y":0.25}],"nb_anim":6,"animSpeed":2},//Trampoline (39)
 	"40":{"count":4,"FlipH":1,"node_x":50,"node_y":40,"node_d":20,"nb_anim":4},//Windmill (40)

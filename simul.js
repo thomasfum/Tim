@@ -209,10 +209,8 @@ let
 	
 	function collision_mouse(TimNo)
 	{
-		
-			console.log("moving part direction "+LevelJson.Parts[TimNo].flipH+" "+LevelJson.Parts[TimNo].flipV);
-		
-			AnimPart(TimNo,true,LevelJson.Parts[TimNo].flipH,LevelJson.Parts[TimNo].flipV,false,false);
+		console.log("moving part direction "+LevelJson.Parts[TimNo].flipH+" "+LevelJson.Parts[TimNo].flipV);
+		AnimPart(TimNo,true,LevelJson.Parts[TimNo].flipH,LevelJson.Parts[TimNo].flipV,false,false);
 	}
 	function collision_bellow(bellowBody)
 	{
@@ -275,8 +273,28 @@ let
 		*/
 
 	}
-	
-	function collision_ballon(_boby)
+	function collision_ballon(_ballonBoby,_impactorBody)
+	{
+		
+		if(LevelJson.Parts[_impactorBody.TimNo].TimType==14)//gear
+		{
+			if(LevelJson.Parts[_impactorBody.TimNo].part!=undefined)
+				if(LevelJson.Parts[_impactorBody.TimNo].part.anim==true)//only if rotating
+					destroy_ballon(_ballonBoby);
+		}
+		if(LevelJson.Parts[_impactorBody.TimNo].TimType==37)//scisor
+		{
+			console.log("Collision scisor ");
+			let flipH=1;
+			if(LevelJson.Parts[_impactorBody.TimNo].flipH==0)//check cisor direction
+				flipH=-1;
+			console.log("cisor :"+_ballonBoby.TimDirectionX+" "+flipH);
+			if(flipH==_ballonBoby.TimDirectionX)
+				destroy_ballon(_ballonBoby);
+		}
+
+	}
+	function destroy_ballon(_boby)
 	{
 		
 		LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
@@ -428,7 +446,7 @@ let
 					if(part.anim==undefined)//ballon is not yet exploding
 					{
 						console.log("CheckGear touching ballon"+part.no);
-						collision_ballon(part.movingObj);
+						destroy_ballon(part.movingObj);
 					}
 				}
 			}
@@ -490,95 +508,67 @@ let
 		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*4.9, y: -10 });
 		AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
 	}
+	
+	function collision_cisor(_cisorBoby,_impactorBody)//cisor
+	{
+		//console.log("cisor collision",_cisorBoby);
+		//console.log("_impactorBody collision",_impactorBody);
+		if((_impactorBody.bounds.max.x>_cisorBoby.bounds.min.x)&&(_impactorBody.bounds.min.x<_cisorBoby.bounds.max.x))
+		{
+			console.log("cisor collision from top or bottom",_cisorBoby);
+			AnimPart(_cisorBoby.TimNo,false,LevelJson.Parts[_cisorBoby.TimNo].flipH,LevelJson.Parts[_cisorBoby.TimNo].flipV,true,false);
+			LevelJson.Parts[_cisorBoby.TimNo].animStep=2;
+		}
+	}
+	
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
 	function collisionStart(event)
 	{
-		
 		const pairs = event.pairs;
 		//console.log("Collision Pairs ",pairs);
-	  pairs.forEach((collision) => {
-		  
-		if((collision.bodyA.TimNo!=undefined)&&(collision.bodyB.TimNo!=undefined))
-		{
-			//console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)
-				collision_mouse(collision.bodyA.TimNo);
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)
-				collision_mouse(collision.bodyB.TimNo);
+		pairs.forEach((collision) => {
+			if((collision.bodyA.TimNo!=undefined)&&(collision.bodyB.TimNo!=undefined))
+			{
+				//console.log("Collision Parts No: "+collision.bodyA.TimNo +"="+LevelJson.Parts[collision.bodyA.TimNo].name+" - "+ collision.bodyB.TimNo+"="+LevelJson.Parts[collision.bodyB.TimNo].name);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==3)//Teeter-totter (3)
+					collision_TeeterTotter(collision.bodyA,collision.bodyB,true);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==3)//Teeter-totter (3)
+					collision_TeeterTotter(collision.bodyB,collision.bodyA,true);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon (4)
+					collision_ballon(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==4)//baloon (4)
+					collision_ballon(collision.bodyB,collision.bodyA);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==6)//mouse (6)
+					collision_mouse(collision.bodyA.TimNo);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)//mouse (6)
+					collision_mouse(collision.bodyB.TimNo);
 
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)
-				collision_bellow(collision.bodyA);
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)
-				collision_bellow(collision.bodyB);
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)//bellow (16)
+					collision_bellow(collision.bodyA);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)//bellow (16)
+					collision_bellow(collision.bodyB);
 			
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==3)
-				collision_TeeterTotter(collision.bodyA,collision.bodyB,true)//Teeter-totter (3)
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==3)
-				collision_TeeterTotter(collision.bodyB,collision.bodyA,true)//Teeter-totter (3)
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
+					collision_Boxing(collision.bodyA);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==35)//Boxing glove (35)
+					collision_Boxing(collision.bodyB);		
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor (37)
+					collision_cisor(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor (37)
+					collision_cisor(collision.bodyB,collision.bodyA);
+
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==39)//Trampoline (39)
+					collision_Trampoline(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==39)//Trampoline (39)
+					collision_Trampoline(collision.bodyB,collision.bodyA);
 			
-			
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==4)//baloon
-			{
-				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==14)//gear
-				{
-					if(LevelJson.Parts[collision.bodyB.TimNo].part!=undefined)
-						if(LevelJson.Parts[collision.bodyB.TimNo].part.anim==true)//only if rotating
-							collision_ballon(collision.bodyA);
-				}
-				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==37)//scisor
-				{
-					let flipH=1;
-					if(LevelJson.Parts[collision.bodyB.TimNo].flipH==0)
-						flipH=-1;
-					//console.log("cisor :"+collision.bodyA.TimDirectionX+" "+flipH);
-					if(flipH==collision.bodyA.TimDirectionX)
-						collision_ballon(collision.bodyA);
-				}
 			}
-			
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==4)//baloon
-			{
-				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==14)//gear
-				{
-					if(LevelJson.Parts[collision.bodyA.TimNo].part!=undefined)
-						if(LevelJson.Parts[collision.bodyA.TimNo].part.anim==true)//only if rotating
-							collision_ballon(collision.bodyB);
-				}
-				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==37)//scisor
-				{
-					let flipH=1;
-					if(LevelJson.Parts[collision.bodyA.TimNo].flipH==0)
-						flipH=-1;
-					//console.log("cisor :"+collision.bodyB.TimDirectionX+" "+flipH);
-					if(flipH==collision.bodyB.TimDirectionX)
-						collision_ballon(collision.bodyB);
-				}
-			}
-		
-		
-		
-		
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
-			{
-				collision_Boxing(collision.bodyA);
-			}
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==35)//Boxing glove (35)
-			{
-				collision_Boxing(collision.bodyB);
-			}
-			if(LevelJson.Parts[collision.bodyA.TimNo].TimType==39)//Trampoline (39)
-			{
-				collision_Trampoline(collision.bodyA,collision.bodyB);
-			}
-			if(LevelJson.Parts[collision.bodyB.TimNo].TimType==39)//Trampoline (39)
-			{
-				collision_Trampoline(collision.bodyB,collision.bodyA);
-			}
-			
-		
-		}
 		});
 	  
 	}
@@ -659,48 +649,52 @@ let
 				//console.log(part);
 				if(part.is_moving!=0)
 				{
-					
-					var restitution=PartDef[part.TimType].restitution;
-					if(restitution==undefined)
-						restitution=0;
-					var mass=PartDef[part.TimType].mass;
-					if(mass==undefined)
-						mass=1;
-					let ox=0;
-					let oy=0;
-					if(PartDef[part.TimType].ox!=undefined)
-						ox=PartDef[part.TimType].ox;
-					if(PartDef[part.TimType].oy!=undefined)
-						oy=PartDef[part.TimType].oy;
-					var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
-						TimNo:part.no,
-						isSleeping: false,
-						isStatic: false,
-						restitution: restitution, 
+					if(part.TimType==10)//Rope (10)
+					{
+						console.log("rope");
+					}
+					else
+					{
+						var restitution=PartDef[part.TimType].restitution;
+						if(restitution==undefined)
+							restitution=0;
+						var mass=PartDef[part.TimType].mass;
+						if(mass==undefined)
+							mass=1;
+						let ox=0;
+						let oy=0;
+						if(PartDef[part.TimType].ox!=undefined)
+							ox=PartDef[part.TimType].ox;
+						if(PartDef[part.TimType].oy!=undefined)
+							oy=PartDef[part.TimType].oy;
+						var movingObj = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
+							TimNo:part.no,
+							isSleeping: false,
+							isStatic: false,
+							restitution: restitution, 
+							
+							//	density:mass, 
+							mass:Math.abs(mass),
+							mass2:mass,
+							render: {
+							  sprite: { texture: part.Images[part.TimType+"-0"].src, 
+							  //xScale: ratio,
+							  //yScale: ratio,
+								xOffset: ox,
+								yOffset: oy//-0.18
+							  
+							  }
+							  }
+							  });
 						
-						//	density:mass, 
-						mass:Math.abs(mass),
-						mass2:mass,
-						render: {
-						  sprite: { texture: part.Images[part.TimType+"-0"].src, 
-						  //xScale: ratio,
-						  //yScale: ratio,
-						  
-						    
-							xOffset: ox,
-							yOffset: oy//-0.18
-						  
-						  }
-						  }
-						  });
-					
-					//movingObj.friction=1;
- 					movingObj.frictionAir=0.02;
-					//movingObj.frictionAir=0.1;
-					//movingObj.sleepThreshold=2;
+						//movingObj.friction=1;
+						movingObj.frictionAir=0.02;
+						//movingObj.frictionAir=0.1;
+						//movingObj.sleepThreshold=2;
 
-					Composite.add(world, [movingObj]);
-					part.movingObj=movingObj;
+						Composite.add(world, [movingObj]);
+						part.movingObj=movingObj;
+					}
 					
 				}
 				else

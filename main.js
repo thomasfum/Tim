@@ -29,7 +29,7 @@
 
 
 
-	var CurrentLevel=8;
+	var CurrentLevel=9;
 	const MaxLevel=9;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
