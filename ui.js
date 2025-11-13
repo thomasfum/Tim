@@ -400,13 +400,13 @@
 			if(LevelJson.Parts[partNo].appearance=="top (2)")
 			{
 				if(to==false)
-					ox=ox+20;
+					ox=ox+5;
 				else
-					ox=ox-20;
+					ox=ox-5;
 			}
 			if(LevelJson.Parts[partNo].appearance=="right (3)")
 			{
-				ox=ox+50;
+				ox=ox+5;
 			}
 		}	
 		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
@@ -422,13 +422,13 @@
 			if(LevelJson.Parts[partNo].appearance=="right (3)")
 			{
 				if(to==false)
-					oy=oy+20;
+					oy=oy+5;
 				else
-					oy=oy-20;
+					oy=oy-5;
 			}
 			if(LevelJson.Parts[partNo].appearance=="top (2)")
 			{
-					oy=oy-20;
+					oy=oy-5;
 			}
 		}
 		

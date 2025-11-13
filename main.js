@@ -13,6 +13,13 @@
 //https://hinosstudio.itch.io/matter-js-cut-the-rope-demo
 //https://codepen.io/rudtjd2548/pen/rNrxopK
 
+//https://codepen.io/shshaw/pen/eYvrRXL  /kind of chain
+//https://codepen.io/take80/pen/OJNYEXr brifge and string
+//https://codepen.io/majman/pen/reqzBW intresting
+//https://brm.io/matter-js/demo/#bridge
+
+//https://brm.io/matter-js/demo/#chains  <======
+
 //---------------------------
 //Todo
 // get all levels in french
@@ -232,7 +239,11 @@
 		canvas.onmouseup = MouseClickUp;
 		canvas.onmousemove = MouseMove;
 		ctx = canvas.getContext("2d");
-		engine = Engine.create();
+		engine = Engine.create({
+			positionIterations: 2,
+			velocityIterations: 2,
+			constraintIterations:1
+		});
 		runner=undefined;
 		render = Render.create({
 			  engine, 

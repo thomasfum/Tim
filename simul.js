@@ -46,10 +46,52 @@ let
 		{
 			if(part.is_moving!=0)
 			{
+				
 				//apply gravity
-				//if(part.MatterBody.mass2>0)
 				if(part.MatterBody!=undefined)
-					Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 })
+				{
+					
+					if(part.TimRope==1)
+					{
+						//if(part.MatterBody.force.y<part.MatterBody.mass2 * 0.0005)
+						{
+							part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
+							//part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
+							//part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
+							//Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.force.y});
+							//Body.setVelocity(part.MatterBody, { x:0, y: 0.000001 });
+						}
+						console.log("TimRope "+part.MatterBody.mass2 * 0.0005,part.MatterBody.force);
+					}
+					else
+						Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 });
+					
+				}
+				
+				//apply gravity to rope also
+				engine.world.bodies.forEach((body)=>{
+					if(body.isStatic==false)
+					{
+						
+						//if(body.TimNo==undefined)
+						//	Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00001 });
+						/*
+						let TimRope=2;
+						if(body.TimNo!=undefined)//rope segment
+						{
+							TimRope=LevelJson.Parts[body.TimNo].TimRope;
+						}
+						if(TimRope==1)
+							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00001 });
+						else if(TimRope==2)
+							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00000001 });
+						else
+							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.0005 });
+						*/
+					}
+					
+				});
+				
 				//check if in contact with a belt
 				engine.world.bodies.forEach((body)=>{
 					if(body.TimNo!=undefined)
@@ -116,10 +158,7 @@ let
 							part.animStep=1;
 						}
 					}
-					
 				}
-			
-			
 				if(part.TimType==13)//Jack-in-the-box (13)
 				{
 					if(part.overY!=0)
@@ -181,9 +220,7 @@ let
 						
 					}
 				}
-			
 			}
-			
 		}
 		});
 		//checkIfWin();
@@ -620,9 +657,16 @@ let
 		}
 	}
 	
+	function addRopeSegmentAroundPulley(partNo, rope)
+	{
+		if(LevelJson.Parts[partNo].appearance=="top (2)")
+		{
+			
+		}
+	}
 	function addRopeSegment(start_x,start_y,next_x,next_y, rope)
 	{
-		let rope_segment_length = 5;
+		let rope_segment_length = 6;
 		let dx=next_x- start_x;
 		let dy=next_y- start_y;
 		console.log("dx",dx);
@@ -630,34 +674,45 @@ let
 		
 		let distance=Math.sqrt((dx*dx)+(dy*dy));
 		console.log("distance",distance);
-		let distanceBetween=8;
+		let distanceBetween=10;
 		
 		for (var i = 0; i < distance/distanceBetween; i += 1) 
 		{	
-			
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let rect = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length)
-			//let last_rect = i !== 0 ? rope.pop() : null
-			last_rect = rope.pop();
+			//let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length);
+			let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length);
+			RopeBody.mass2=1;
+			RopeBody.TimRope=2;
+			RopeBody.TimNo=undefined;
+			//RopeBody.friction=5;
+			RopeBody.frictionAir=0.3;
+			//RopeBody.frictionStatic=5;
+			
+			//RopeBody.sleepThreshold=2;
+			
+			
+			last_RopeBody = rope.pop();
 			let cons = Constraint.create({
-				//bodyA: i == 0 ? startbox : last_rect,
-				bodyA: last_rect,
-				bodyB: rect,
-				stiffness: 1,
+				bodyA: last_RopeBody,
+				bodyB: RopeBody,
+				stiffness: 0.99,
 				damping:1,
-				density: 9.5, 
+				//density: 9.5, 
 				render: {
 					anchors: false,
 					lineWidth: 3,
 					type: 'line'
 				}
 			})
+			
 			//if (last_rect) 
-				rope.push(last_rect)
+			rope.push(last_RopeBody)
 			rope.push(cons)
-			rope.push(rect)
+			
+			
+			rope.push(RopeBody)
 		}
 	}
 	//--------------------------------------------------
@@ -753,8 +808,40 @@ let
 						_isStatic=false;
 					//if(part.TimType==16)//bellows (soufflet)
 					//	_isStatic=false;		
-					
-					if(part.TimType==3)//"Teeter-totter (3)"
+					if(part.TimType==37)
+					{
+					}else
+					if(part.TimType==7)//"pulley (7)"
+					{
+						
+						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  /*part.Images[part.TimType+"-0"].width/2*/8, {
+							TimNo:part.no,
+							isSleeping: false,
+							isStatic: true,
+							restitution: restitution, 
+							
+							//	density:mass, 
+							mass:Math.abs(50),
+							mass2:550,
+							density:550,
+							friction:1,
+							frictionStatic:0.5*20,
+							render: {
+							  sprite: { texture: part.Images[part.TimType+"-0"].src, 
+							  //xScale: ratio,
+							  //yScale: ratio,
+								xOffset: 0,
+								yOffset: 0//-0.18
+							  
+							  }
+							  }
+							  });
+						Composite.add(world, [MatterBody]);
+						part.MatterBody=MatterBody;
+						part.staticObjId=MatterBody.id;
+						//console.log("id=",part.staticObjId);
+					}
+					else if(part.TimType==3)//"Teeter-totter (3)"
 					{
 						console.log("Teeter-totter=",part.no);
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
@@ -854,9 +941,7 @@ let
 									scaleY=-1;
 								}
 							}
-							if(part.TimType==16)//bellows (soufflet)
-							{
-							}
+							
 							Matter.Vertices.scale(verts, scaleX*part.width, scaleY*part.height);
 							let ox=part.pos_x+(part.width/2);
 							let oy=part.pos_y+(part.height/2);
@@ -912,6 +997,7 @@ let
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
 					console.log("rope: from " + getPosXRope(part.connected_part_1,false)+","+getPosYRope(part.connected_part_1,false));
+					
 					for(var key in part.TimPulleys)
 					{
 						console.log("rope: to pulley " + getPosXRope(part.TimPulleys[key],true)+","+getPosYRope(part.TimPulleys[key],true));
@@ -920,8 +1006,13 @@ let
 					console.log("rope: to " + getPosXRope(part.connected_part_2,true)+","+getPosYRope(part.connected_part_2,true));
 				
 				
+					
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
+					LevelJson.Parts[part.connected_part_1].TimRope=1;
+					LevelJson.Parts[part.connected_part_2].TimRope=1;
+					//startbox.TimRope=1;
+					//lastbox.TimRope=1;
 					console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
 					var rope = [];
 					rope.push(startbox)
@@ -939,6 +1030,17 @@ let
 						let next_x=getPosXRopePulleySimul(part.TimPulleys[key],true);
 						let next_y=getPosYRopePulleySimul(part.TimPulleys[key],true);
 						addRopeSegment(start_x,start_y,next_x,next_y, rope);
+						
+						
+						start_x= getPosXRopePulleySimul(part.TimPulleys[key],true);
+						start_y= getPosYRopePulleySimul(part.TimPulleys[key],true);
+						
+						
+						next_x=getPosXRopePulleySimul(part.TimPulleys[key],false);
+						next_y=getPosYRopePulleySimul(part.TimPulleys[key],false);
+						addRopeSegment(start_x,start_y,next_x,next_y, rope);
+						//addRopeSegmentAroundPulley(part.TimPulleys[key], rope);
+						
 						start_x= getPosXRopePulleySimul(part.TimPulleys[key],false);
 						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
 						
@@ -1055,4 +1157,5 @@ let
 			}
 		});
 		Composite.remove(world, allCosntraints);
+		Engine.clear(engine);
 	}
