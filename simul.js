@@ -619,6 +619,47 @@ let
 			});
 		}
 	}
+	
+	function addRopeSegment(start_x,start_y,next_x,next_y, rope)
+	{
+		let rope_segment_length = 5;
+		let dx=next_x- start_x;
+		let dy=next_y- start_y;
+		console.log("dx",dx);
+		console.log("dy",dy);
+		
+		let distance=Math.sqrt((dx*dx)+(dy*dy));
+		console.log("distance",distance);
+		let distanceBetween=8;
+		
+		for (var i = 0; i < distance/distanceBetween; i += 1) 
+		{	
+			
+			let current_x=start_x+i*(dx/distance)*distanceBetween;
+			let current_y=start_y+i*(dy/distance)*distanceBetween;
+			
+			let rect = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length)
+			//let last_rect = i !== 0 ? rope.pop() : null
+			last_rect = rope.pop();
+			let cons = Constraint.create({
+				//bodyA: i == 0 ? startbox : last_rect,
+				bodyA: last_rect,
+				bodyB: rect,
+				stiffness: 1,
+				damping:1,
+				density: 9.5, 
+				render: {
+					anchors: false,
+					lineWidth: 3,
+					type: 'line'
+				}
+			})
+			//if (last_rect) 
+				rope.push(last_rect)
+			rope.push(cons)
+			rope.push(rect)
+		}
+	}
 	//--------------------------------------------------
 	// run
 	//--------------------------------------------------
@@ -652,12 +693,14 @@ let
 			
 			if(part.in_partsbin==0)
 			{
+				
+				
 				//console.log(part);
 				if(part.is_moving!=0)
 				{
 					if(part.TimType==10)//Rope (10)
 					{
-						console.log("rope");
+						
 					}
 					else
 					{
@@ -862,6 +905,116 @@ let
 			}
 		});
 		
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)//Rope (10)
+			{
+				console.log("rope: "+part.no);
+				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
+				{
+					console.log("rope: from " + getPosXRope(part.connected_part_1,false)+","+getPosYRope(part.connected_part_1,false));
+					for(var key in part.TimPulleys)
+					{
+						console.log("rope: to pulley " + getPosXRope(part.TimPulleys[key],true)+","+getPosYRope(part.TimPulleys[key],true));
+						console.log("rope: from pulley " + getPosXRope(part.TimPulleys[key],false)+","+getPosYRope(part.TimPulleys[key],false));
+					}
+					console.log("rope: to " + getPosXRope(part.connected_part_2,true)+","+getPosYRope(part.connected_part_2,true));
+				
+				
+					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
+					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
+					console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
+					var rope = [];
+					rope.push(startbox)
+					
+					
+					let start_x=getPosXRope(part.connected_part_1,false);
+					let start_y=getPosYRope(part.connected_part_1,false);
+					
+					
+					
+					for(var key in part.TimPulleys)
+					{
+						console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
+						console.log("rope: from pulley " + getPosXRopePulleySimul(part.TimPulleys[key],false)+","+getPosYRopePulleySimul(part.TimPulleys[key],false));
+						let next_x=getPosXRopePulleySimul(part.TimPulleys[key],true);
+						let next_y=getPosYRopePulleySimul(part.TimPulleys[key],true);
+						addRopeSegment(start_x,start_y,next_x,next_y, rope);
+						start_x= getPosXRopePulleySimul(part.TimPulleys[key],false);
+						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
+						
+					}					
+					
+					let next_x=getPosXRope(part.connected_part_2,false);
+					let next_y=getPosYRope(part.connected_part_2,false);
+					addRopeSegment(start_x,start_y,next_x,next_y, rope);
+					
+					
+					
+					/*
+					let dx=next_x- start_x;
+					let dy=next_y- start_y;
+					console.log("dx",dx);
+					console.log("dy",dy);
+					
+					let distance=Math.sqrt((dx*dx)+(dy*dy));
+					console.log("distance",distance);
+					let distanceBetween=8;
+					
+					for (var i = 0; i < distance/distanceBetween; i += 1) 
+					{	
+						
+						let current_x=start_x+i*(dx/distance)*distanceBetween;
+						let current_y=start_y+i*(dy/distance)*distanceBetween;
+						
+						let rect = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length)
+						let last_rect = i !== 0 ? rope.pop() : null
+						let cons = Constraint.create({
+							bodyA: i == 0 ? startbox : last_rect,
+							bodyB: rect,
+							stiffness: 1,
+							damping:1,
+							density: 9.5, 
+							render: {
+								anchors: false,
+								lineWidth: 3,
+								type: 'line'
+							}
+						})
+						if (last_rect) 
+							rope.push(last_rect)
+						rope.push(cons)
+						rope.push(rect)
+					}
+					*/
+					let last_rect = rope.pop()
+					console.log("last_rect",last_rect);
+					console.log("lastbox",lastbox);
+					let cons = Constraint.create({
+						bodyA: last_rect,
+						bodyB: lastbox,
+						pointB:{ x: 0, y: -20 },
+						stiffness: 1,
+						damping:1,
+						density: 9.5, 
+						render: {
+							anchors: false,
+							lineWidth: 2,
+							type: 'line'
+						}
+					})
+					console.log("cons",cons);
+					rope.push(last_rect)
+					rope.push(cons)
+					//rope.push(startbox)
+					//rope.push(lastbox)
+
+
+					// add all of the bodies to the world
+					//World.add(engine.world, [wedge, pulley, constraint1, constraint2, ...rope, ground]);
+					Composite.add(engine.world, [ ...rope]);
+				}
+			}
+		});	
 		LevelJson.Parts.forEach(part => {
 			if(PartDef[part.TimType].autoAnim!=undefined)
 				AnimPart(part.no,true,part.flipH,part.flipV,false,false);

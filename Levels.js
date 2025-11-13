@@ -256,6 +256,7 @@ const Solutions={
 			document.getElementById("levelInput").value=level;
 		CurrentLevel=level;
 		CurrentLevelWinned=false;
+		wireframe=false;
 		stop();
 		cleanPhysics(true);
 		console.log("loading level "+level);

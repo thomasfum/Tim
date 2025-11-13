@@ -68,6 +68,9 @@
 
 	function drawImage(img,x,y,flipV,flipH)
 	{
+		
+		if(wireframe==true)
+			return;
 		//console.log("flipH="+flipH+" flipV="+flipV);
 		x=x+playgroundOffsetX;
 		y=y+playgroundOffsetY;
@@ -83,6 +86,8 @@
 		
 	function drawLine(x1,y1,x2,y2, offset = 0) 
 	{
+		if(wireframe==true)
+			return;
 		var [ox, oy] = [0, 0];  
 		if (offset) {
 			const [dx, dy] = [x1 - x2, y1 - y2];
@@ -381,10 +386,60 @@
 		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
 	}
 	
+	
+	
+	function getPosXRopePulleySimul(partNo,to)
+	{
+		let rx=0.5;
+		//console.log("getPosXRope",partNo);
+		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
+			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+		let ox=LevelJson.Parts[partNo].width*rx;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			{
+				if(to==false)
+					ox=ox+20;
+				else
+					ox=ox-20;
+			}
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				ox=ox+50;
+			}
+		}	
+		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+	}
+	function getPosYRopePulleySimul(partNo,to)
+	{
+		let ry=0.5;
+		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
+			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
+		let oy=LevelJson.Parts[partNo].height*ry;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				if(to==false)
+					oy=oy+20;
+				else
+					oy=oy-20;
+			}
+			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			{
+					oy=oy-20;
+			}
+		}
+		
+		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+	}
+	
+	
 	function refresh( allObjects)
 	{
-		if(wireframe==true)
-			return;
+		//if(wireframe==true)
+		//	return;
 		//displayScore();
 		//console.log("Refresh "+allObjects);
 		if(allObjects==true)
