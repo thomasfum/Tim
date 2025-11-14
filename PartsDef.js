@@ -17,7 +17,7 @@ const PartDef={
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
 	"15":{"count":26,"nb_anim":12,"autoAnim":1,"fixed":1},//"Aquarium (15)"
 	"16":{"count":3,"FlipH":1,"nb_anim":3,"restitution":0.4,"phy_poly":[{"p":"0 0  1 0.4 1 0.6 0 1  0 0"}]},//bellows (soufflet)
-	"17":{"count":1,"ry":0.1},//bucket
+	"17":{"count":1,"ry":0.1,"mass":2},//bucket
 	"18":{"count":16},
 	"19":{"count":6},
 	"20":{"count":3},

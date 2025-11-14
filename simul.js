@@ -50,46 +50,15 @@ let
 				//apply gravity
 				if(part.MatterBody!=undefined)
 				{
-					
-					if(part.TimRope==1)
-					{
-						//if(part.MatterBody.force.y<part.MatterBody.mass2 * 0.0005)
-						{
-							part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
-							//part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
-							//part.MatterBody.force.y=part.MatterBody.force.y+(part.MatterBody.mass2 * 0.0005); 
-							//Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.force.y});
-							//Body.setVelocity(part.MatterBody, { x:0, y: 0.000001 });
-						}
-						console.log("TimRope "+part.MatterBody.mass2 * 0.0005,part.MatterBody.force);
-					}
-					else
-						Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 });
-					
+					Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 });
 				}
 				
 				//apply gravity to rope also
 				engine.world.bodies.forEach((body)=>{
 					if(body.isStatic==false)
 					{
-						
-						//if(body.TimNo==undefined)
-						//	Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00001 });
-						/*
-						let TimRope=2;
-						if(body.TimNo!=undefined)//rope segment
-						{
-							TimRope=LevelJson.Parts[body.TimNo].TimRope;
-						}
-						if(TimRope==1)
-							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00001 });
-						else if(TimRope==2)
-							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.00000001 });
-						else
-							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass2 * 0.0005 });
-						*/
+						Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00005});
 					}
-					
 				});
 				
 				//check if in contact with a belt
@@ -657,61 +626,43 @@ let
 		}
 	}
 	
-	function addRopeSegmentAroundPulley(partNo, rope)
-	{
-		if(LevelJson.Parts[partNo].appearance=="top (2)")
-		{
-			
-		}
-	}
+	
 	function addRopeSegment(start_x,start_y,next_x,next_y, rope)
 	{
 		let rope_segment_length = 6;
 		let dx=next_x- start_x;
 		let dy=next_y- start_y;
-		console.log("dx",dx);
-		console.log("dy",dy);
+		//console.log("dx",dx);
+		//console.log("dy",dy);
 		
 		let distance=Math.sqrt((dx*dx)+(dy*dy));
-		console.log("distance",distance);
-		let distanceBetween=10;
+		//console.log("distance",distance);
+		let distanceBetween=9;
 		
 		for (var i = 0; i < distance/distanceBetween; i += 1) 
 		{	
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			//let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length);
-			let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length);
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} });
+			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
 			RopeBody.mass2=1;
-			RopeBody.TimRope=2;
 			RopeBody.TimNo=undefined;
-			//RopeBody.friction=5;
-			RopeBody.frictionAir=0.3;
-			//RopeBody.frictionStatic=5;
-			
-			//RopeBody.sleepThreshold=2;
 			
 			
+			let dst=4;
 			last_RopeBody = rope.pop();
-			let cons = Constraint.create({
-				bodyA: last_RopeBody,
-				bodyB: RopeBody,
-				stiffness: 0.99,
-				damping:1,
-				//density: 9.5, 
-				render: {
-					anchors: false,
-					lineWidth: 3,
-					type: 'line'
-				}
-			})
-			
-			//if (last_rect) 
-			rope.push(last_RopeBody)
-			rope.push(cons)
-			
-			
+			if(last_RopeBody!=undefined)
+			{
+				let cons = Constraint.create({
+					bodyA: last_RopeBody,
+					bodyB: RopeBody,
+					stiffness: 1,
+					render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
+				});
+				rope.push(last_RopeBody);
+				rope.push(cons);
+			}
 			rope.push(RopeBody)
 		}
 	}
@@ -814,27 +765,18 @@ let
 					if(part.TimType==7)//"pulley (7)"
 					{
 						
-						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  /*part.Images[part.TimType+"-0"].width/2*/8, {
+						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  /*part.Images[part.TimType+"-0"].width/2*/10, {
 							TimNo:part.no,
 							isSleeping: false,
 							isStatic: true,
+							//restitution: 0, 
+							slop:1.2,//magic!!!
+							/*
 							restitution: restitution, 
-							
-							//	density:mass, 
-							mass:Math.abs(50),
-							mass2:550,
-							density:550,
 							friction:1,
 							frictionStatic:0.5*20,
-							render: {
-							  sprite: { texture: part.Images[part.TimType+"-0"].src, 
-							  //xScale: ratio,
-							  //yScale: ratio,
-								xOffset: 0,
-								yOffset: 0//-0.18
-							  
-							  }
-							  }
+							*/
+							render: {visible: false  }
 							  });
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
@@ -1004,25 +946,21 @@ let
 						console.log("rope: from pulley " + getPosXRope(part.TimPulleys[key],false)+","+getPosYRope(part.TimPulleys[key],false));
 					}
 					console.log("rope: to " + getPosXRope(part.connected_part_2,true)+","+getPosYRope(part.connected_part_2,true));
-				
-				
+					
+					var startboxType = LevelJson.Parts[part.connected_part_1].TimType;
+					var lastboxType = LevelJson.Parts[part.connected_part_2].TimType;
+					
+					var startboxRy = PartDef[LevelJson.Parts[part.connected_part_1].TimType].ry*LevelJson.Parts[part.connected_part_1].height-LevelJson.Parts[part.connected_part_1].height/2;
+					var lastboxRy = PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
+					console.log("sb ry:",startboxRy);
+					console.log("eb ry:",lastboxRy);
 					
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
-					LevelJson.Parts[part.connected_part_1].TimRope=1;
-					LevelJson.Parts[part.connected_part_2].TimRope=1;
-					//startbox.TimRope=1;
-					//lastbox.TimRope=1;
 					console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
 					var rope = [];
-					rope.push(startbox)
-					
-					
 					let start_x=getPosXRope(part.connected_part_1,false);
 					let start_y=getPosYRope(part.connected_part_1,false);
-					
-					
-					
 					for(var key in part.TimPulleys)
 					{
 						console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
@@ -1031,89 +969,35 @@ let
 						let next_y=getPosYRopePulleySimul(part.TimPulleys[key],true);
 						addRopeSegment(start_x,start_y,next_x,next_y, rope);
 						
-						
-						start_x= getPosXRopePulleySimul(part.TimPulleys[key],true);
-						start_y= getPosYRopePulleySimul(part.TimPulleys[key],true);
-						
-						
-						next_x=getPosXRopePulleySimul(part.TimPulleys[key],false);
-						next_y=getPosYRopePulleySimul(part.TimPulleys[key],false);
-						addRopeSegment(start_x,start_y,next_x,next_y, rope);
-						//addRopeSegmentAroundPulley(part.TimPulleys[key], rope);
-						
 						start_x= getPosXRopePulleySimul(part.TimPulleys[key],false);
 						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
-						
 					}					
 					
 					let next_x=getPosXRope(part.connected_part_2,false);
 					let next_y=getPosYRope(part.connected_part_2,false);
 					addRopeSegment(start_x,start_y,next_x,next_y, rope);
 					
-					
-					
-					/*
-					let dx=next_x- start_x;
-					let dy=next_y- start_y;
-					console.log("dx",dx);
-					console.log("dy",dy);
-					
-					let distance=Math.sqrt((dx*dx)+(dy*dy));
-					console.log("distance",distance);
-					let distanceBetween=8;
-					
-					for (var i = 0; i < distance/distanceBetween; i += 1) 
-					{	
-						
-						let current_x=start_x+i*(dx/distance)*distanceBetween;
-						let current_y=start_y+i*(dy/distance)*distanceBetween;
-						
-						let rect = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length)
-						let last_rect = i !== 0 ? rope.pop() : null
-						let cons = Constraint.create({
-							bodyA: i == 0 ? startbox : last_rect,
-							bodyB: rect,
-							stiffness: 1,
-							damping:1,
-							density: 9.5, 
-							render: {
-								anchors: false,
-								lineWidth: 3,
-								type: 'line'
-							}
-						})
-						if (last_rect) 
-							rope.push(last_rect)
-						rope.push(cons)
-						rope.push(rect)
-					}
-					*/
-					let last_rect = rope.pop()
-					console.log("last_rect",last_rect);
-					console.log("lastbox",lastbox);
-					let cons = Constraint.create({
-						bodyA: last_rect,
-						bodyB: lastbox,
-						pointB:{ x: 0, y: -20 },
-						stiffness: 1,
-						damping:1,
-						density: 9.5, 
-						render: {
-							anchors: false,
-							lineWidth: 2,
-							type: 'line'
-						}
-					})
-					console.log("cons",cons);
-					rope.push(last_rect)
-					rope.push(cons)
-					//rope.push(startbox)
-					//rope.push(lastbox)
-
-
-					// add all of the bodies to the world
-					//World.add(engine.world, [wedge, pulley, constraint1, constraint2, ...rope, ground]);
+				
+					// add all of the bodies and constraits to the world
 					Composite.add(engine.world, [ ...rope]);
+
+					//connect to first part
+					let consS = Constraint.create({
+						bodyA: lastbox,
+						bodyB: rope[rope.length-1],
+						pointA:{ x: 0, y: lastboxRy },
+						stiffness: 1,
+						render: {	anchors: false,	lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)"}
+					})
+					//connect to last part
+					let consE = Constraint.create({
+						bodyA: startbox,
+						bodyB: rope[0],
+						pointA:{ x: 0, y: startboxRy },
+						stiffness: 1,
+						render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
+					})
+					Composite.add(engine.world, [ consE,consS]);
 				}
 			}
 		});	

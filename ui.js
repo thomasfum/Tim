@@ -342,6 +342,50 @@
 			}
 		}
 	}
+
+
+	function getPosXRopeBody(partNo,to)
+	{
+		let rx=0.5;
+		//console.log("getPosXRope",partNo);
+		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
+			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+		let ox=LevelJson.Parts[partNo].width*rx;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			{
+				if(to==false)
+					ox=ox+7;
+				else
+					ox=ox-7;
+			}
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				ox=ox+3;
+			}
+		}	
+		return LevelJson.Parts[partNo].MatterBody.position.x+ox-LevelJson.Parts[partNo].width/2;
+	}
+	function getPosYRopeBody(partNo,to)
+	{
+		let ry=0.5;
+		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
+			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
+		let oy=LevelJson.Parts[partNo].height*ry;
+		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		{
+			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			{
+				if(to==false)
+					oy=oy+7;
+				else
+					oy=oy-7;
+			}
+		}
+		
+		return LevelJson.Parts[partNo].MatterBody.position.y+oy-LevelJson.Parts[partNo].height/2;
+	}
 	
 	function getPosXRope(partNo,to)
 	{
@@ -486,22 +530,30 @@
 				
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
-					ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
-					//console.log("rope("+part.no+"): ",part);
-					ctx.beginPath();
-					ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
-					for(var key in part.TimPulleys)
+					if(CurrentLevelRunning==false)
 					{
-						ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
-						ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
+						ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
+						//console.log("rope("+part.no+"): ",part);
+						ctx.beginPath();
+						ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
+						for(var key in part.TimPulleys)
+						{
+							ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
+							ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
+						}
+						ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
+						ctx.stroke();
+						//part8-0
+						drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
+						drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
 					}
-					ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
-					ctx.stroke();
+					else
+					{
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-20, getPosYRopeBody(part.connected_part_2)-12,part.false,false);
+					}
 					
 					
-					//part8-0
-					drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
-					drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
 				}
 			}
 		});

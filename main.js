@@ -240,9 +240,9 @@
 		canvas.onmousemove = MouseMove;
 		ctx = canvas.getContext("2d");
 		engine = Engine.create({
-			positionIterations: 2,
-			velocityIterations: 2,
-			constraintIterations:1
+			positionIterations: 6,//default 6
+			velocityIterations: 4,//12,//default 4
+			constraintIterations:2////default 2
 		});
 		runner=undefined;
 		render = Render.create({
