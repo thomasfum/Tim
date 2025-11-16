@@ -530,6 +530,40 @@ let
 			console.log("cisor collision from top or bottom",_cisorBoby);
 			AnimPart(_cisorBoby.TimNo,false,LevelJson.Parts[_cisorBoby.TimNo].flipH,LevelJson.Parts[_cisorBoby.TimNo].flipV,true,false);
 			LevelJson.Parts[_cisorBoby.TimNo].animStep=2;
+			
+			//cut rope ?
+			let distMin=99999;
+			let ropePart=undefined;
+			engine.world.bodies.forEach((body)=>{
+				if(body.TimNo==undefined)//rope
+				{
+					let dist= Matter.Vector.magnitude( Matter.Vector.sub(_cisorBoby.position, body.position));
+					if(dist<distMin)
+					{
+						distMin=dist;
+						ropePart=body;
+					}
+				}
+			});
+			if(distMin<20)
+			{
+				//cut the rope
+				console.log("distMin",distMin);
+				console.log("distMin ropePart",ropePart);
+				let ropeConstraint=undefined;
+				engine.world.constraints.forEach((constraint)=>{
+					
+					if(constraint.bodyA.id==ropePart.id)
+					{
+						console.log("found constraint");
+						console.log(constraint);	
+						ropeConstraint=constraint;
+					}
+				});
+				if(ropeConstraint!=undefined)
+					Composite.remove(world, ropeConstraint);			
+			}
+			
 		}
 	}
 	
@@ -644,7 +678,7 @@ let
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} });
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { group: -1 }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
 			RopeBody.mass2=1;
 			RopeBody.TimNo=undefined;
@@ -659,6 +693,7 @@ let
 					bodyB: RopeBody,
 					stiffness: 1,
 					render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
+					
 				});
 				rope.push(last_RopeBody);
 				rope.push(cons);
@@ -690,19 +725,13 @@ let
 		cleanPhysics(false);
 		engine.world.gravity.y = 0;
 		LevelJson.Parts.forEach(part => {
-			/*
-			let start=part.name.indexOf('(');
-			let end=part.name.indexOf(')');
-			let result = part.name.substring(start+1, end);
-			*/
+					
 			
-			
-			if(part.in_partsbin==0)
+			if(part.in_partsbin==0)//not in bin
 			{
-				
-				
+							
 				//console.log(part);
-				if(part.is_moving!=0)
+				if(part.is_moving!=0)//moving
 				{
 					if(part.TimType==10)//Rope (10)
 					{
@@ -759,9 +788,12 @@ let
 						_isStatic=false;
 					//if(part.TimType==16)//bellows (soufflet)
 					//	_isStatic=false;		
+				/*
 					if(part.TimType==37)
 					{
+						
 					}else
+						*/
 					if(part.TimType==7)//"pulley (7)"
 					{
 						
@@ -770,7 +802,7 @@ let
 							isSleeping: false,
 							isStatic: true,
 							//restitution: 0, 
-							slop:1.2,//magic!!!
+							//slop:1.1,//magic!!!
 							/*
 							restitution: restitution, 
 							friction:1,
@@ -918,10 +950,16 @@ let
 					}
 					else
 					{
+						let group=0;
+						if(part.TimType==37)
+						{
+							group=-1;//rope and cisor
+						}						
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
-							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							render: { fillStyle: "rgba(0, 0, 255, 0)" },
+							collisionFilter: { group: group }
 							});
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
