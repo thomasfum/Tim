@@ -678,7 +678,7 @@ let
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { group: -1 }});
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
 			RopeBody.mass2=1;
 			RopeBody.TimNo=undefined;
@@ -786,29 +786,23 @@ let
 					let _isStatic=true;
 					if(part.TimType==3)	//"Teeter-totter (3)"
 						_isStatic=false;
-					//if(part.TimType==16)//bellows (soufflet)
-					//	_isStatic=false;		
-				/*
-					if(part.TimType==37)
-					{
-						
-					}else
-						*/
+				
 					if(part.TimType==7)//"pulley (7)"
 					{
 						
-						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  /*part.Images[part.TimType+"-0"].width/2*/10, {
+						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2, 10, {
 							TimNo:part.no,
 							isSleeping: false,
 							isStatic: true,
 							//restitution: 0, 
-							//slop:1.1,//magic!!!
+							slop:1,//magic!!!
 							/*
 							restitution: restitution, 
 							friction:1,
 							frictionStatic:0.5*20,
 							*/
-							render: {visible: false  }
+							render: {visible: false  },
+							collisionFilter: { category:2,mask: 2 }
 							  });
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
@@ -950,16 +944,18 @@ let
 					}
 					else
 					{
+						/*
 						let group=0;
 						if(part.TimType==37)
 						{
 							group=-1;//rope and cisor
-						}						
+						}
+						*/						
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" },
-							collisionFilter: { group: group }
+							//collisionFilter: { group: group }
 							});
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
@@ -1019,13 +1015,26 @@ let
 					// add all of the bodies and constraits to the world
 					Composite.add(engine.world, [ ...rope]);
 
+//	//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
 					//connect to first part
 					let consS = Constraint.create({
 						bodyA: lastbox,
 						bodyB: rope[rope.length-1],
 						pointA:{ x: 0, y: lastboxRy },
 						stiffness: 1,
-						render: {	anchors: false,	lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)"}
+						render: {
+							anchors: false,	lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)",
+							/*
+							 sprite: { texture: part.Images["8-0"], 
+							  //xScale: ratio,
+							  //yScale: ratio,
+								xOffset: 0,
+								yOffset: 0//-0.18
+							  
+							  }
+							*/
+							}
+						
 					})
 					//connect to last part
 					let consE = Constraint.create({

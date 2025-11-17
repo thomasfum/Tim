@@ -29,7 +29,9 @@
 // size 678x369
 
 //trempolin active only if contact on top
-//managing pos of tooter
+// managing pos of tooter
+// free positioning
+// noeud seau
 //---------------------------
 //bug
 //restrating simul speed is increasing... see level 6 run+run+run

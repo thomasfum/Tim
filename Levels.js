@@ -7,6 +7,7 @@ const WinCondition={
 	"6":{"Conditions":[{"t":"a","unitNo":0}]},
 	"7":{"Conditions":[{"t":"d","unitNo":5}]},
 	"8":{"Conditions":[{"t":"d","unitNo":11}]},
+	"9":{"Conditions":[{"t":"p","unitNo":9,"x1":20,"y1":255,"dx":535,"dy":100},{"t":"p","unitNo":10,"x1":20,"y1":255,"dx":535,"dy":100},{"t":"p","unitNo":11,"x1":20,"y1":255,"dx":535,"dy":100}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -18,6 +19,7 @@ const Solutions={
 	"6":{"Parts":[ {"unitNo":4,"x":232,"y":216,"name":"Trampoline (39)","FlipH":0,"FlipV":0}, {"unitNo":5,"x":344,"y":152,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":6,"x":424,"y":104,"name":"Trampoline (39)","FlipH":0,"FlipV":0}]},
 	"7":{"Parts":[ {"unitNo":18,"x":616,"y":136,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":0},{"unitNo":19,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":7,"cp2":6},{"unitNo":20,"x":360,"y":184,"name":"Mouse cage (6)","FlipH":0,"FlipV":0}]},
 	"8":{"Parts":[ {"unitNo":15,"x":104,"y":184,"name":"Bellows (16)","FlipH":0,"FlipV":0},{"unitNo":16,"x":392,"y":280,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":9},{"unitNo":18,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":6},{"unitNo":19,"x":296,"y":56,"name":"Windmill (40)","FlipH":1,"FlipV":0},{"unitNo":20,"x":200,"y":184,"name":"Windmill (40)","FlipH":0,"FlipV":0}]},
+	"9":{"Parts":[ {"unitNo":12,"x":200,"y":120,"name":"Cannon ball (43)","FlipH":0,"FlipV":0},{"unitNo":13,"x":376,"y":264,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":14,"x":216,"y":152,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
 };
 
 

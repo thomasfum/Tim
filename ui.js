@@ -549,8 +549,8 @@
 					}
 					else
 					{
-						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
-						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-20, getPosYRopeBody(part.connected_part_2)-12,part.false,false);
+						//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
+						//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-20, getPosYRopeBody(part.connected_part_2)-12,part.false,false);
 					}
 					
 					
