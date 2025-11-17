@@ -17,13 +17,13 @@ const PartDef={
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4},//gear
 	"15":{"count":26,"nb_anim":12,"autoAnim":1,"fixed":1},//"Aquarium (15)"
 	"16":{"count":3,"FlipH":1,"nb_anim":3,"restitution":0.4,"phy_poly":[{"p":"0 0  1 0.4 1 0.6 0 1  0 0"}]},//bellows (soufflet)
-	"17":{"count":1,"ry":0.1,"mass":2},//bucket
+	"17":{"count":1,"ry":0.1,"mass":2,"phy_poly":[{"p":"0.25 0  0.75 0  1 0.45  0.75 1  0.25 1  0 0.45 "}]},//bucket
 	"18":{"count":16},
 	"19":{"count":6},
 	"20":{"count":3},
 	"21":{"count":4},
 	"22":{"count":3},
-	"23":{"count":1,"ry":0.95},//eye hook 
+	"23":{"count":1,"ry":0.8},//eye hook 
 	"24":{"count":5},
 	"25":{"count":2},
 	"26":{"count":6},

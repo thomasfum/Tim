@@ -346,7 +346,7 @@
 
 	function getPosXRopeBody(partNo,to)
 	{
-		let rx=0.5;
+		let rx=0;
 		//console.log("getPosXRope",partNo);
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
 			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
@@ -364,8 +364,9 @@
 			{
 				ox=ox+3;
 			}
-		}	
-		return LevelJson.Parts[partNo].MatterBody.position.x+ox-LevelJson.Parts[partNo].width/2;
+		}
+		
+		return LevelJson.Parts[partNo].MatterBody.position.x-(LevelJson.Parts[partNo].width/2+ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
 	}
 	function getPosYRopeBody(partNo,to)
 	{
@@ -383,8 +384,12 @@
 					oy=oy-7;
 			}
 		}
-		
-		return LevelJson.Parts[partNo].MatterBody.position.y+oy-LevelJson.Parts[partNo].height/2;
+		//oy=0;
+		//console.log("angle:",Math.cos(LevelJson.Parts[partNo].MatterBody.angle)*oy);
+		if(LevelJson.Parts[partNo].flipV==0)
+			return LevelJson.Parts[partNo].MatterBody.position.y-(LevelJson.Parts[partNo].height/2+oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
+		else
+			return LevelJson.Parts[partNo].MatterBody.position.y+(LevelJson.Parts[partNo].height/2-oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
 	}
 	
 	function getPosXRope(partNo,to)
@@ -427,7 +432,8 @@
 			}
 		}
 		
-		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+		
 	}
 	
 	
@@ -522,6 +528,25 @@
 			}
 		});//
 		
+		
+		//step 1
+		//z index 0
+		//console.log("-------------- 0 -------------" );
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin==0)
+			{
+				RefreshPartially(allObjects,part,0);
+			}
+		});//
+		//console.log("-------------- 1 -------------" );
+		//z index 1 (nb_anim>0)
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin==0)
+			{
+				RefreshPartially(allObjects,part,1);
+			}
+		});//
+		
 		//----------------
 		//string here
 		LevelJson.Parts.forEach(part => {
@@ -544,37 +569,24 @@
 						ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
 						ctx.stroke();
 						//part8-0
-						drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-20, getPosYRope(part.connected_part_1)-12,part.false,false);
-						drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-20, getPosYRope(part.connected_part_2)-12,part.false,false);
+						
+							drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_1)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+							drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_2)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+						
 					}
 					else
 					{
-						//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
-						//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-20, getPosYRopeBody(part.connected_part_2)-12,part.false,false);
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_1)-Images["8-0"].height/2,false,false);
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_2)-Images["8-0"].height/2,false,false);
 					}
 					
 					
 				}
 			}
 		});
+
 		
-		//step 1
-		//z index 0
-		//console.log("-------------- 0 -------------" );
-		LevelJson.Parts.forEach(part => {
-			if(part.in_partsbin==0)
-			{
-				RefreshPartially(allObjects,part,0);
-			}
-		});//
-		//console.log("-------------- 1 -------------" );
-		//z index 1 (nb_anim>0)
-		LevelJson.Parts.forEach(part => {
-			if(part.in_partsbin==0)
-			{
-				RefreshPartially(allObjects,part,1);
-			}
-		});//
+		
 		
 		//selection
 		LevelJson.Parts.forEach(part => {

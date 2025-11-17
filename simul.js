@@ -751,37 +751,102 @@ let
 							ox=PartDef[part.TimType].ox;
 						if(PartDef[part.TimType].oy!=undefined)
 							oy=PartDef[part.TimType].oy;
-						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
-							TimNo:part.no,
-							isSleeping: false,
-							isStatic: false,
-							restitution: restitution, 
+						if(PartDef[part.TimType].phy_poly===undefined)
+						{
+							var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
+								TimNo:part.no,
+								isSleeping: false,
+								isStatic: false,
+								restitution: restitution, 
+								
+								//	density:mass, 
+								mass:Math.abs(mass),
+								mass2:mass,
+								render: {
+								  sprite: { texture: part.Images[part.TimType+"-0"].src, 
+								  //xScale: ratio,
+								  //yScale: ratio,
+									xOffset: ox,
+									yOffset: oy//-0.18
+								  
+								  }
+								  }
+								  });
 							
-							//	density:mass, 
-							mass:Math.abs(mass),
-							mass2:mass,
-							render: {
-							  sprite: { texture: part.Images[part.TimType+"-0"].src, 
-							  //xScale: ratio,
-							  //yScale: ratio,
-								xOffset: ox,
-								yOffset: oy//-0.18
-							  
-							  }
-							  }
-							  });
-						
-						//MatterBody.friction=1;
-						MatterBody.frictionAir=0.02;
-						//MatterBody.frictionAir=0.1;
-						//MatterBody.sleepThreshold=2;
+							//MatterBody.friction=1;
+							MatterBody.frictionAir=0.02;
+							//MatterBody.frictionAir=0.1;
+							//MatterBody.sleepThreshold=2;
 
-						Composite.add(world, [MatterBody]);
-						part.MatterBody=MatterBody;
+							Composite.add(world, [MatterBody]);
+							part.MatterBody=MatterBody;
+						}
+						else
+						{
+							var restitution=PartDef[part.TimType].restitution;
+							if(restitution==undefined)
+								restitution=0;
+							var mass=PartDef[part.TimType].mass;
+							if(mass==undefined)
+								mass=1;
+							//console.log("poly");
+							//console.log("phy_poly.length="+PartDef[part.TimType].phy_poly.length);
+							for(let i=0;i<PartDef[part.TimType].phy_poly.length;i++)
+							{
+								let verts = Matter.Vertices.fromPath(PartDef[part.TimType].phy_poly[i].p);
+								let scaleX=1;
+								let scaleY=1;
+								
+								if(part.flipH!=0)
+									scaleX=-1;
+								if(part.flipV!=0)
+									scaleY=-1;
+								
+								Matter.Vertices.scale(verts, scaleX*part.width, scaleY*part.height);
+								let ox=part.pos_x+(part.width/2);
+								let oy=part.pos_y+(part.height/2);
+								if(PartDef[part.TimType].phy_poly[i].x!=undefined)
+								{
+									console.log("ggg  x");
+									ox=ox-(PartDef[part.TimType].phy_poly[i].x*part.width)*scaleX;
+								}
+								if(PartDef[part.TimType].phy_poly[i].y!=undefined)
+								{
+									console.log("ggg  y");
+									oy=oy-(PartDef[part.TimType].phy_poly[i].y*part.height)*scaleY;
+								}
+								console.log("Poly ox",ox);
+								var MatterBody =Bodies.fromVertices(playgroundOffsetX+ox, playgroundOffsetY+oy, verts, {
+									isStatic: false, 
+									TimNo:part.no,
+									restitution: restitution, 
+								//	density:mass, 
+									mass:Math.abs(mass),
+									mass2:mass,
+									render: {   
+										sprite: { texture: part.Images[part.TimType+"-0"].src, 
+									  //xScale: ratio,
+									  //yScale: ratio,
+										//xOffset: ox,
+										//yOffset: oy//-0.18
+												}	
+									}		
+									
+									}, false, 0.0001, 100);
+								
+								//MatterBody.friction=1;
+								MatterBody.frictionAir=0.02;
+								//MatterBody.frictionAir=0.1;
+								//MatterBody.sleepThreshold=2;
+								console.log("Poly move",MatterBody);
+								Composite.add(world, [MatterBody]);
+								part.MatterBody=MatterBody;
+							}
+						}
 					}
 					
 				}
-				else
+				else//not moving
 				{
 					let _isStatic=true;
 					if(part.TimType==3)	//"Teeter-totter (3)"
@@ -869,23 +934,6 @@ let
 						//console.log("phy_poly.length="+PartDef[part.TimType].phy_poly.length);
 						for(let i=0;i<PartDef[part.TimType].phy_poly.length;i++)
 						{
-							
-						
-						/*
-							console.log("verts1=",PartDef[part.TimType].phy_poly);
-							let ret=polygonMakeCCW(PartDef[part.TimType].phy_poly);
-							console.log(ret);
-							console.log("verts2=",PartDef[part.TimType].phy_poly);
-							// Decompose into convex polygons, using the faster algorithm
-							var result2;
-							
-							var convexPolygons = polygonQuickDecomp(PartDef[part.TimType].phy_poly,result2);
-							console.log("verts3=",result2);
-							//let verts = Matter.Vertices.fromPath(PartDef[part.TimType].phy_poly[0]);
-							//let verts = Matter.Vertices.fromPath(convexPolygons);
-							//let verts = Vertices.create(points, body);
-							console.log("verts3=",convexPolygons);
-							*/
 							let verts = Matter.Vertices.fromPath(PartDef[part.TimType].phy_poly[i].p);
 							let scaleX=1;
 							let scaleY=1;
@@ -1007,44 +1055,40 @@ let
 						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
 					}					
 					
-					let next_x=getPosXRope(part.connected_part_2,false);
-					let next_y=getPosYRope(part.connected_part_2,false);
+					let next_x=getPosXRope(part.connected_part_2,true);
+					let next_y=getPosYRope(part.connected_part_2,true);
 					addRopeSegment(start_x,start_y,next_x,next_y, rope);
 					
 				
 					// add all of the bodies and constraits to the world
 					Composite.add(engine.world, [ ...rope]);
 
-//	//drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-20, getPosYRopeBody(part.connected_part_1)-12,part.false,false);
+
 					//connect to first part
 					let consS = Constraint.create({
 						bodyA: lastbox,
 						bodyB: rope[rope.length-1],
 						pointA:{ x: 0, y: lastboxRy },
 						stiffness: 1,
-						render: {
-							anchors: false,	lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)",
-							/*
-							 sprite: { texture: part.Images["8-0"], 
-							  //xScale: ratio,
-							  //yScale: ratio,
-								xOffset: 0,
-								yOffset: 0//-0.18
-							  
-							  }
-							*/
-							}
+						TimNode:1,
+						render: {anchors: false, lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)"}
 						
 					})
+					
+					
+					
 					//connect to last part
 					let consE = Constraint.create({
 						bodyA: startbox,
 						bodyB: rope[0],
 						pointA:{ x: 0, y: startboxRy },
 						stiffness: 1,
+						TimNode:2,
 						render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
 					})
 					Composite.add(engine.world, [ consE,consS]);
+				
+							
 				}
 			}
 		});	
