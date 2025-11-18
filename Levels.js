@@ -285,12 +285,15 @@ const Solutions={
 				engine.world.bodies.forEach((body)=>{
 					if(body.TimNo==unitNo)
 					{
+						let maxY=WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy;
+						if(WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy>500)
+							maxY=Number.MAX_SAFE_INTEGER;
 						found=true;
-						
+						console.log("Y",body.position.y);
 						if((body.position.x>WinCondition[CurrentLevel].Conditions[index].x1)&&
 						(body.position.x<WinCondition[CurrentLevel].Conditions[index].x1+WinCondition[CurrentLevel].Conditions[index].dx)&&
 						(body.position.y>WinCondition[CurrentLevel].Conditions[index].y1)&&
-						(body.position.y<WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy)
+						(body.position.y<maxY)
 						)
 						{
 							//console.log("test condition WIN");
