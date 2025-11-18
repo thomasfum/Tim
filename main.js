@@ -84,7 +84,10 @@
 	var MouseOnPart=0;
 	var BeltNoConnecting=-1;
 	
-	
+	var RopeMode=0;
+	var RopeStart=-1;
+	var RopeIntermdiatePulley=[];
+	var RopeNoConnecting=-1;
 	
 	var CurrentLevelWinned=false;
 	var CurrentLevelRunning=false;

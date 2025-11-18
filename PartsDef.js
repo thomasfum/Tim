@@ -7,7 +7,7 @@ const PartDef={
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7,"rx":0.5,"ry":1.1},//ballon
 	"5":{"count":35,"FlipH":1,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"FlipH":1,"stick":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
-	"7":{"count":4},//pulley
+	"7":{"count":4,"rx":0.5,"ry":0.5},//pulley
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.2,"mass":15},//Basketball 
 	"10":{"count":1},//rope

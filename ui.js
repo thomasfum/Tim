@@ -15,6 +15,21 @@
 		return [x, y];
 	}
 
+	function GetNodeRopePos(part)
+	{
+		
+		var x=part.pos_x+(part.width*PartDef[part.TimType].rx);
+		let y=part.pos_y+(part.height*PartDef[part.TimType].ry);
+		//console.log("GetNodePos = "+x+":"+y);
+		
+		if(part.flipH!=0)
+		{
+			let nx=(part.width-(part.width*PartDef[part.TimType].rx));
+			x=part.pos_x+nx;
+		}
+		return [x, y];
+	}
+	
 	function flipHorizontally(img,x,y){
 		//console.log("fliiiiip horizontally");
 		// move to x + img's width
@@ -678,9 +693,6 @@
 			}
 		});
 		
-		
-	
-		
 		//--------------------------
 		//step 2 aquarium
 		LevelJson.Parts.forEach(part => {
@@ -758,6 +770,39 @@
 				}
 			}
 		});
+		
+		//draw drag rope
+		if(RopeMode==2)
+		{
+			//console.log("BeltMode = 2 "+MouseOnPart);
+			ctx.strokeStyle = 'red';
+			if((MouseOnPart!=-1)&&(PartConnectionFreeRope(MouseOnPart)==true))
+			{
+				//console.log("MouseOnPart = ",LevelJson.Parts[MouseOnPart].TimType);
+				if(PartDef[LevelJson.Parts[MouseOnPart].TimType].rx!=undefined)
+					ctx.strokeStyle = 'lightgreen';
+			}
+		
+			const  [x,y]=GetNodeRopePos(LevelJson.Parts[RopeStart]);
+			
+			ctx.beginPath();
+			//ctx.moveTo(LevelJson.Parts[RopeStart].pos_x, LevelJson.Parts[RopeStart].pos_y);
+			//ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
+			ctx.moveTo(getPosXRope(RopeStart,false),getPosYRope(RopeStart,false));
+			for(var key in RopeIntermdiatePulley)
+			{
+				/*
+				const  [xp,yp]=GetNodeRopePos(LevelJson.Parts[RopeIntermdiatePulley[key]]);
+				ctx.lineTo(xp,yp);
+				ctx.moveTo(xp,yp);
+				*/
+				ctx.lineTo(getPosXRope(RopeIntermdiatePulley[key],true), getPosYRope(RopeIntermdiatePulley[key],true));
+				ctx.moveTo(getPosXRope(RopeIntermdiatePulley[key],false), getPosYRope(RopeIntermdiatePulley[key],false));
+			}
+			ctx.lineTo(Mouse_pos_x+playgroundOffsetX, Mouse_pos_y+playgroundOffsetY);
+			ctx.stroke();
+		}
+		
 		displayScore();
 		displayBoard();
 		if(ShowWinConditions==true)

@@ -1,7 +1,7 @@
 
 
 
-	//c'est la
+	
 	function PartConnectionFree(part_no)
 	{
 		let partFree=true;
@@ -23,6 +23,30 @@
 		//console.log("PartConnectionFree "+partFree,part_no);
 		return partFree;
 	}
+	
+	
+	function PartConnectionFreeRope(part_no)
+	{
+		let partFree=true;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)//rope
+			{
+				if(part.connected_part_1==part_no)
+				{
+					partFree=false;
+					console.log("PartConnectionto rope "+part.no);
+				}
+				if(part.connected_part_2==part_no)
+				{
+					console.log("PartConnectionto rope "+part.no);
+					partFree=false;
+				}
+			}
+		});
+		//console.log("PartConnectionFree "+partFree,part_no);
+		return partFree;
+	}
+	
 	
 	function PartBeltExtremity(part_no)
 	{
@@ -53,12 +77,27 @@
 		});
 		return BeltNo;
 	}
-
+	
+	
+	function PartConnectionRope(part_no)
+	{
+		let BeltNo=-1;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)
+			{
+				if(part.connected_part_1==part_no)
+					BeltNo=part.no;
+				if(part.connected_part_2==part_no)
+					BeltNo=part.no;
+			}
+		});
+		return BeltNo;
+	}
 	function checkConnection(pos_x,pos_y)
 	{
 		let no=-1;
 		LevelJson.Parts.forEach(part => {
-			if(doPartsOverlapMouse(part,pos_x,pos_y))
+			if(doPartsOverlapMouseForBelt(part,pos_x,pos_y))
 			{
 				if(PartConnectionFree(part.no))
 					no= part.no;
@@ -66,7 +105,20 @@
 		});
 		return no;
 	}
-
+	function checkConnectionRope(pos_x,pos_y)
+	{
+		console.log("checkConnectionRope "+pos_x+","+pos_y);
+		let no=-1;
+		LevelJson.Parts.forEach(part => {
+			if(doPartsOverlapMouseForRope(part,pos_x,pos_y))
+			{
+				console.log("isConnectionRope free "+pos_x+","+pos_y);
+				if(PartConnectionFreeRope(part.no))
+					no= part.no;
+			}
+		});
+		return no;
+	}
 
 	function doPartsOverlapsPoint(part1, x,y)
 	{
@@ -132,11 +184,10 @@
 	  //}
 	}
 	
-	function doPartsOverlapMouse(part1, x,y)
+	function doPartsOverlapMouseForBelt(part1, x,y)
 	{
-		if(PartDef[part1.TimType].node_x==undefined)
-			return false;
-	
+			if(PartDef[part1.TimType].node_x==undefined)
+				return false;
 		const  [xn,yn]=GetNodePos(part1)
 	/*
 		let max1x=part1.pos_x+((PartDef[part1.TimType].node_x+PartDef[part1.TimType].node_d)*+part1.width)/100;
@@ -161,7 +212,38 @@
 		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
 	  
 	}
-
+	function doPartsOverlapMouseForRope(part1, x,y)
+	{
+		
+		if(PartDef[part1.TimType].rx==undefined)
+			return false;
+		
+		const  [xn,yn]=GetNodeRopePos(part1)
+		
+		console.log("doPartsOverlapMouseForRope: rx exist:"+xn+","+yn);
+	/*
+		let max1x=part1.pos_x+((PartDef[part1.TimType].node_x+PartDef[part1.TimType].node_d)*+part1.width)/100;
+		let min1x=part1.pos_x+((PartDef[part1.TimType].node_x-PartDef[part1.TimType].node_d)*+part1.width)/100;
+				
+		let max1y=part1.pos_y+((PartDef[part1.TimType].node_y+PartDef[part1.TimType].node_d)*+part1.height)/100;
+		let min1y=part1.pos_y+((PartDef[part1.TimType].node_y-PartDef[part1.TimType].node_d)*+part1.height)/100;
+		*/
+		let diam=20;
+		let max1x=xn+diam;
+		let min1x=xn-diam;
+				
+		let max1y=yn+diam;
+		let min1y=yn-diam;
+		
+		let aLeftOfB = max1x < x;
+		let aRightOfB = min1x > x;
+		let aAboveB = min1y > y;
+		let aBelowB = max1y < y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  
+	}
 	
 	
 
@@ -223,17 +305,26 @@
 		if(DraggingObject!=undefined)//dragging
 		{
 			//console.log("MouseClickUp:2",DraggingObject);
-			if(DraggingObject.TimType==8)
+			if(DraggingObject.TimType==8)//belt
 			{
 				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
 				BeltMode=1;
 				Dragging=false;
 				BeltNoConnecting=DraggingObject.no;
 			}
+			else if(DraggingObject.TimType==10)//rope
+			{
+				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
+				RopeMode=1;
+				Dragging=false;
+				RopeNoConnecting=DraggingObject.no;
+				console.log("RopeMode",RopeMode);
+			}
 			else
 			{
 				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 				BeltMode=0;
+				RopeMode=0;
 				if(LevelJson.Parts[DraggingObject.no].pos_x+LevelJson.Parts[DraggingObject.no].width>playgroundWidth)//on the bin
 				{
 					LevelJson.Parts[DraggingObject.no].pos_x=-1;
@@ -269,6 +360,79 @@
 			{
 				//console.log("MouseClickUp:2 "+BeltMode );
 				let endConnection=false;
+				
+				if(RopeMode==0)
+				{
+				}
+				else if(RopeMode==1)
+				{
+					let retNo=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
+					if(retNo==-1)
+					{
+						endConnection=true;
+						RopeMode=0;
+						RopeIntermdiatePulley=[];
+						LevelJson.Parts[RopeNoConnecting].connected_part_1=undefined;
+						LevelJson.Parts[RopeNoConnecting].connected_part_2=undefined;
+						LevelJson.Parts[RopeNoConnecting].pos_x=-1;
+						LevelJson.Parts[RopeNoConnecting].pos_y=-1;
+						LevelJson.Parts[RopeNoConnecting].in_partsbin=1;
+						console.log("disco ",LevelJson.Parts[RopeNoConnecting]);
+						refresh(true);
+					}
+					else
+					{
+						RopeMode=2;
+						console.log("Start con rope:"+retNo);
+						RopeStart=retNo
+					}
+						
+				}	
+				else if(RopeMode==2)
+				{
+					let retNo=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
+					if(retNo==-1)
+					{
+						endConnection=true;
+						RopeMode=0;
+						RopeIntermdiatePulley=[];
+						LevelJson.Parts[RopeNoConnecting].connected_part_1=undefined;
+						LevelJson.Parts[RopeNoConnecting].connected_part_2=undefined;
+						LevelJson.Parts[RopeNoConnecting].pos_x=-1;
+						LevelJson.Parts[RopeNoConnecting].pos_y=-1;
+						LevelJson.Parts[RopeNoConnecting].in_partsbin=1;
+						console.log("disco ",LevelJson.Parts[RopeNoConnecting]);
+						refresh(true);
+					}
+					else
+					{
+						
+						
+						if(LevelJson.Parts[retNo].TimType!=7)
+						{
+							console.log("end connection rope ",LevelJson.Parts[RopeNoConnecting]);
+							RopeMode=0;
+							endConnection=true;
+							LevelJson.Parts[RopeNoConnecting].connected_part_1=RopeStart;
+							LevelJson.Parts[RopeNoConnecting].connected_part_2=retNo;
+							LevelJson.Parts[RopeNoConnecting].in_partsbin=0;
+							LevelJson.Parts[RopeNoConnecting].TimPulleys=RopeIntermdiatePulley;
+
+							//console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]);
+							RopeMode=0;
+							RopeIntermdiatePulley=[];
+							RopeNoConnecting=-1;
+							refresh(true);
+						}
+						else
+						{
+							console.log("connection to pulley",retNo);
+							RopeIntermdiatePulley.push(retNo);
+							refresh(true);
+						}
+					}
+				}
+				
 				if(BeltMode==0)
 				{
 					
@@ -346,7 +510,7 @@
 		
 		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
 		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
-		if(BeltMode==0)
+		if((BeltMode==0)&&(RopeMode==0))
 		{
 			if((SelectedPart!=undefined)&&(SelectedPart!=-1))
 			{
@@ -416,8 +580,9 @@
 			
 			//-----------------------------
 			LevelJson.Parts.forEach(part => {
-				if(doPartsOverlapMouse(part,Xclick,Yclick	))
+				if(doPartsOverlapMouseForBelt(part,Xclick,Yclick))
 				{
+
 					if(!PartConnectionFree(part.no))
 					{
 						
@@ -440,12 +605,41 @@
 							BeltMode=2;
 						}
 					}
+					
+				}
+				//console.log("connect rope",part);
+				if(doPartsOverlapMouseForRope(part,Xclick,Yclick))
+				{
+					console.log("does mouse overlap rope to",part);
+					if(!PartConnectionFreeRope(part.no))
+					{
+						console.log("connect rope to",part);
+						let RopeNo=PartConnectionRope(part.no);
+						
+						if(LevelJson.Parts[RopeNo].connected_part_1==part.no)
+						{
+							console.log("on fixed with connection "+part.no+" on rope " + RopeNo+ " 1");
+							LevelJson.Parts[RopeNo].connected_part_1=undefined;
+							RopeStart=LevelJson.Parts[RopeNo].connected_part_2;
+							RopeNoConnecting=RopeNo;
+							RopeMode=2;
+						}
+						if(LevelJson.Parts[RopeNo].connected_part_2==part.no)
+						{
+							console.log("on fixed with connection "+part.no+" on belt " + RopeNo+ " 2");
+							LevelJson.Parts[RopeNo].connected_part_2=undefined;
+							RopeStart=LevelJson.Parts[RopeNo].connected_part_1;
+							RopeNoConnecting=RopeNo;
+							RopeMode=2;
+						}
+					}
 				}
 			});
 		
 			if(BeltMode==2)
 				return;
-		
+			if(RopeMode==2)
+				return;
 			// le click est dans l'objet
 			LevelJson.Parts.forEach(part => {
 			
@@ -617,6 +811,8 @@
 						{
 							if(BeltMode==1)
 								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+							else if(RopeMode==1)
+								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
 							else
 								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-2.cur'), auto";//drag cursor
 							onPartNo=part.no;
@@ -643,14 +839,16 @@
 					
 					//selectPart(-1);
 					//console.log("not over");
-					if(BeltMode==0)
+					if((BeltMode==0)&&(RopeMode==0))
 						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
-					else
+					if(BeltMode!=0)
 						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+					if(RopeMode!=0)
+						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
 				}
 			}
 			MouseOnPart=onPartNo;
-			if(BeltMode==2)
+			if((BeltMode==2)||(RopeMode==2))
 			{
 				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
 				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
