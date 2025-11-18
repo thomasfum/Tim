@@ -116,13 +116,11 @@
 			if(part.animDelay>animSpeed)
 			{
 				part.animDelay=0;
-				//{
-					if(part.megaloop!=5)
-						part.animStep++;
-					else
-						if(part.animStep2<10)
-							part.animStep2++;
-				//}
+				if(part.megaloop!=5)
+					part.animStep++;
+				else
+					if(part.animStep2<10)
+						part.animStep2++;
 				if(part.animStep>=part.nb_anim)
 				{
 					part.animStep=0;
@@ -297,6 +295,19 @@
 									}
 									y=part.pos_y-38;
 								}
+								if(PartDef[part.TimType].animLeft==1)
+								{
+									if(part.flipH==1)
+									{
+										
+										x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+									}
+									else
+									{
+										x=part.pos_x;
+									}
+									y=part.pos_y;
+								}
 								if(part.fixed==1)//background
 									drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
 									
@@ -344,52 +355,47 @@
 	}
 
 
-	function getPosXRopeBody(partNo,to)
+	function getPosXRopeBody(partNo)
 	{
 		let rx=0;
 		//console.log("getPosXRope",partNo);
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
 			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
 		let ox=LevelJson.Parts[partNo].width*rx;
-		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		
+		if(LevelJson.Parts[partNo].MatterBody.isStatic==true)
 		{
-			if(LevelJson.Parts[partNo].appearance=="top (2)")
-			{
-				if(to==false)
-					ox=ox+7;
-				else
-					ox=ox-7;
-			}
-			if(LevelJson.Parts[partNo].appearance=="right (3)")
-			{
-				ox=ox+3;
-			}
+			if(LevelJson.Parts[partNo].flipH==0)
+				return LevelJson.Parts[partNo].MatterBody.position.x-LevelJson.Parts[partNo].width/2+ox;
+			else
+				return LevelJson.Parts[partNo].MatterBody.position.x+LevelJson.Parts[partNo].width/2-ox;
 		}
 		
-		return LevelJson.Parts[partNo].MatterBody.position.x-(LevelJson.Parts[partNo].width/2+ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
+		//if(LevelJson.Parts[partNo].flipH==0)
+			return LevelJson.Parts[partNo].MatterBody.position.x+(LevelJson.Parts[partNo].width/2-ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
+		//else
+		//	return LevelJson.Parts[partNo].MatterBody.position.x+(LevelJson.Parts[partNo].width/2-ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
 	}
-	function getPosYRopeBody(partNo,to)
+	function getPosYRopeBody(partNo)
 	{
-		let ry=0.5;
+		let ry=0;
 		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
 			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
 		let oy=LevelJson.Parts[partNo].height*ry;
-		if(LevelJson.Parts[partNo].TimType==7)//pulley
+		
+		if(LevelJson.Parts[partNo].MatterBody.isStatic==true)
 		{
-			if(LevelJson.Parts[partNo].appearance=="right (3)")
-			{
-				if(to==false)
-					oy=oy+7;
-				else
-					oy=oy-7;
-			}
+			if(LevelJson.Parts[partNo].flipV==0)
+				return LevelJson.Parts[partNo].MatterBody.position.y-LevelJson.Parts[partNo].height/2+oy;
+			else
+				return LevelJson.Parts[partNo].MatterBody.position.y+LevelJson.Parts[partNo].height/2-oy;
 		}
 		//oy=0;
 		//console.log("angle:",Math.cos(LevelJson.Parts[partNo].MatterBody.angle)*oy);
-		if(LevelJson.Parts[partNo].flipV==0)
+		//if(LevelJson.Parts[partNo].flipV==0)
 			return LevelJson.Parts[partNo].MatterBody.position.y-(LevelJson.Parts[partNo].height/2+oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
-		else
-			return LevelJson.Parts[partNo].MatterBody.position.y+(LevelJson.Parts[partNo].height/2-oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
+		//else
+		//	return LevelJson.Parts[partNo].MatterBody.position.y-(LevelJson.Parts[partNo].height/2-oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
 	}
 	
 	function getPosXRope(partNo,to)
@@ -399,6 +405,7 @@
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
 			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
 		let ox=LevelJson.Parts[partNo].width*rx;
+		
 		if(LevelJson.Parts[partNo].TimType==7)//pulley
 		{
 			if(LevelJson.Parts[partNo].appearance=="top (2)")
@@ -412,8 +419,11 @@
 			{
 				ox=ox+3;
 			}
-		}	
-		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+		}
+		if(LevelJson.Parts[partNo].flipH==0)
+			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+		else
+			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
 	}
 	function getPosYRope(partNo,to)
 	{
@@ -421,6 +431,7 @@
 		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
 			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
 		let oy=LevelJson.Parts[partNo].height*ry;
+		
 		if(LevelJson.Parts[partNo].TimType==7)//pulley
 		{
 			if(LevelJson.Parts[partNo].appearance=="right (3)")
@@ -432,7 +443,10 @@
 			}
 		}
 		
+		if(LevelJson.Parts[partNo].flipV==0)
 			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+		else
+			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
 		
 	}
 	
@@ -576,8 +590,8 @@
 					}
 					else
 					{
-						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_1)-Images["8-0"].height/2,false,false);
-						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_2)-Images["8-0"].height/2,false,false);
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_1)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_1)/*-playgroundOffsetY*/-Images["8-0"].height/2,false,false);
+						drawImage(Images["8-0"], getPosXRopeBody(part.connected_part_2)-playgroundOffsetX-Images["8-0"].width/2, getPosYRopeBody(part.connected_part_2)/*-playgroundOffsetY*/-Images["8-0"].height/2,false,false);
 					}
 					
 					

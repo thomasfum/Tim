@@ -30,7 +30,6 @@
 
 //trempolin active only if contact on top
 // managing pos of tooter
-// free positioning
 // noeud seau
 //---------------------------
 //bug
@@ -38,7 +37,7 @@
 
 
 
-	var CurrentLevel=9;
+	var CurrentLevel=10;
 	const MaxLevel=9;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";

@@ -23,6 +23,7 @@ let
 		LevelJson.Parts[PartNo].animDirectionX=flipH;
 		LevelJson.Parts[PartNo].animOnce=once;
 		LevelJson.Parts[PartNo].animCleanAtEnd=cleanAtEnd;
+		
 	
 		if(forwardMessage==true)
 		{
@@ -30,7 +31,7 @@ let
 			if(otherExtremity!=-1)
 			{
 				console.log("from Part "+PartNo+" action on "+otherExtremity);
-				AnimPart(otherExtremity,false,flipH,flipV,false,false)
+				AnimPart(otherExtremity,false,flipH,flipV,false,false);
 			}
 		}
 	}
@@ -44,7 +45,7 @@ let
 		LevelJson.Parts.forEach(part => {
 		if(part.in_partsbin==0)
 		{
-			if(part.is_moving!=0)
+			if(part.is_moving!=0)//moving
 			{
 				
 				//apply gravity
@@ -57,7 +58,11 @@ let
 				engine.world.bodies.forEach((body)=>{
 					if(body.isStatic==false)
 					{
-						Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00005});
+						if(body.collisionFilter.category==2)//rope
+						{
+							//console.log("apply force to "+body.label, body.mass);
+							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00005});
+						}
 					}
 				});
 				
@@ -83,7 +88,7 @@ let
 			}
 			else //staticobj
 			{
-				if(part.TimType==3)//"Teeter-totter (3)"
+				if(part.TimType==3)//Teeter-totter (3)
 				{
 					if(part.MatterBody!=undefined)
 					{
@@ -189,6 +194,40 @@ let
 						
 					}
 				}
+				if(part.TimType==27)//Gun (27)
+				{
+					engine.world.constraints.forEach((constraint)=>{
+					
+						if(constraint.bodyA!=undefined)
+						{
+							if(constraint.bodyA.id==part.staticObjId)
+							{
+								//console.log("found constraint");
+								/*
+								console.log("found Gun constraint part",part);
+								console.log("found Gun constraint matterBody",part.MatterBody);
+								console.log("found Gun constraint bodyA",constraint.bodyA);
+								console.log("found Gun constraint bodyB",constraint.bodyB);
+								console.log("found Gun constraint",constraint);
+								*/						
+								let Imp=(constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x)+(constraint.bodyB.constraintImpulse.y*constraint.bodyB.constraintImpulse.y)
+								let impx=constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x*1000
+								if(impx>1.5)
+								{
+									//console.log("found Gun constraint bodyB impulse=",impx);
+									
+									if(part.anim!=true)
+									{
+										console.log("fire Gun");
+										AnimPart(part.no, false,part.flipH,part.flipV,true,false);
+									}
+								}
+							}
+					}
+				});
+				
+				}
+			
 			}
 		}
 		});
@@ -207,6 +246,8 @@ let
 					boxing(body);
 				if(LevelJson.Parts[body.TimNo].TimType==14)//gear
 					CheckGear(body);
+				if(LevelJson.Parts[body.TimNo].TimType==27)//Gun (27)
+					LaunchGunBullet(body);
 			}
 		});
 		
@@ -217,6 +258,48 @@ let
 		});
 		
 		checkIfWin();
+	}
+	
+	function LaunchGunBullet(GunBody)
+	{
+		if((LevelJson.Parts[GunBody.TimNo].animStep==3)&&(LevelJson.Parts[GunBody.TimNo].animDelay==0))
+		{
+			let part=LevelJson.Parts[GunBody.TimNo];
+			//console.log("LaunchGunBullet "+LevelJson.Parts.length );
+			let newPart={no:LevelJson.Parts.length,TimType: 20, width:0,height:0, is_moving: 0, in_partsbin: 0, is_scenery: 0,flipH:0, flipV:0,name:"bullet",pos_x:-100,pos_y:-100,selected:0};
+			//console.log("LaunchGunBullet "+LevelJson.Parts );
+			var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x-10, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2-8,  5, {
+								TimNo:newPart.no,
+								isSleeping: false,
+								isStatic: false,
+								restitution: 0, 
+								
+								//	density:mass, 
+								mass:0,
+								mass2:0,
+								label:"bullet",
+								render: {
+								  sprite: { texture: Images["20-0"].src, 
+								  xScale: -1,
+								  yScale: -1,
+									xOffset: 0,
+									yOffset: 0//-0.18
+								  
+								  }
+								  }
+								  });
+						
+
+			Composite.add(world, [MatterBody]);
+			newPart.MatterBody=MatterBody;
+			LevelJson.Parts.push(newPart);
+			let scaleX=-1;
+			if(scaleX==-1)
+				Body.rotate(MatterBody, 3.14);
+			
+			Body.setVelocity(MatterBody, { x:10*scaleX, y: 0 });				
+			
+		}
 	}
 	
 	function collision_mouse(TimNo)
@@ -287,7 +370,7 @@ let
 	}
 	function collision_ballon(_ballonBoby,_impactorBody)
 	{
-		
+			console.log("collision_ballon ");
 		if(LevelJson.Parts[_impactorBody.TimNo].TimType==14)//gear
 		{
 			if(LevelJson.Parts[_impactorBody.TimNo].part!=undefined)
@@ -304,6 +387,11 @@ let
 			if(flipH==_ballonBoby.TimDirectionX)
 				destroy_ballon(_ballonBoby);
 		}
+		if(LevelJson.Parts[_impactorBody.TimNo].TimType==20)//bullet
+		{
+				destroy_ballon(_ballonBoby);
+				Composite.remove(world, [_impactorBody]);//delete bullet
+		}
 
 	}
 	function destroy_ballon(_boby)
@@ -311,6 +399,27 @@ let
 		
 		LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
 		LevelJson.Parts[_boby.TimNo].pos_y=_boby.position.y-28;
+		
+		let constraintToDestroy=undefined;
+		engine.world.constraints.forEach((constraint)=>{
+			if(constraint.bodyA!=undefined)
+				if(constraint.bodyA.id==_boby.id)
+				{
+					console.log("found constraint ballon A");
+					console.log(constraint);	
+					constraintToDestroy=constraint;
+				}
+			if(constraint.bodyB!=undefined)
+				if(constraint.bodyB.id==_boby.id)
+				{
+					console.log("found constraint ballon B");
+					console.log(constraint);	
+					constraintToDestroy=constraint;
+				}
+			});
+		if(constraintToDestroy!=undefined)
+			Composite.remove(world, [constraintToDestroy]);
+		
 		Composite.remove(world, [_boby]);
 		
 		console.log("destroy ballon "+_boby.TimNo);
@@ -498,6 +607,7 @@ let
 				//console.log("collisions ->",collision.body);
 				//collision.body.isSleeping=true;
 				//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+				//Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });//for ball
 				Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });
 				collision.body.TimDirectionX=scaleX;
 				//console.log("collisions ->",collision.body);
@@ -638,9 +748,8 @@ let
 			LevelJson.Parts.forEach(part => {
 				
 				part.MatterBody=undefined;
-				part.MatterBody=undefined;
 				part.selected=0;
-				if(LevelJsonOrigin!=undefined)
+				if((LevelJsonOrigin!=undefined)&&(LevelJsonOrigin.Parts[part.no]!=undefined))
 				{
 					part.is_moving=LevelJsonOrigin.Parts[part.no].is_moving;
 					part.pos_x=LevelJsonOrigin.Parts[part.no].pos_x;
@@ -668,7 +777,12 @@ let
 		let dy=next_y- start_y;
 		//console.log("dx",dx);
 		//console.log("dy",dy);
-		
+		/*
+		start_x+=playgroundOffsetX;
+		start_y+=playgroundOffsetY;
+		next_x+=playgroundOffsetX;
+		next_y+=playgroundOffsetY;
+		*/
 		let distance=Math.sqrt((dx*dx)+(dy*dy));
 		//console.log("distance",distance);
 		let distanceBetween=9;
@@ -678,7 +792,7 @@ let
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
 			RopeBody.mass2=1;
 			RopeBody.TimNo=undefined;
@@ -709,7 +823,6 @@ let
 
 		//remove the link with physics
 		LevelJson.Parts.forEach(part => {
-			part.MatterBody=undefined;
 			part.MatterBody=undefined;
 		});
 		LevelJsonOrigin =JSON.parse(JSON.stringify(LevelJson));
@@ -807,12 +920,12 @@ let
 								let oy=part.pos_y+(part.height/2);
 								if(PartDef[part.TimType].phy_poly[i].x!=undefined)
 								{
-									console.log("ggg  x");
+									//console.log("ggg  x");
 									ox=ox-(PartDef[part.TimType].phy_poly[i].x*part.width)*scaleX;
 								}
 								if(PartDef[part.TimType].phy_poly[i].y!=undefined)
 								{
-									console.log("ggg  y");
+									//console.log("ggg  y");
 									oy=oy-(PartDef[part.TimType].phy_poly[i].y*part.height)*scaleY;
 								}
 								console.log("Poly ox",ox);
@@ -854,8 +967,15 @@ let
 				
 					if(part.TimType==7)//"pulley (7)"
 					{
-						
-						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2, 10, {
+						let oy=0;
+						let ox=0;
+						if(part.appearance=="right (3)")
+						if(part.appearance=="right (3)")
+							ox=-5;
+				
+						if(part.appearance=="top (2)")
+							oy=5;
+						var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+ox+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+oy+part.Images[part.TimType+"-0"].height/2, 10, {
 							TimNo:part.no,
 							isSleeping: false,
 							isStatic: true,
@@ -866,7 +986,7 @@ let
 							friction:1,
 							frictionStatic:0.5*20,
 							*/
-							render: {visible: false  },
+							render: {fillStyle: "rgba(0, 0, 255, 0)" },
 							collisionFilter: { category:2,mask: 2 }
 							  });
 						Composite.add(world, [MatterBody]);
@@ -921,7 +1041,7 @@ let
 							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
 							bodyB: MatterBody,
 							length: 0, 
-							render: { visible: false }
+							render: { visible: false}
 						});
 						//console.log("constraint",constraint);
 						Composite.add(world, [constraint]);
@@ -1032,10 +1152,29 @@ let
 					var startboxType = LevelJson.Parts[part.connected_part_1].TimType;
 					var lastboxType = LevelJson.Parts[part.connected_part_2].TimType;
 					
-					var startboxRy = PartDef[LevelJson.Parts[part.connected_part_1].TimType].ry*LevelJson.Parts[part.connected_part_1].height-LevelJson.Parts[part.connected_part_1].height/2;
-					var lastboxRy = PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
-					console.log("sb ry:",startboxRy);
-					console.log("eb ry:",lastboxRy);
+					var s_rx=PartDef[LevelJson.Parts[part.connected_part_1].TimType].rx;
+					var s_ry=PartDef[LevelJson.Parts[part.connected_part_1].TimType].ry;
+					var startboxRx = s_rx*LevelJson.Parts[part.connected_part_1].width-LevelJson.Parts[part.connected_part_1].width/2;
+					var startboxRy = s_ry*LevelJson.Parts[part.connected_part_1].height-LevelJson.Parts[part.connected_part_1].height/2;
+					if(LevelJson.Parts[part.connected_part_1].flipH==1)
+						startboxRx=startboxRx*-1;
+					if(LevelJson.Parts[part.connected_part_1].flipV==1)
+						startboxRy=startboxRy*-1;
+					console.log("s_rx:",s_rx);
+					
+					var l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx;
+					var l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry;
+					var lastboxRx = l_rx*LevelJson.Parts[part.connected_part_2].width-LevelJson.Parts[part.connected_part_2].width/2;
+					var lastboxRy = l_ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
+					
+					if(LevelJson.Parts[part.connected_part_2].flipH==1)
+						lastboxRx=lastboxRx*-1;
+					if(LevelJson.Parts[part.connected_part_2].flipV==1)
+						lastboxRy=lastboxRy*-1;
+					
+					
+					//console.log("sb ry:",startboxRy);
+					//console.log("eb ry:",lastboxRy);
 					
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
@@ -1068,7 +1207,7 @@ let
 					let consS = Constraint.create({
 						bodyA: lastbox,
 						bodyB: rope[rope.length-1],
-						pointA:{ x: 0, y: lastboxRy },
+						pointA:{ x: lastboxRx, y: lastboxRy },
 						stiffness: 1,
 						TimNode:1,
 						render: {anchors: false, lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)"}
@@ -1081,7 +1220,7 @@ let
 					let consE = Constraint.create({
 						bodyA: startbox,
 						bodyB: rope[0],
-						pointA:{ x: 0, y: startboxRy },
+						pointA:{ x: startboxRx, y: startboxRy },
 						stiffness: 1,
 						TimNode:2,
 						render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}

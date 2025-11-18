@@ -564,9 +564,16 @@
 			//DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
 			//DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
 			
-			DraggingObject.pos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2)/16)*16+8;
-			DraggingObject.pos_y=Math.round((e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2)/16)*16+8;
-			
+			if(PartDef[DraggingObject.TimType].stick==1)
+			{
+				DraggingObject.pos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2)/16)*16+8;
+				DraggingObject.pos_y=Math.round((e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2)/16)*16+8;
+			}
+			else
+			{
+				DraggingObject.pos_x=Math.round(e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2);
+				DraggingObject.pos_y=Math.round(e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2);
+			}
 			selectPart(DraggingObject.no);
 			let overlap=false;
 			LevelJson.Parts.forEach(part => {

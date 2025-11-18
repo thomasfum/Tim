@@ -7,7 +7,7 @@ const WinCondition={
 	"6":{"Conditions":[{"t":"a","unitNo":0}]},
 	"7":{"Conditions":[{"t":"d","unitNo":5}]},
 	"8":{"Conditions":[{"t":"d","unitNo":11}]},
-	"9":{"Conditions":[{"t":"p","unitNo":9,"x1":20,"y1":255,"dx":535,"dy":100},{"t":"p","unitNo":10,"x1":20,"y1":255,"dx":535,"dy":100},{"t":"p","unitNo":11,"x1":20,"y1":255,"dx":535,"dy":100}]},
+	"9":{"Conditions":[{"t":"p","unitNo":9,"x1":20,"y1":255,"dx":535,"dy":110},{"t":"p","unitNo":10,"x1":20,"y1":255,"dx":535,"dy":110},{"t":"p","unitNo":11,"x1":20,"y1":255,"dx":535,"dy":110}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -224,8 +224,11 @@ const Solutions={
 			//console.log(part.name +" =>"+result+":"+PartDef[result]) ;
 			//console.log(part);
 			
-			Images["8-0"]=0;
+			Images["8-0"]=0;//rope node
 			loadImage("8-0",undefined,0);
+			
+			Images["20-0"]=0;//bullet
+			loadImage("20-0",undefined,0);
 			
 			for (let index = 0; index < PartDef[result].count; ++index) 
 			{
@@ -286,10 +289,11 @@ const Solutions={
 					if(body.TimNo==unitNo)
 					{
 						let maxY=WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy;
-						if(WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy>500)
+						//console.log("maxY",maxY);
+						if(WinCondition[CurrentLevel].Conditions[index].y1+WinCondition[CurrentLevel].Conditions[index].dy>=360)//out of screen=> always ok if object out
 							maxY=Number.MAX_SAFE_INTEGER;
 						found=true;
-						console.log("Y",body.position.y);
+						//console.log("Y="+body.position.y+" / "+maxY);
 						if((body.position.x>WinCondition[CurrentLevel].Conditions[index].x1)&&
 						(body.position.x<WinCondition[CurrentLevel].Conditions[index].x1+WinCondition[CurrentLevel].Conditions[index].dx)&&
 						(body.position.y>WinCondition[CurrentLevel].Conditions[index].y1)&&
