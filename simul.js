@@ -61,7 +61,7 @@ let
 						if(body.collisionFilter.category==2)//rope
 						{
 							//console.log("apply force to "+body.label, body.mass);
-							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00005});
+							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00001});
 						}
 					}
 				});
@@ -196,36 +196,78 @@ let
 				}
 				if(part.TimType==27)//Gun (27)
 				{
-					engine.world.constraints.forEach((constraint)=>{
-					
-						if(constraint.bodyA!=undefined)
+					if(part.anim!=true)
+					{
+						
+						
+						let otherExtremity=PartRopetExtremity(part.no);
+						
+						if(otherExtremity>=0)
 						{
-							if(constraint.bodyA.id==part.staticObjId)
+							if(engine.timing.timestamp>100)
 							{
-								//console.log("found constraint");
-								/*
-								console.log("found Gun constraint part",part);
-								console.log("found Gun constraint matterBody",part.MatterBody);
-								console.log("found Gun constraint bodyA",constraint.bodyA);
-								console.log("found Gun constraint bodyB",constraint.bodyB);
-								console.log("found Gun constraint",constraint);
-								*/						
-								let Imp=(constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x)+(constraint.bodyB.constraintImpulse.y*constraint.bodyB.constraintImpulse.y)
-								let impx=constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x*1000
-								if(impx>1.5)
-								{
-									//console.log("found Gun constraint bodyB impulse=",impx);
-									
-									if(part.anim!=true)
+								engine.world.bodies.forEach((body)=>{
+									if(body.TimNo==otherExtremity)
 									{
-										console.log("fire Gun");
-										AnimPart(part.no, false,part.flipH,part.flipV,true,false);
+										console.log("found Gun otherExtremity "+otherExtremity,body.speed);		
+										if(body.speed>0.5)
+										{
+										console.log("fire Gun "+part.no);
+										AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
+										}
+									}
+								});
+							}
+						}
+						/*
+						engine.world.constraints.forEach((constraint)=>{
+						
+							if(constraint.bodyA!=undefined)
+							{
+								if(constraint.bodyA.id==part.staticObjId)
+								{
+									//console.log("time:"+engine.timing.timestamp); 
+									if(engine.timing.timestamp>100)
+										//let time for rope to stabilize)
+									{
+										//console.log("found constraint");
+										
+										console.log("found Gun constraint part",part);
+										console.log("found Gun constraint matterBody",part.MatterBody);
+										console.log("found Gun constraint bodyA",constraint.bodyA);
+										console.log("found Gun constraint bodyB",constraint.bodyB);
+										
+										//console.log("found Gun constraint "+ part.no,constraint);
+											
+										//console.log("found Gun constraint bodyB velocity x for "+ part.no,constraint.bodyB.velocity.x);
+										//let Imp=(constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x)+(constraint.bodyB.constraintImpulse.y*constraint.bodyB.constraintImpulse.y)
+										let impx=constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.x*1000;
+										let impy=constraint.bodyB.constraintImpulse.x*constraint.bodyB.constraintImpulse.y*1000;
+										let Imp=Math.round((impx*impx)+(impy*impy)*100000);
+										if(part.fliph==1)
+											impx=impx*-1;
+										if(impx>0)
+										{
+											//if(part.no==13)
+											if(Imp>0)
+													console.log("found Gun "+ part.no+" impulse="+Imp);
+											if(Imp>=7000)
+											{
+												//console.log("found Gun constraint bodyB impulse=",impx);
+												
+												if(part.anim!=true)
+												{
+													console.log("fire Gun "+part.no);
+													AnimPart(part.no, false,part.flipH,part.flipV,true,false);
+												}
+											}
+										}
 									}
 								}
 							}
+						});
+						*/
 					}
-				});
-				
 				}
 			
 			}
@@ -238,6 +280,7 @@ let
 	//--------------------------------------------------
 	function afterRender()
 	{
+		
 		//console.log("afterRender");
 		engine.world.bodies.forEach((body)=>{
 			if(body.TimNo!=undefined)
@@ -258,46 +301,50 @@ let
 		});
 		
 		checkIfWin();
+		//if(engine.timing.timestamp>0)
+		//	stop();
 	}
 	
 	function LaunchGunBullet(GunBody)
 	{
 		if((LevelJson.Parts[GunBody.TimNo].animStep==3)&&(LevelJson.Parts[GunBody.TimNo].animDelay==0))
 		{
+			let swap=1;
+			if(LevelJson.Parts[GunBody.TimNo].flipH==1)
+				swap=-1;
 			let part=LevelJson.Parts[GunBody.TimNo];
 			//console.log("LaunchGunBullet "+LevelJson.Parts.length );
 			let newPart={no:LevelJson.Parts.length,TimType: 20, width:0,height:0, is_moving: 0, in_partsbin: 0, is_scenery: 0,flipH:0, flipV:0,name:"bullet",pos_x:-100,pos_y:-100,selected:0};
 			//console.log("LaunchGunBullet "+LevelJson.Parts );
-			var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x-10, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2-8,  5, {
+			let x=0;
+			if(swap==-1)//no swap
+				x=part.pos_x-10;
+			if(swap==1)//swap
+				x=part.pos_x+part.Images[part.TimType+"-0"].width+10;
+			//console.log("flip "+x);
+			var MatterBody = Bodies.circle(playgroundOffsetX+x, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2-8,  5, {
 								TimNo:newPart.no,
 								isSleeping: false,
 								isStatic: false,
 								restitution: 0, 
-								
-								//	density:mass, 
 								mass:0,
 								mass2:0,
 								label:"bullet",
 								render: {
-								  sprite: { texture: Images["20-0"].src, 
-								  xScale: -1,
-								  yScale: -1,
-									xOffset: 0,
-									yOffset: 0//-0.18
-								  
-								  }
-								  }
-								  });
+									sprite: { texture: Images["20-0"].src, 
+										xOffset: 0,
+										yOffset: 0
+											}
+									}
+								});
 						
 
 			Composite.add(world, [MatterBody]);
 			newPart.MatterBody=MatterBody;
 			LevelJson.Parts.push(newPart);
-			let scaleX=-1;
-			if(scaleX==-1)
+			if(swap==-1)
 				Body.rotate(MatterBody, 3.14);
-			
-			Body.setVelocity(MatterBody, { x:10*scaleX, y: 0 });				
+			Body.setVelocity(MatterBody, { x:10*swap, y: 0 });				
 			
 		}
 	}
@@ -405,14 +452,14 @@ let
 			if(constraint.bodyA!=undefined)
 				if(constraint.bodyA.id==_boby.id)
 				{
-					console.log("found constraint ballon A");
+					//console.log("found constraint ballon A");
 					console.log(constraint);	
 					constraintToDestroy=constraint;
 				}
 			if(constraint.bodyB!=undefined)
 				if(constraint.bodyB.id==_boby.id)
 				{
-					console.log("found constraint ballon B");
+					//console.log("found constraint ballon B");
 					console.log(constraint);	
 					constraintToDestroy=constraint;
 				}
@@ -429,10 +476,10 @@ let
 	
 	function TeeterTotterTilt(_TeeterTotterBoby,_impactorBody)
 	{
-		console.log("TT "+_TeeterTotterBoby.TimNo+"=> rotate ",_TeeterTotterBoby);
+		//console.log("TT "+_TeeterTotterBoby.TimNo+"=> rotate ",_TeeterTotterBoby);
 		let  bodies = Composite.allBodies(engine.world);
 		const collisions = Matter.Query.collides(_TeeterTotterBoby, bodies);
-		console.log("collisions",collisions);
+		//console.log("collisions",collisions);
 		let vx=1.8;//1.8
 		let vy=-6.5;//7.2
 		collisions.forEach((collision) => {
@@ -785,20 +832,20 @@ let
 		*/
 		let distance=Math.sqrt((dx*dx)+(dy*dy));
 		//console.log("distance",distance);
-		let distanceBetween=9;
+		let distanceBetween=9;//9
 		
 		for (var i = 0; i < distance/distanceBetween; i += 1) 
 		{	
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.1	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
-			RopeBody.mass2=1;
+			RopeBody.mass2=0.01;
 			RopeBody.TimNo=undefined;
 			
 			
-			let dst=4;
+			//let dst=4;
 			last_RopeBody = rope.pop();
 			if(last_RopeBody!=undefined)
 			{
@@ -928,7 +975,7 @@ let
 									//console.log("ggg  y");
 									oy=oy-(PartDef[part.TimType].phy_poly[i].y*part.height)*scaleY;
 								}
-								console.log("Poly ox",ox);
+								//console.log("Poly ox",ox);
 								var MatterBody =Bodies.fromVertices(playgroundOffsetX+ox, playgroundOffsetY+oy, verts, {
 									isStatic: false, 
 									TimNo:part.no,
@@ -951,7 +998,7 @@ let
 								MatterBody.frictionAir=0.02;
 								//MatterBody.frictionAir=0.1;
 								//MatterBody.sleepThreshold=2;
-								console.log("Poly move",MatterBody);
+								//console.log("Poly move",MatterBody);
 								Composite.add(world, [MatterBody]);
 								part.MatterBody=MatterBody;
 							}
@@ -969,7 +1016,8 @@ let
 					{
 						let oy=0;
 						let ox=0;
-						if(part.appearance=="right (3)")
+						if(part.appearance=="left (1)")
+							ox=5;
 						if(part.appearance=="right (3)")
 							ox=-5;
 				
@@ -996,7 +1044,7 @@ let
 					}
 					else if(part.TimType==3)//"Teeter-totter (3)"
 					{
-						console.log("Teeter-totter=",part.no);
+						//console.log("Teeter-totter=",part.no);
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
@@ -1137,9 +1185,10 @@ let
 		LevelJson.Parts.forEach(part => {
 			if(part.TimType==10)//Rope (10)
 			{
-				console.log("rope: "+part.no);
+				//console.log("rope: "+part.no);
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
+					/*
 					console.log("rope: from " + getPosXRope(part.connected_part_1,false)+","+getPosYRope(part.connected_part_1,false));
 					
 					for(var key in part.TimPulleys)
@@ -1148,7 +1197,7 @@ let
 						console.log("rope: from pulley " + getPosXRope(part.TimPulleys[key],false)+","+getPosYRope(part.TimPulleys[key],false));
 					}
 					console.log("rope: to " + getPosXRope(part.connected_part_2,true)+","+getPosYRope(part.connected_part_2,true));
-					
+					*/
 					var startboxType = LevelJson.Parts[part.connected_part_1].TimType;
 					var lastboxType = LevelJson.Parts[part.connected_part_2].TimType;
 					
@@ -1160,7 +1209,7 @@ let
 						startboxRx=startboxRx*-1;
 					if(LevelJson.Parts[part.connected_part_1].flipV==1)
 						startboxRy=startboxRy*-1;
-					console.log("s_rx:",s_rx);
+					//console.log("s_rx:",s_rx);
 					
 					var l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx;
 					var l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry;
@@ -1178,14 +1227,14 @@ let
 					
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
-					console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
+					//console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
 					var rope = [];
 					let start_x=getPosXRope(part.connected_part_1,false);
 					let start_y=getPosYRope(part.connected_part_1,false);
 					for(var key in part.TimPulleys)
 					{
-						console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
-						console.log("rope: from pulley " + getPosXRopePulleySimul(part.TimPulleys[key],false)+","+getPosYRopePulleySimul(part.TimPulleys[key],false));
+						//console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
+						//console.log("rope: from pulley " + getPosXRopePulleySimul(part.TimPulleys[key],false)+","+getPosYRopePulleySimul(part.TimPulleys[key],false));
 						let next_x=getPosXRopePulleySimul(part.TimPulleys[key],true);
 						let next_y=getPosYRopePulleySimul(part.TimPulleys[key],true);
 						addRopeSegment(start_x,start_y,next_x,next_y, rope);
@@ -1227,7 +1276,7 @@ let
 					})
 					Composite.add(engine.world, [ consE,consS]);
 				
-							
+						
 				}
 			}
 		});	

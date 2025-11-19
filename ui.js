@@ -456,6 +456,14 @@
 				else
 					oy=oy-7;
 			}
+			if(LevelJson.Parts[partNo].appearance=="left (1)")
+			{
+				
+				if(to==false)
+					oy=oy+7;
+				else
+					oy=oy-7;
+			}
 		}
 		
 		if(LevelJson.Parts[partNo].flipV==0)
@@ -487,6 +495,11 @@
 			{
 				ox=ox+5;
 			}
+			if(LevelJson.Parts[partNo].appearance=="left (1)")
+			{
+				//console.log("getPosXRopePulleySimul -5");
+				ox=ox-5;
+			}
 		}	
 		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
 	}
@@ -500,6 +513,14 @@
 		{
 			if(LevelJson.Parts[partNo].appearance=="right (3)")
 			{
+				if(to==false)
+					oy=oy+5;
+				else
+					oy=oy-5;
+			}
+			if(LevelJson.Parts[partNo].appearance=="left (1)")
+			{
+				//console.log("getPosYRopePulleySimul -5");
 				if(to==false)
 					oy=oy+5;
 				else
@@ -786,16 +807,10 @@
 			const  [x,y]=GetNodeRopePos(LevelJson.Parts[RopeStart]);
 			
 			ctx.beginPath();
-			//ctx.moveTo(LevelJson.Parts[RopeStart].pos_x, LevelJson.Parts[RopeStart].pos_y);
-			//ctx.moveTo(x+playgroundOffsetX, y+playgroundOffsetY);
 			ctx.moveTo(getPosXRope(RopeStart,false),getPosYRope(RopeStart,false));
 			for(var key in RopeIntermdiatePulley)
 			{
-				/*
-				const  [xp,yp]=GetNodeRopePos(LevelJson.Parts[RopeIntermdiatePulley[key]]);
-				ctx.lineTo(xp,yp);
-				ctx.moveTo(xp,yp);
-				*/
+				
 				ctx.lineTo(getPosXRope(RopeIntermdiatePulley[key],true), getPosYRope(RopeIntermdiatePulley[key],true));
 				ctx.moveTo(getPosXRope(RopeIntermdiatePulley[key],false), getPosYRope(RopeIntermdiatePulley[key],false));
 			}

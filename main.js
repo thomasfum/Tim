@@ -157,6 +157,12 @@
 							part.connected_part_1=sPart.cp1;
 							part.connected_part_2=sPart.cp2;
 						}
+						if(part.TimType==10)//rope
+						{
+							part.connected_part_1=sPart.cp1;
+							part.connected_part_2=sPart.cp2;
+							part.TimPulleys=sPart.pls;
+						}
 						if(part.TimType==2)//wood incilned
 						{
 							part.size=sPart.size;
@@ -188,6 +194,12 @@
 						{
 							sPart.cp1=part.connected_part_1;
 							sPart.cp2=part.connected_part_2;
+						}
+						if(part.TimType==10)//rope
+						{
+							sPart.cp1=part.connected_part_1;
+							sPart.cp2=part.connected_part_2;
+							sPart.pls=part.TimPulleys;
 						}
 						if(part.TimType==2)//wood incilned
 						{
