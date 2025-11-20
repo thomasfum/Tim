@@ -34,11 +34,11 @@
 //---------------------------
 //bug
 //restrating simul speed is increasing... see level 6 run+run+run
+//TRICK_13
 
 
-
-	var CurrentLevel=10;
-	const MaxLevel=9;
+	var CurrentLevel=13;
+	const MaxLevel=12;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 
@@ -168,10 +168,13 @@
 							part.size=sPart.size;
 							part.width=sPart.width;
 						}
+						
+						
 					}
 				});
 				
 			});
+			connectPlugs();
 		refresh(true);
 	}
 	
@@ -267,6 +270,7 @@
 			  options: {
 				wireframes: wireframe,
 				background: "rgba(0,162,162,255)",
+				//background: 'transparent',
 				width: canvas.width,
 				height: canvas.height,
 				pixelRatio:  window.devicePixelRatio // here

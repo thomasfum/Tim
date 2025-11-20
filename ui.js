@@ -18,6 +18,8 @@
 	function GetNodeRopePos(part)
 	{
 		
+	
+		
 		var x=part.pos_x+(part.width*PartDef[part.TimType].rx);
 		let y=part.pos_y+(part.height*PartDef[part.TimType].ry);
 		//console.log("GetNodePos = "+x+":"+y);
@@ -138,7 +140,10 @@
 						part.animStep2++;
 				if(part.animStep>=part.nb_anim)
 				{
-					part.animStep=0;
+					if(part.fixed==1)
+						part.animStep=1;
+					else
+						part.animStep=0;
 					if(part.megaloop!=undefined)
 					{
 						if(part.megaloop<=5)
@@ -153,13 +158,27 @@
 		}
 	}
 	
-	function RefreshPartially(allObjects, part,zIndex)
+	function RefreshPartially(allObjects, part,zIndex,allObjects)
 	{
 		//console.log("RefreshPartially ",part.no);
 		if((zIndex==0)&&((PartDef[part.TimType].nb_anim!=undefined)&&(PartDef[part.TimType].nb_anim!=0)))
 			return;
 		if((zIndex==1)&&((PartDef[part.TimType].nb_anim==undefined)||(PartDef[part.TimType].nb_anim==0)))
 			return;
+		
+		if((PartDef[part.TimType].zIndex==-1)&&(allObjects==false))
+		{
+			//console.log("zIndex -1 ",part.no);
+			ctx.globalCompositeOperation = "destination-over";
+		}
+		else
+			ctx.globalCompositeOperation = "source-over";
+/*				
+		
+			ctx.fillStyle = "rgba(0,0,162,255)";
+			ctx.fillRect(0, 0, 100, 100);
+		ctx.globalCompositeOperation = "source-over";
+*/
 		
 		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 		{
@@ -171,8 +190,9 @@
 				{
 					//if(part.no==1)
 					//	console.log("refresh 3 -",part.no);
-					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined))
+					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26))//electrical fan
 					{
+						//console.log("refresh 3 -",part.no);
 						//dupliquer en width
 						for (let index = 0; index < part.width/Images[part.TimType+"-0"].width; ++index) 
 						{
@@ -189,7 +209,7 @@
 							}
 						}
 					}
-					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined))
+					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26))
 					{
 						
 						//dupliquer en height
@@ -246,8 +266,8 @@
 						}
 						else
 						{
-							if(part.no==0)
-								console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
+							//if(part.no==0)
+							//	console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
 							//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
 							for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
 							{
@@ -267,6 +287,7 @@
 					}
 					else //no duplication
 					{
+						//console.log("refresh 4 -",part.no);
 						let size=0;
 						if(part.size!=undefined)
 							size=part.size;
@@ -274,17 +295,80 @@
 							
 						if((part.anim==undefined)||(part.anim==false))
 						{
-							part.fixed=0;
-							if(PartDef[part.TimType].fixed!=undefined)
-								part.fixed=PartDef[part.TimType].fixed;
+							
 						
-							part.nb_anim=PartDef[part.TimType].nb_anim;
-							drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
-							if(part.fixed==1)//background
-								drawImage(Images[part.TimType+"-1"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+							if(part.TimType==21)//Electric switch & outlet 
+							{
+								if(allObjects==true)
+									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
+								//console.log("switch");
+								if(part.switch=="down")
+								{
+									drawImage(Images[part.TimType+"-2"],part.pos_x+8,part.pos_y+7,part.flipV,part.flipH);
+								}
+								if(part.switch=="up")
+								{
+									drawImage(Images[part.TimType+"-1"],part.pos_x+8,part.pos_y+8,part.flipV,part.flipH);
+								}
+								if(part.connected_part_1!=undefined)
+								{
+									drawImage(Images[part.TimType+"-3"],part.pos_x+29,part.pos_y+4,part.flipV,part.flipH);
+								}
+								if(part.connected_part_2!=undefined)
+								{
+									drawImage(Images[part.TimType+"-3"],part.pos_x+29,part.pos_y+18,part.flipV,part.flipH);
+								}
+								if(allObjects==false)
+									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							}
+							else
+							{
+								
+								
+								
+								let x=part.pos_x;//
+								let y=part.pos_y+part.height/2-Images[part.TimType+"-"+size].height/2;
+								//console.log("refresh 4 s-"+part.no + x+","+y);
+								part.fixed=0;
+								if(PartDef[part.TimType].fixed!=undefined)
+									part.fixed=PartDef[part.TimType].fixed;
+								part.nb_anim=PartDef[part.TimType].nb_anim;
+								
+								drawImage(Images[part.TimType+"-"+size], x, y,part.flipV,part.flipH);
+								if(part.fixed==1)//background
+									drawImage(Images[part.TimType+"-1"],x,y,part.flipV,part.flipH);
+									
+								if(part.TimType==26)//Generator (26)
+								{
+									if(part.connected_part_1!=undefined)
+									{
+										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+4,part.flipV,part.flipH);
+									}
+									if(part.connected_part_2!=undefined)
+									{
+										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+18,part.flipV,part.flipH);
+									}
+								}
+								if(part.TimType==38)//Solar panels (38)
+								{
+									if(part.connected_part_1!=undefined)
+									{
+										drawImage(Images[part.TimType+"-1"],part.pos_x+52,part.pos_y+4,part.flipV,part.flipH);
+									}
+									if(part.connected_part_2!=undefined)
+									{
+										drawImage(Images[part.TimType+"-1"],part.pos_x+52,part.pos_y+18,part.flipV,part.flipH);
+									}
+								}
+								
+							}
+							
 						}
 						else
 						{
+							
+							
+						
 							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
 							//if(part.no==10)
 							//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
@@ -323,12 +407,28 @@
 									}
 									y=part.pos_y;
 								}
+								
+								//console.log("refresh 4 d-"+part.no + x+","+y);
 								if(part.fixed==1)//background
-									drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+									//drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-0"],x,y,part.flipV,part.flipH);
 									
 								//if(part.no==10)
 								//		console.log("anim1 "+(size+part.animStep));
 								drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+								
+								if(part.TimType==26)//Generator (26)
+								{
+									if(part.connected_part_1!=undefined)
+									{
+										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+4,part.flipV,part.flipH);
+									}
+									if(part.connected_part_2!=undefined)
+									{
+										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+18,part.flipV,part.flipH);
+									}
+								}
+								
 							}
 						}
 					}
@@ -367,54 +467,82 @@
 				}
 			}
 		}
+	
+		ctx.globalCompositeOperation = "source-over";
+	
 	}
 
 
+	
 	function getPosXRopeBody(partNo)
 	{
-		let rx=0;
-		//console.log("getPosXRope",partNo);
-		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
-			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
-		let ox=LevelJson.Parts[partNo].width*rx;
-		
-		if(LevelJson.Parts[partNo].MatterBody.isStatic==true)
-		{
-			if(LevelJson.Parts[partNo].flipH==0)
-				return LevelJson.Parts[partNo].MatterBody.position.x-LevelJson.Parts[partNo].width/2+ox;
-			else
-				return LevelJson.Parts[partNo].MatterBody.position.x+LevelJson.Parts[partNo].width/2-ox;
-		}
-		
-		//if(LevelJson.Parts[partNo].flipH==0)
-			return LevelJson.Parts[partNo].MatterBody.position.x+(LevelJson.Parts[partNo].width/2-ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
-		//else
-		//	return LevelJson.Parts[partNo].MatterBody.position.x+(LevelJson.Parts[partNo].width/2-ox)*Math.sin(-LevelJson.Parts[partNo].MatterBody.angle);
+		let x=0;
+		engine.world.constraints.forEach((constraint)=>{
+			//console.log("constraint :",constraint.bodyA);
+			if(constraint.bodyA!=undefined)
+			{
+				if(constraint.bodyB!=undefined)
+				{
+					if((constraint.bodyA.TimNo==partNo)&&(constraint.bodyB.label=="rope"))
+					{
+						x= constraint.bodyA.position.x+constraint.pointA.x;
+						//console.log("---------------XRopeBody A",x);
+					}
+				
+					if((constraint.bodyB.TimNo==partNo)&&(constraint.bodyA.label=="rope"))
+					{
+						x= constraint.bodyB.position.x+constraint.pointB.x;				
+						//console.log("---------------XRopeBody B",x);
+					}
+				}
+			}	
+		});
+		return x;
 	}
+	
 	function getPosYRopeBody(partNo)
 	{
-		let ry=0;
-		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
-			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
-		let oy=LevelJson.Parts[partNo].height*ry;
-		
-		if(LevelJson.Parts[partNo].MatterBody.isStatic==true)
-		{
-			if(LevelJson.Parts[partNo].flipV==0)
-				return LevelJson.Parts[partNo].MatterBody.position.y-LevelJson.Parts[partNo].height/2+oy;
-			else
-				return LevelJson.Parts[partNo].MatterBody.position.y+LevelJson.Parts[partNo].height/2-oy;
-		}
-		//oy=0;
-		//console.log("angle:",Math.cos(LevelJson.Parts[partNo].MatterBody.angle)*oy);
-		//if(LevelJson.Parts[partNo].flipV==0)
-			return LevelJson.Parts[partNo].MatterBody.position.y-(LevelJson.Parts[partNo].height/2+oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
-		//else
-		//	return LevelJson.Parts[partNo].MatterBody.position.y-(LevelJson.Parts[partNo].height/2-oy)*Math.cos(LevelJson.Parts[partNo].MatterBody.angle);
+		let y=0;
+		engine.world.constraints.forEach((constraint)=>{
+			//console.log("constraint :",constraint.bodyA);
+			if(constraint.bodyA!=undefined)
+			{
+				if(constraint.bodyB!=undefined)
+				{
+				
+					if((constraint.bodyA.TimNo==partNo)&&(constraint.bodyB.label=="rope"))
+					{
+						y= constraint.bodyA.position.y+constraint.pointA.y;							
+						//console.log("---------------YRopeBody A",y);
+					}
+				
+					if((constraint.bodyB.TimNo==partNo)&&(constraint.bodyA.label=="rope"))
+					{
+						y= constraint.bodyB.position.y+constraint.pointB.y;
+						//console.log("---------------YRopeBody B",y);
+					}
+				}
+			}	
+		});
+		return y;
 	}
 	
 	function getPosXRope(partNo,to)
 	{
+		
+		
+		if((CurrentLevel==13)&&(partNo==6))//TRICK_13
+		{
+			
+			let rx2=0.5;
+			if(PartDef[LevelJson.Parts[partNo].TimType].rx2!=undefined)
+				rx2=PartDef[LevelJson.Parts[partNo].TimType].rx2;
+			//console.log("GetNodePosX level 13 ",rx2);
+			let ox=LevelJson.Parts[partNo].width*rx2;
+			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+		}
+		
+		
 		let rx=0.5;
 		//console.log("getPosXRope",partNo);
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
@@ -442,6 +570,18 @@
 	}
 	function getPosYRope(partNo,to)
 	{
+		
+		if((CurrentLevel==13)&&(partNo==6))//TRICK_13
+		{
+			
+			let ry2=0.5;
+			if(PartDef[LevelJson.Parts[partNo].TimType].ry2!=undefined)
+				ry2=PartDef[LevelJson.Parts[partNo].TimType].ry2;
+			//console.log("GetNodePosY level 13 ",ry2);
+			let oy=LevelJson.Parts[partNo].height*ry2;
+			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+		}
+		
 		let ry=0.5;
 		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
 			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
@@ -538,15 +678,18 @@
 	
 	function refresh( allObjects)
 	{
+		
+		
 		//if(wireframe==true)
 		//	return;
 		//displayScore();
 		//console.log("Refresh "+allObjects);
 		if(allObjects==true)
 		{
+
 			ctx.fillStyle = "rgba(0,162,162,255)";
 			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
-			
+
 		}
 		ctx.fillStyle = "rgba(0,243,243,255)";
 		ctx.fillRect(72*8, 0,80, canvas.height-80);
@@ -585,7 +728,7 @@
 		LevelJson.Parts.forEach(part => {
 			if(part.in_partsbin==0)
 			{
-				RefreshPartially(allObjects,part,0);
+				RefreshPartially(allObjects,part,0,allObjects);
 			}
 		});//
 		//console.log("-------------- 1 -------------" );
@@ -593,7 +736,7 @@
 		LevelJson.Parts.forEach(part => {
 			if(part.in_partsbin==0)
 			{
-				RefreshPartially(allObjects,part,1);
+				RefreshPartially(allObjects,part,1,allObjects);
 			}
 		});//
 		
@@ -834,8 +977,6 @@
 		//level info after level load
 		if((Test==false)&&(loadingLevel==true))
 		{
-			
 			NewLevel();	
-			
 		}
 	}

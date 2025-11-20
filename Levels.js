@@ -9,7 +9,8 @@ const WinCondition={
 	"8":{"Conditions":[{"t":"d","unitNo":11}]},
 	"9":{"Conditions":[{"t":"p","unitNo":9,"x1":20,"y1":255,"dx":535,"dy":110},{"t":"p","unitNo":10,"x1":20,"y1":255,"dx":535,"dy":110},{"t":"p","unitNo":11,"x1":20,"y1":255,"dx":535,"dy":110}]},
 	"10":{"Conditions":[{"t":"a","unitNo":6},{"t":"a","unitNo":13},{"t":"a","unitNo":21}]},
-	
+	"11":{"Conditions":[{"t":"a","unitNo":2},{"t":"a","unitNo":10},{"t":"a","unitNo":11}]},
+	"12":{"Conditions":[{"t":"p","unitNo":12,"x1":378,"y1":290,"dx":50,"dy":50}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -23,6 +24,9 @@ const Solutions={
 	"8":{"Parts":[ {"unitNo":15,"x":104,"y":184,"name":"Bellows (16)","FlipH":0,"FlipV":0},{"unitNo":16,"x":392,"y":280,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":9},{"unitNo":18,"x":577,"y":170,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":20,"cp2":6},{"unitNo":19,"x":296,"y":56,"name":"Windmill (40)","FlipH":1,"FlipV":0},{"unitNo":20,"x":200,"y":184,"name":"Windmill (40)","FlipH":0,"FlipV":0}]},
 	"9":{"Parts":[ {"unitNo":12,"x":200,"y":120,"name":"Cannon ball (43)","FlipH":0,"FlipV":0},{"unitNo":13,"x":376,"y":264,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":14,"x":216,"y":152,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
 	"10":{"Parts":[ {"unitNo":19,"x":589,"y":136,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":8,"cp2":21,"pls":[11]},{"unitNo":20,"x":608,"y":133,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":22,"cp2":13,"pls":[15]},{"unitNo":21,"x":65,"y":238,"name":"Gun (27)","FlipH":0,"FlipV":0},{"unitNo":22,"x":221,"y":264,"name":"Bucket (17)","FlipH":0,"FlipV":0}]},
+	"11":{"Parts":[ {"unitNo":9,"x":424,"y":232,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":10,"x":400,"y":102,"name":"Electric fan (24)","FlipH":1,"FlipV":0},{"unitNo":11,"x":70,"y":263,"name":"Electric fan (24)","FlipH":0,"FlipV":0}]},
+	"12":{"Parts":[ {"unitNo":15,"x":592,"y":123,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":599,"y":125,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":21,"cp2":8},{"unitNo":17,"x":591,"y":131,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":7,"cp2":19},{"unitNo":18,"x":365,"y":29,"name":"Windmill (40)","FlipH":0,"FlipV":0},{"unitNo":19,"x":251,"y":300,"name":"Generator (26)","FlipH":0,"FlipV":0},{"unitNo":20,"x":253,"y":254,"name":"Electric fan (24)","FlipH":0,"FlipV":0},{"unitNo":21,"x":137,"y":81,"name":"Electric engine (50)","FlipH":0,"FlipV":0}]},
+	"13":{"Parts":[ {"unitNo":20,"x":600,"y":124,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":25,"cp2":7}, {"unitNo":21,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":10,"cp2":11},{"unitNo":22,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":0,"cp2":15},{"unitNo":23,"x":588,"y":122,"name":"Rope (10)","FlipH":0,"FlipV":1,"cp1":17,"cp2":14,"pls":[]},{"unitNo":24,"x":353,"y":200,"name":"Electric fan (24)","FlipH":1,"FlipV":0},{"unitNo":25,"x":168,"y":46,"name":"Electric engine (50)","FlipH":0,"FlipV":0},{"unitNo":26,"x":314,"y":159,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
 };
 
 

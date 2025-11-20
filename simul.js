@@ -10,6 +10,10 @@ let
 		Constraint = Matter.Constraint,
 		World = Matter.World;
 
+	let collisionCategory_general=1;
+	let collisionCategory_rope=2;
+	let collisionCategory_bullet=4;
+	
 
 	//--------------------------------------------------
 	// AnimPart
@@ -32,6 +36,13 @@ let
 			{
 				console.log("from Part "+PartNo+" action on "+otherExtremity);
 				AnimPart(otherExtremity,false,flipH,flipV,false,false);
+				if(LevelJson.Parts[otherExtremity].TimType==26)//generator
+				{
+					if(LevelJson.Parts[otherExtremity].connected_part_1!=undefined)
+						SwitchElectric(LevelJson.Parts[otherExtremity].connected_part_1);
+					if(LevelJson.Parts[otherExtremity].connected_part_2!=undefined)
+						SwitchElectric(LevelJson.Parts[otherExtremity].connected_part_2);
+				}
 			}
 		}
 	}
@@ -41,8 +52,20 @@ let
 	//--------------------------------------------------
 	function beforeRender()
 	{
+		
+			ctx.fillStyle = "rgba(0,0,162,255)";
+			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
+			
+			
+			
+			
+			
 		//console.log("beforeRender");
 		LevelJson.Parts.forEach(part => {
+			
+			if(part.no==17)
+				console.log("bucket 17",part.MatterBody);
+			
 		if(part.in_partsbin==0)
 		{
 			if(part.is_moving!=0)//moving
@@ -58,7 +81,7 @@ let
 				engine.world.bodies.forEach((body)=>{
 					if(body.isStatic==false)
 					{
-						if(body.collisionFilter.category==2)//rope
+						if(body.collisionFilter.category==collisionCategory_rope)//rope
 						{
 							//console.log("apply force to "+body.label, body.mass);
 							Body.applyForce(body, body.position, { x: body.force.x, y: body.mass * 0.00001});
@@ -209,7 +232,7 @@ let
 								engine.world.bodies.forEach((body)=>{
 									if(body.TimNo==otherExtremity)
 									{
-										console.log("found Gun otherExtremity "+otherExtremity,body.speed);		
+										//console.log("found Gun otherExtremity "+otherExtremity,body.speed);		
 										if(body.speed>0.5)
 										{
 										console.log("fire Gun "+part.no);
@@ -269,7 +292,56 @@ let
 						*/
 					}
 				}
+				if(part.TimType==29)//Light bulb (29)
+				{
+					if(part.anim!=true)
+					{
+						let otherExtremity=PartRopetExtremity(part.no);
+						
+						if(otherExtremity>=0)
+						{
+							if(engine.timing.timestamp>100)
+							{
+								engine.world.bodies.forEach((body)=>{
+									if(body.TimNo==otherExtremity)
+									{
+										//console.log("found Light bulb otherExtremity "+otherExtremity,body.speed);		
+										if(body.speed>0.5)
+										{
+										console.log("light bulb "+part.no);
+										AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
+										}
+									}
+								});
+							}
+						}
+					}
+				}
 			
+				if(part.TimType==38)//Solar panels (38)
+				{
+					LevelJson.Parts.forEach(part1 => {
+						if(isLight(part1))//Light bulb (29)
+						{
+							if(part1.anim==true)//light on
+							{
+								let dx=part1.pos_x- part.pos_x;
+								let dy=part1.pos_y- part.pos_y;
+								let distance=Math.sqrt((dx*dx)+(dy*dy));
+								//console.log("light on at "+distance);
+								if(distance<100)
+								{
+									if(part.connected_part_1!=undefined)
+										if(LevelJson.Parts[part.connected_part_1].anim!=true)
+											SwitchElectric(part.connected_part_1);
+									if(part.connected_part_2!=undefined)
+										if(LevelJson.Parts[part.connected_part_2].anim!=true)
+											SwitchElectric(part.connected_part_2);
+								}
+							}
+						}
+					});
+				}
 			}
 		}
 		});
@@ -335,7 +407,8 @@ let
 										xOffset: 0,
 										yOffset: 0
 											}
-									}
+									},
+								collisionFilter: { category:collisionCategory_bullet,mask: collisionCategory_general }
 								});
 						
 
@@ -723,7 +796,106 @@ let
 			
 		}
 	}
+	function startFan(partno)
+	{
+		let scaleX=1;
+		if(LevelJson.Parts[partno].flipH==1)
+			scaleX=-1;
+		
+		let startPoint = { x: LevelJson.Parts[partno].pos_x+playgroundOffsetX+LevelJson.Parts[partno].width/2, y: LevelJson.Parts[partno].pos_y+playgroundOffsetY+LevelJson.Parts[partno].height/2 };
+		var collisions = [];
+        let  bodies = Composite.allBodies(engine.world);
+        let  endPoint = { x: LevelJson.Parts[partno].pos_x+playgroundOffsetX+LevelJson.Parts[partno].width/2+150*scaleX, y: LevelJson.Parts[partno].pos_y+playgroundOffsetY+LevelJson.Parts[partno].height/2};
+		
+		
+		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
+		console.log("collisions",collisions);
+		collisions.forEach((collision) => {
+			if(collision.body.isStatic==false)
+			{
+			//console.log("collisions ->",collision.body);
+				//collision.body.isSleeping=true;
+				//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
+				Body.setVelocity(collision.body, { x:5*scaleX, y: 0 });
+				collision.body.TimDirectionX=scaleX;
+				//console.log("collisions ->",collision.body);
+			}
+			else
+			{
+				//console.log("bellow blow Type->",LevelJson.Parts[collision.body.TimNo].TimType);
+				if(LevelJson.Parts[collision.body.TimNo].TimType==40)//Windmill (40)
+				{
+					console.log("bellow blow No->",collision.body.TimNo);
+					//collision.body.TimDirectionX=scaleX;
+					AnimPart(collision.body.TimNo,true,LevelJson.Parts[collision.body.TimNo].flipH,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
+				}
+			}
+		});
+	}
+	function startElectricEngine(partno)
+	{
+		console.log("startElectricEngine ",LevelJson.Parts[partno]);
+		
+		
+	}
+	function SwitchElectric(partno)
+	{
+		if(LevelJson.Parts[partno].anim==true)
+		{
+			LevelJson.Parts[partno].anim=false;
+			console.log("Electric stop "+partno);
+		}
+		else
+		{
+			
+			console.log("Electric start "+partno);
+			
+			if(LevelJson.Parts[partno].TimType==24)//Electric fan
+			{
+				AnimPart(partno,false,LevelJson.Parts[partno].flipH,LevelJson.Parts[partno].flipV,false,false);
+				startFan(partno);
+			}
+			if(LevelJson.Parts[partno].TimType==50)//Electric engine (50)
+			{
+				AnimPart(partno,true,LevelJson.Parts[partno].flipH,LevelJson.Parts[partno].flipV,false,false);
+				startElectricEngine(partno);
+			}
+		}
+
+
+		
+	}
+	function collision_ElectricSwitch(_switchBoby,_impactorBody)
+	{
+		
+		if((_impactorBody.velocity.y>0)&&(LevelJson.Parts[_switchBoby.TimNo].switch=="up"))
+		{
+			//console.log("ElectricSwitch collision >down "+_switchBoby.TimNo,_impactorBody.velocity.y);
+			LevelJson.Parts[_switchBoby.TimNo].switch="down";
+			if(LevelJson.Parts[_switchBoby.TimNo].connected_part_1!=undefined)
+				SwitchElectric(LevelJson.Parts[_switchBoby.TimNo].connected_part_1);
+			if(LevelJson.Parts[_switchBoby.TimNo].connected_part_2!=undefined)
+				SwitchElectric(LevelJson.Parts[_switchBoby.TimNo].connected_part_2);
+		}
+		else if((_impactorBody.velocity.y<0)&&(LevelJson.Parts[_switchBoby.TimNo].switch=="down"))
+		{
+			//console.log("ElectricSwitch collision >up "+_switchBoby.TimNo,_impactorBody.velocity.y);
+			LevelJson.Parts[_switchBoby.TimNo].switch="up";
+			if(LevelJson.Parts[_switchBoby.TimNo].connected_part_1!=undefined)
+				SwitchElectric(LevelJson.Parts[_switchBoby.TimNo].connected_part_1);
+			if(LevelJson.Parts[_switchBoby.TimNo].connected_part_2!=undefined)
+				SwitchElectric(LevelJson.Parts[_switchBoby.TimNo].connected_part_2);
+		}
+	}
 	
+	function  collision_FlashLight(_flashLightBoby,_impactorBody)
+	{
+		if((_impactorBody.velocity.y>0))
+		{
+			console.log("FlashLight collision >up "+_flashLightBoby.TimNo,_impactorBody.velocity.y);
+			AnimPart(_flashLightBoby.TimNo,false,LevelJson.Parts[_flashLightBoby.TimNo].flipH,LevelJson.Parts[_flashLightBoby.TimNo].flipV,true,false);
+		}
+	}
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
@@ -756,6 +928,19 @@ let
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)//bellow (16)
 					collision_bellow(collision.bodyB);
 			
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==21)//Electric switch & outlet (21)
+					collision_ElectricSwitch(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==21)//Electric switch & outlet (21)
+					collision_ElectricSwitch(collision.bodyB,collision.bodyA);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==25)//Flashlight (25)
+					collision_FlashLight(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==25)//Flashlight (25)
+					collision_FlashLight(collision.bodyB,collision.bodyA);
+				
+				
+				
+				
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
 					collision_Boxing(collision.bodyA);
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==35)//Boxing glove (35)
@@ -770,6 +955,8 @@ let
 					collision_Trampoline(collision.bodyA,collision.bodyB);
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==39)//Trampoline (39)
 					collision_Trampoline(collision.bodyB,collision.bodyA);
+				
+
 			
 			}
 		});
@@ -803,6 +990,7 @@ let
 					part.pos_y=LevelJsonOrigin.Parts[part.no].pos_y;
 					part.in_partsbin=LevelJsonOrigin.Parts[part.no].in_partsbin;
 					part.fixed=LevelJsonOrigin.Parts[part.no].fixed;
+					part.switch=LevelJsonOrigin.Parts[part.no].switch;
 					
 				}
 				part.anim=false;
@@ -839,7 +1027,7 @@ let
 			let current_x=start_x+i*(dx/distance)*distanceBetween;
 			let current_y=start_y+i*(dy/distance)*distanceBetween;
 			
-			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.1	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:2,mask: 2 }});
+			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.1	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:collisionCategory_rope,mask: collisionCategory_rope }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
 			RopeBody.mass2=0.01;
 			RopeBody.TimNo=undefined;
@@ -930,7 +1118,8 @@ let
 									yOffset: oy//-0.18
 								  
 								  }
-								  }
+								  },
+								  
 								  });
 							
 							//MatterBody.friction=1;
@@ -1035,7 +1224,7 @@ let
 							frictionStatic:0.5*20,
 							*/
 							render: {fillStyle: "rgba(0, 0, 255, 0)" },
-							collisionFilter: { category:2,mask: 2 }
+							collisionFilter: { category:collisionCategory_rope,mask: collisionCategory_rope }
 							  });
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
@@ -1160,18 +1349,17 @@ let
 					}
 					else
 					{
-						/*
-						let group=0;
-						if(part.TimType==37)
-						{
-							group=-1;//rope and cisor
-						}
-						*/						
+						let _isSensor=false;
+						if(part.TimType==21)//Electric switch & outlet 
+							_isSensor=true;
+												
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2, part.width, part.height, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
 							render: { fillStyle: "rgba(0, 0, 255, 0)" },
-							//collisionFilter: { group: group }
+							isSensor: _isSensor,
+							
+							collisionFilter: { category:collisionCategory_general,mask: -1&(~collisionCategory_bullet) }//
 							});
 						Composite.add(world, [MatterBody]);
 						part.MatterBody=MatterBody;
@@ -1203,24 +1391,36 @@ let
 					
 					var s_rx=PartDef[LevelJson.Parts[part.connected_part_1].TimType].rx;
 					var s_ry=PartDef[LevelJson.Parts[part.connected_part_1].TimType].ry;
+					
 					var startboxRx = s_rx*LevelJson.Parts[part.connected_part_1].width-LevelJson.Parts[part.connected_part_1].width/2;
 					var startboxRy = s_ry*LevelJson.Parts[part.connected_part_1].height-LevelJson.Parts[part.connected_part_1].height/2;
+				
 					if(LevelJson.Parts[part.connected_part_1].flipH==1)
 						startboxRx=startboxRx*-1;
 					if(LevelJson.Parts[part.connected_part_1].flipV==1)
 						startboxRy=startboxRy*-1;
+				
 					//console.log("s_rx:",s_rx);
 					
 					var l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx;
 					var l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry;
+					
+					if(CurrentLevel==13)
+					{
+						l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx2;
+						l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry2;
+					}
+					
+					
 					var lastboxRx = l_rx*LevelJson.Parts[part.connected_part_2].width-LevelJson.Parts[part.connected_part_2].width/2;
 					var lastboxRy = l_ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
-					
+					if(CurrentLevel!=13)//TRICK_13
+					{
 					if(LevelJson.Parts[part.connected_part_2].flipH==1)
 						lastboxRx=lastboxRx*-1;
 					if(LevelJson.Parts[part.connected_part_2].flipV==1)
 						lastboxRy=lastboxRy*-1;
-					
+					}
 					
 					//console.log("sb ry:",startboxRy);
 					//console.log("eb ry:",lastboxRy);

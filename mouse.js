@@ -514,7 +514,62 @@
 		Dragging=false;
 		DraggingObject=undefined;
 	}
+	function needPower(part)
+	{
+		if((part.TimType==24)||(part.TimType==50))//Electric fan or engine
+			return true;
+		else 
+			return false;
+	}
+	function isGenerator(part)
+	{
+		if((part.TimType==21)||(part.TimType==26)||(part.TimType==38))//Electric switch & outlet (21) or generator or Solar panels
+			return true;
+		else 
+			return false;
+	}
+	function isLight(part)
+	{
+		if((part.TimType==29)||(part.TimType==25))//Light bulb (29) or Flashlight (25)
+			return true;
+		else 
+			return false;
+	}
 	
+	function connectPlugs()
+	{
+		LevelJson.Parts.forEach(part1 => {
+			if(needPower(part1)==true)//Electric fan or engine
+			{
+				LevelJson.Parts.forEach(part => {
+					
+					if(isGenerator(part)==true)//Electric switch & outlet (21) or generator
+					{
+						let dx=part1.pos_x-part.pos_x;
+						let dy=part1.pos_y-part.pos_y;
+						let dst=Math.sqrt((dx*dx)+(dy*dy));
+						//console.log("fan moving",dst);
+						if(dst<100)
+							connected=part.no;
+					}
+				});
+				//connect
+				if(connected!=undefined)
+				{
+					if(LevelJson.Parts[connected].connected_part_1==undefined)
+					{
+						if(LevelJson.Parts[connected].connected_part_2!=part1.no)
+							LevelJson.Parts[connected].connected_part_1=part1.no;
+					}
+					else if(LevelJson.Parts[connected].connected_part_2==undefined)
+					{
+						if(LevelJson.Parts[connected].connected_part_1!=part1.no)
+							LevelJson.Parts[connected].connected_part_2=part1.no;
+					}
+				}
+			}
+		});
+	}
 	function MouseClickDown(e)
 	{
 		if((loadingLevel==true)&&(Test==false))
@@ -801,6 +856,55 @@
 			}
 			else
 				DraggingObject.overlap=false;
+			
+			if(needPower(DraggingObject))//Electric fan or engine
+			{
+				//console.log("electric moving");
+				let connected=undefined;
+				LevelJson.Parts.forEach(part => {
+					
+					if(isGenerator(part)==true)//Electric switch & outlet (21) or generator
+					{
+						let dx=DraggingObject.pos_x-part.pos_x;
+						let dy=DraggingObject.pos_y-part.pos_y;
+						let dst=Math.sqrt((dx*dx)+(dy*dy));
+						//console.log("electric moving to a generator",dst);
+						if(dst<100)
+							connected=part.no;
+					}
+				});
+				//connect
+				if(connected!=undefined)
+				{
+					if(LevelJson.Parts[connected].connected_part_1==undefined)
+					{
+						if(LevelJson.Parts[connected].connected_part_2!=DraggingObject.no)
+							LevelJson.Parts[connected].connected_part_1=DraggingObject.no;
+					}
+					else if(LevelJson.Parts[connected].connected_part_2==undefined)
+					{
+						if(LevelJson.Parts[connected].connected_part_1!=DraggingObject.no)
+							LevelJson.Parts[connected].connected_part_2=DraggingObject.no;
+					}
+					//console.log("electric moving to a generator",LevelJson.Parts[connected]);
+				}
+				else
+				{
+					//disconnect
+					LevelJson.Parts.forEach(part => {
+						
+						if(isGenerator(part)==true)//Electric switch & outlet (21) or generator
+						{
+							if(part.connected_part_1==DraggingObject.no)
+								part.connected_part_1=undefined;
+							if(part.connected_part_2==DraggingObject.no)
+								part.connected_part_2=undefined;	
+						}
+						
+					});
+				}
+			}
+			
 			refresh(true);
 		}
 		else//over
