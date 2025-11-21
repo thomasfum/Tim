@@ -514,6 +514,15 @@
 		Dragging=false;
 		DraggingObject=undefined;
 	}
+	
+	function isFiring(part)
+	{
+		if((part.TimType==18))//canon
+			return true;
+		else 
+			return false;
+	}
+	
 	function needPower(part)
 	{
 		if((part.TimType==24)||(part.TimType==50))//Electric fan or engine

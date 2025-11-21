@@ -11,6 +11,7 @@ const WinCondition={
 	"10":{"Conditions":[{"t":"a","unitNo":6},{"t":"a","unitNo":13},{"t":"a","unitNo":21}]},
 	"11":{"Conditions":[{"t":"a","unitNo":2},{"t":"a","unitNo":10},{"t":"a","unitNo":11}]},
 	"12":{"Conditions":[{"t":"p","unitNo":12,"x1":378,"y1":290,"dx":50,"dy":50}]},
+	"13":{"Conditions":[{"t":"a","unitNo":15}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},

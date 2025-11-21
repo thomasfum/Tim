@@ -57,14 +57,11 @@ let
 			ctx.fillRect(0, 0, canvas.width, canvas.height-80);
 			
 			
-			
-			
-			
 		//console.log("beforeRender");
 		LevelJson.Parts.forEach(part => {
 			
-			if(part.no==17)
-				console.log("bucket 17",part.MatterBody);
+			//if(part.no==17)
+			//	console.log("bucket 17",part.MatterBody);
 			
 		if(part.in_partsbin==0)
 		{
@@ -305,11 +302,16 @@ let
 								engine.world.bodies.forEach((body)=>{
 									if(body.TimNo==otherExtremity)
 									{
-										//console.log("found Light bulb otherExtremity "+otherExtremity,body.speed);		
-										if(body.speed>0.5)
+										//console.log("found Light bulb otherExtremity "+otherExtremity,body);		
+										let otherX=getPosXRopeBody(otherExtremity);
+										//console.log("found Light bulb otherExtremity "+otherX,part);	
+										if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10)&&(body.position.y>part.pos_y+part.height))//need to be below
 										{
-										console.log("light bulb "+part.no);
-										AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
+											if(body.speed>0.5)
+											{
+												console.log("light bulb "+part.no);
+												AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
+											}
 										}
 									}
 								});
@@ -317,7 +319,6 @@ let
 						}
 					}
 				}
-			
 				if(part.TimType==38)//Solar panels (38)
 				{
 					LevelJson.Parts.forEach(part1 => {
@@ -342,6 +343,30 @@ let
 						}
 					});
 				}
+				if(part.TimType==30)//Magnifying glass (30)
+				{
+					LevelJson.Parts.forEach(part1 => {
+						if(isLight(part1))//Light bulb (29)
+						{
+							if(part1.anim==true)//light on
+							{
+								let dx=part1.pos_x- part.pos_x;
+								let dy=part1.pos_y- part.pos_y;
+								let distance=Math.sqrt((dx*dx)+(dy*dy));
+								if(distance<50)
+								{
+									//console.log("light Magnifying glass at "+distance);
+									if((part1.pos_x<part.pos_x)&&(part1.flipH==0))
+										Magnifying(true,part);
+										
+									if((part1.pos_x>part.pos_x)&&(part1.flipH==1))
+										Magnifying(false,part);
+								}
+							}
+						}
+					});
+				}
+			
 			}
 		}
 		});
@@ -422,6 +447,56 @@ let
 		}
 	}
 	
+	
+	function Magnifying(left, part)
+	{
+		//console.log("Magnifying glass "+part.no +" light left "+left);
+		LevelJson.Parts.forEach(part1 => {
+			if(isFiring(part1))//can be fired
+			{
+				if((part.anim!=true)&&(part.isfiring==undefined))//not firing and not have fired
+				{
+					let fireX=getPosXFire(part1.no);
+					let fireY=getPosYFire(part1.no);
+					console.log("light Magnifying glass will fired "+fireX+";"+fireY);
+					let dx=fireX- part.pos_x;
+					let dy=fireY- part.pos_y;
+					let distance=Math.sqrt((dx*dx)+(dy*dy));
+					if(distance<100)
+					{
+						console.log("light Magnifying glass will fired "+part1.no);
+						part.animStep=0;
+						part.isfiring=part1.no;
+						part.animDelay=0;
+						//part.animOnce=true;
+						part.anim=true;
+						/*
+						if((part1.pos_x<part.pos_x)&&(part1.flipH==0))
+							Magnifying(true,part);
+							
+						if((part1.pos_x>part.pos_x)&&(part1.flipH==1))
+							Magnifying(false,part);
+						*/
+					}
+				}
+				else
+				{
+					if((part.isfiring==part1.no)&&(part.anim==true))
+					{
+						if(part.animDelay==PartDef[part.TimType].animSpeed)
+						{
+							//part.animStep=0;
+							//part.animDelay=0;
+							part.anim=false;
+							console.log("light Magnifying glass fire "+part1.no);
+						}
+					}
+				}
+			}
+		});
+		
+		
+	}
 	function collision_mouse(TimNo)
 	{
 		console.log("moving part direction "+LevelJson.Parts[TimNo].flipH+" "+LevelJson.Parts[TimNo].flipV);
@@ -469,7 +544,7 @@ let
 				if(LevelJson.Parts[collision.body.TimNo].TimType==40)//Windmill (40)
 				{
 					console.log("bellow blow No->",collision.body.TimNo);
-					//collision.body.TimDirectionX=scaleX;
+					collision.body.TimDirectionX=scaleX;
 					AnimPart(collision.body.TimNo,true,LevelJson.Parts[collision.body.TimNo].flipH,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
 				}
 			}
@@ -691,6 +766,17 @@ let
 					}
 				}
 			}
+			if(part.TimType==14)//other gear
+			{
+				if(Matter.Collision.collides(GearBody, part.MatterBody) != null)
+				{
+					if(part.anim==undefined)//gear is not yet rotating
+					{
+						console.log("CheckGear touching gear"+part.no);
+						AnimPart(part.no,false,part.flipH,part.flipV,false,false);	
+					}
+				}
+			}
 		});
 	}
 	
@@ -825,9 +911,13 @@ let
 				//console.log("bellow blow Type->",LevelJson.Parts[collision.body.TimNo].TimType);
 				if(LevelJson.Parts[collision.body.TimNo].TimType==40)//Windmill (40)
 				{
-					console.log("bellow blow No->",collision.body.TimNo);
-					//collision.body.TimDirectionX=scaleX;
-					AnimPart(collision.body.TimNo,true,LevelJson.Parts[collision.body.TimNo].flipH,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
+					
+					console.log("fan blow No->"+collision.body.TimNo+" dir="+scaleX);
+					collision.body.TimDirectionX=scaleX;
+					if(scaleX==1)
+						AnimPart(collision.body.TimNo,true,0,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
+					else
+						AnimPart(collision.body.TimNo,true,1,LevelJson.Parts[collision.body.TimNo].flipV,false,false);
 				}
 			}
 		});
@@ -1007,7 +1097,7 @@ let
 	
 	function addRopeSegment(start_x,start_y,next_x,next_y, rope)
 	{
-		let rope_segment_length = 6;
+		let rope_segment_length = 6;//6
 		let dx=next_x- start_x;
 		let dy=next_y- start_y;
 		//console.log("dx",dx);
@@ -1029,11 +1119,11 @@ let
 			
 			let RopeBody = Bodies.rectangle(current_x, current_y, rope_segment_length,rope_segment_length,{label:"rope",friction:1,	frictionStatic:1, mass:0.1	,sleepThreshold:20 ,render: { visible: false} , collisionFilter: { category:collisionCategory_rope,mask: collisionCategory_rope }});
 			//let RopeBody = Bodies.circle(current_x, current_y, rope_segment_length,{friction:1,	frictionStatic:1, mass:0.3	,sleepThreshold:5 ,render: { visible: true} });
-			RopeBody.mass2=0.01;
+			RopeBody.mass2=0.01;//0.01
 			RopeBody.TimNo=undefined;
 			
 			
-			//let dst=4;
+			
 			last_RopeBody = rope.pop();
 			if(last_RopeBody!=undefined)
 			{
@@ -1405,21 +1495,27 @@ let
 					var l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx;
 					var l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry;
 					
-					if(CurrentLevel==13)
+					if((CurrentLevel==13)&&(part.connected_part_2==6))//TRICK_13
 					{
 						l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx2;
 						l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry2;
 					}
 					
 					
+					
 					var lastboxRx = l_rx*LevelJson.Parts[part.connected_part_2].width-LevelJson.Parts[part.connected_part_2].width/2;
 					var lastboxRy = l_ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
 					if(CurrentLevel!=13)//TRICK_13
 					{
-					if(LevelJson.Parts[part.connected_part_2].flipH==1)
-						lastboxRx=lastboxRx*-1;
-					if(LevelJson.Parts[part.connected_part_2].flipV==1)
-						lastboxRy=lastboxRy*-1;
+						if(LevelJson.Parts[part.connected_part_2].flipH==1)
+							lastboxRx=lastboxRx*-1;
+						if(LevelJson.Parts[part.connected_part_2].flipV==1)
+							lastboxRy=lastboxRy*-1;
+					}
+					else
+					{
+						console.log("flipH",LevelJson.Parts[part.connected_part_2].flipH);
+						console.log("flipV",LevelJson.Parts[part.connected_part_2].flipV);
 					}
 					
 					//console.log("sb ry:",startboxRy);
@@ -1475,6 +1571,8 @@ let
 						render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
 					})
 					Composite.add(engine.world, [ consE,consS]);
+					//Composite.add(engine.world, [ consE]);
+					//Composite.add(engine.world, [ consS]);
 				
 						
 				}

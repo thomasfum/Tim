@@ -18,19 +18,19 @@ const PartDef={
 	"15":{"count":26,"nb_anim":12,"autoAnim":1,"fixed":1},//"Aquarium (15)"
 	"16":{"count":3,"FlipH":1,"nb_anim":3,"restitution":0.4,"phy_poly":[{"p":"0 0  1 0.4 1 0.6 0 1  0 0"}]},//bellows (soufflet)
 	"17":{"count":1,"rx":0.5,"ry":0,"mass":2,"phy_poly":[{"p":"0.25 0  0.75 0  0.9 0.45  0.75 1  0.25 1  0.1 0.45 "}]},//bucket
-	"18":{"count":16},
+	"18":{"count":16},//canon
 	"19":{"count":6},
-	"20":{"count":3},//bullet
-	"21":{"count":4,"zIndex":-1},//Electric switch & outlet 
+	"20":{"count":3},												//bullet
+	"21":{"count":4,"zIndex":-1},									//Electric switch & outlet 
 	"22":{"count":3},
-	"23":{"count":1,"rx":0.5,"ry":0.2},//eye hook 
-	"24":{"count":5,"FlipH":1,"nb_anim":4,"fixed":1,"animSpeed":2},//Electric fan
-	"25":{"count":2,"nb_anim":2},//Flashlight (25)
+	"23":{"count":1,"rx":0.5,"ry":0.2},								//eye hook 
+	"24":{"count":5,"FlipH":1,"nb_anim":4,"fixed":1,"animSpeed":2},	//Electric fan
+	"25":{"count":2,"FlipH":1,"nb_anim":2},									//Flashlight (25)
 	"26":{"count":6,"fixed":1,"nb_anim":4,"node_x":70,"node_y":90,"node_d":20},//Generator (26)
 	"27":{"count":6,"FlipH":1,"rx":0.35,"ry":0.85,"nb_anim":6,"animLeft":1},//gun//0.35
 	"28":{"count":1,"restitution":0.2,"mass":1},//baseball
 	"29":{"count":6,"rx":0.8,"ry":1,"nb_anim":2,},//Light bulb (29)
-	"30":{"count":1},
+	"30":{"count":1,"FlipH":1,"nb_anim":0,"animSpeed":100},//Magnifying glass (30)
 	"31":{"count":10},
 	"32":{"count":1},
 	"33":{"count":1},

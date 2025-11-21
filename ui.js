@@ -129,7 +129,8 @@
 			animSpeed=PartDef[part.TimType].animSpeed;
 		if(animSpeed>0)
 		{
-			part.animDelay++;
+			if(part.anim==true)
+				part.animDelay++;
 			if(part.animDelay>animSpeed)
 			{
 				part.animDelay=0;
@@ -190,7 +191,7 @@
 				{
 					//if(part.no==1)
 					//	console.log("refresh 3 -",part.no);
-					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26))//electrical fan
+					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18))//electrical fan, canon
 					{
 						//console.log("refresh 3 -",part.no);
 						//dupliquer en width
@@ -209,7 +210,7 @@
 							}
 						}
 					}
-					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26))
+					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18))
 					{
 						
 						//dupliquer en height
@@ -296,8 +297,15 @@
 						if((part.anim==undefined)||(part.anim==false))
 						{
 							
-						
-							if(part.TimType==21)//Electric switch & outlet 
+							if(part.TimType==18)//canon
+							{
+								drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+								if(part.flipH==0)
+									drawImage(Images[part.TimType+"-"+9], part.pos_x+9, part.pos_y+13,part.flipV,part.flipH);
+								else
+									drawImage(Images[part.TimType+"-"+9], part.pos_x+16, part.pos_y+13,part.flipV,part.flipH);
+							}
+							else if(part.TimType==21)//Electric switch & outlet 
 							{
 								if(allObjects==true)
 									drawImage(Images[part.TimType+"-"+size], part.pos_x, part.pos_y,part.flipV,part.flipH);
@@ -366,9 +374,6 @@
 						}
 						else
 						{
-							
-							
-						
 							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
 							//if(part.no==10)
 							//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
@@ -428,6 +433,24 @@
 										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+18,part.flipV,part.flipH);
 									}
 								}
+								if(part.TimType==30)//Magnifying glass (30)
+								{
+									if(part.isfiring!=undefined)
+									{
+										let fireX=getPosXFire(part.isfiring);
+										let fireY=getPosYFire(part.isfiring);
+										ctx.strokeStyle = "rgb(243, 243, 0)";//243,178,0
+										ctx.fillStyle = "rgb(243, 243, 0)";//243,178,0
+										ctx.beginPath();
+										ctx.moveTo( playgroundOffsetX+part.pos_x+part.width/2, playgroundOffsetY+part.pos_y);
+										ctx.lineTo(fireX,fireY);
+										
+										ctx.lineTo( playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2);
+										ctx.closePath(); // automatically moves back to bottom left corner
+										ctx.fill();
+										
+									}
+								}
 								
 							}
 						}
@@ -435,6 +458,7 @@
 				}
 				else //part.appearance == something
 				{
+					//console.log("refresh 4 -",part.no);
 					//console.log("*****refresh apparence ("+part.no+") "+part.name);
 					//if(part.no==0)
 					//	console.log("refresh 5 -",part.no);
@@ -443,7 +467,31 @@
 					let end=part.appearance.indexOf(')');
 					let subResult = part.appearance.substring(start+1, end);
 					//console.log(part.TimType+"_"+subResult);
-					if((part.anim==undefined)||(part.anim==false))
+					if(part.TimType==29)//Light bulb (29)
+					{
+						if((part.anim==undefined)||(part.anim==false))
+						{
+							drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							if(subResult==0)
+								drawImage(Images[part.TimType+"-"+4], part.pos_x+21, part.pos_y+28,part.flipV,part.flipH);
+							else
+								drawImage(Images[part.TimType+"-"+4], part.pos_x+21, part.pos_y+4,part.flipV,part.flipH);
+						}
+						else
+						{
+							if(subResult==0)
+							{
+								drawImage(Images[part.TimType+"-"+(parseInt(subResult)+1)], part.pos_x-8, part.pos_y-18,part.flipV,part.flipH);
+								drawImage(Images[part.TimType+"-"+5], part.pos_x+21, part.pos_y+28,part.flipV,part.flipH);
+							}
+							else
+															{
+								drawImage(Images[part.TimType+"-"+(parseInt(subResult)+1)], part.pos_x-8, part.pos_y,part.flipV,part.flipH);
+								drawImage(Images[part.TimType+"-"+5], part.pos_x+21, part.pos_y+4,part.flipV,part.flipH);
+							}
+						}
+					}
+					else if((part.anim==undefined)||(part.anim==false))
 						drawImage(Images[part.TimType+"-"+subResult], part.pos_x, part.pos_y,part.flipV,part.flipH);
 					else
 					{
@@ -527,6 +575,15 @@
 		return y;
 	}
 	
+	
+	function getPosXFire(partNo)
+	{
+		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x;
+	}
+	function getPosYFire(partNo)
+	{
+		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y;
+	}
 	function getPosXRope(partNo,to)
 	{
 		
