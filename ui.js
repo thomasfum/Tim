@@ -183,6 +183,8 @@
 		
 		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 		{
+			
+								
 			//if(part.no==0)
 			//	console.log("refresh 2 -",part.no);
 			if((part.TimType!=8)&&(part.TimType!=10))//not belt & not rope
@@ -288,6 +290,7 @@
 					}
 					else //no duplication
 					{
+						
 						//console.log("refresh 4 -",part.no);
 						let size=0;
 						if(part.size!=undefined)
@@ -303,7 +306,7 @@
 								if(part.flipH==0)
 									drawImage(Images[part.TimType+"-"+9], part.pos_x+9, part.pos_y+13,part.flipV,part.flipH);
 								else
-									drawImage(Images[part.TimType+"-"+9], part.pos_x+16, part.pos_y+13,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+9], part.pos_x+15, part.pos_y+13,part.flipV,part.flipH);
 							}
 							else if(part.TimType==21)//Electric switch & outlet 
 							{
@@ -332,8 +335,8 @@
 							else
 							{
 								
-								
-								
+								if(part.no==21)
+									console.log("dynamite",part);
 								let x=part.pos_x;//
 								let y=part.pos_y+part.height/2-Images[part.TimType+"-"+size].height/2;
 								//console.log("refresh 4 s-"+part.no + x+","+y);
@@ -374,6 +377,7 @@
 						}
 						else
 						{
+							
 							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
 							//if(part.no==10)
 							//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
@@ -381,12 +385,97 @@
 							{
 								//console.log("1 no image for "+part.no+" : "+part.animStep);
 							}
+							else if(part.TimType==19)//dynamite
+							{
+								
+								drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+							}
+							else if(part.TimType==18)//canon
+							{
+								//
+								let ox_e=0;
+								let ox_e2=0;
+								let ox_1=0;
+								let ox_2=0;
+								let ox_3=0;
+								let ox_4=0;
+								let ox_5=0;
+								let ox_o=0;
+								if(part.flipH==1)
+								{
+									ox_e=60;
+									ox_e2=59;//8
+									ox_1=22;//8
+									ox_2=16;//0
+									ox_3=-36;//<<32
+									ox_4=-36;//>>
+									ox_5=-4;
+									ox_o=-180;
+									//console.log("rrr",part.width);
+								}
+								if(part.animStep<5)
+								{
+									//console.log("cannon "+part.TimType+"-"+(part.animStep+10),Images );
+									drawImage(Images[part.TimType+"-"+(part.animStep+10)], part.pos_x-4+ox_e, part.pos_y-4,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+								}
+								else
+								{
+									if(part.animStep==5)
+										drawImage(Images[part.TimType+"-"+1], part.pos_x-7+ox_1, part.pos_y-8,part.flipV,part.flipH);
+									if(part.animStep==6)
+										drawImage(Images[part.TimType+"-"+2], part.pos_x-8+ox_2, part.pos_y-11,part.flipV,part.flipH);
+									if(part.animStep==7)
+									{
+										drawImage(Images[part.TimType+"-"+3], part.pos_x+ox_3, part.pos_y-8,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+4], part.pos_x+86+ox_3+ox_o, part.pos_y-39,part.flipV,part.flipH);
+									}
+									if(part.animStep==8)
+									{
+										drawImage(Images[part.TimType+"-"+5], part.pos_x+ox_4, part.pos_y-12,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+6], part.pos_x+86+10+ox_4+ox_o, part.pos_y-39-5,part.flipV,part.flipH);
+									}
+									if(part.animStep==9)
+									{
+										drawImage(Images[part.TimType+"-"+7], part.pos_x+ox_5, part.pos_y-10,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+8], part.pos_x+86+10+ox_5+ox_o, part.pos_y-39-5,part.flipV,part.flipH);
+									}
+									if(part.animStep>9)
+									{
+										drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+15], part.pos_x-1+ox_e2, part.pos_y+2,part.flipV,part.flipH);
+									}
+								}
+								
+								
+								//wheel
+								if(part.flipH==0)
+									drawImage(Images[part.TimType+"-"+9], part.pos_x+9, part.pos_y+13,part.flipV,part.flipH);
+								else
+									drawImage(Images[part.TimType+"-"+9], part.pos_x+15, part.pos_y+13,part.flipV,part.flipH);
+								
+							}
 							else
 							{
 								//console.log("anim1 "+part.no+ " "+part.name);
 								//let x=part.pos_x;
 								let x=part.pos_x;//
 								let y=part.pos_y+part.height/2-Images[part.TimType+"-"+(size+part.animStep)].height/2;
+								
+								if(PartDef[part.TimType].at=="tl")
+								{
+									if(part.flipH==1)
+									{
+										x=part.pos_x+part.width-Images[part.TimType+"-"+(size+part.animStep)].width;
+									}
+									else
+									{
+										x=part.pos_x;
+									}
+									y=part.pos_y-part.height/2;
+									
+								}
+								
 								if(PartDef[part.TimType].animRight==1)
 								{
 									if(part.flipH==1)
@@ -433,25 +522,6 @@
 										drawImage(Images[part.TimType+"-5"],part.pos_x+5,part.pos_y+18,part.flipV,part.flipH);
 									}
 								}
-								if(part.TimType==30)//Magnifying glass (30)
-								{
-									if(part.isfiring!=undefined)
-									{
-										let fireX=getPosXFire(part.isfiring);
-										let fireY=getPosYFire(part.isfiring);
-										ctx.strokeStyle = "rgb(243, 243, 0)";//243,178,0
-										ctx.fillStyle = "rgb(243, 243, 0)";//243,178,0
-										ctx.beginPath();
-										ctx.moveTo( playgroundOffsetX+part.pos_x+part.width/2, playgroundOffsetY+part.pos_y);
-										ctx.lineTo(fireX,fireY);
-										
-										ctx.lineTo( playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2);
-										ctx.closePath(); // automatically moves back to bottom left corner
-										ctx.fill();
-										
-									}
-								}
-								
 							}
 						}
 					}
@@ -578,11 +648,25 @@
 	
 	function getPosXFire(partNo)
 	{
-		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x;
+	
+		let fx=0.5;	
+		//console.log("getPosXRope",partNo);
+		if(PartDef[LevelJson.Parts[partNo].TimType].fx!=undefined)
+			fx=PartDef[LevelJson.Parts[partNo].TimType].fx;
+		let ox=LevelJson.Parts[partNo].width*fx;	
+		if(LevelJson.Parts[partNo].flipH==0)
+			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+		else
+			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
+		
 	}
 	function getPosYFire(partNo)
 	{
-		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y;
+		let fy=0.5;
+		if(PartDef[LevelJson.Parts[partNo].TimType].fy!=undefined)
+			fy=PartDef[LevelJson.Parts[partNo].TimType].fy;
+		let oy=LevelJson.Parts[partNo].height*fy;
+		return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
 	}
 	function getPosXRope(partNo,to)
 	{
@@ -758,7 +842,7 @@
 		
 		
 		//--------------------------
-		//step 0 //cisor
+		//step 0 
 		LevelJson.Parts.forEach(part => {
 			
 			if(part.in_partsbin==0)
@@ -774,9 +858,29 @@
 							drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,false,part.flipH);
 					}
 				}
+				if(part.TimType==30)//Magnifying glass (30)
+				{
+					if((part.isfiring!=undefined)&&(part.anim==true))
+					{
+						let fireX=getPosXFire(part.isfiring);
+						let fireY=getPosYFire(part.isfiring);
+						ctx.strokeStyle = "rgb(243, 243, 0)";//243,178,0
+						ctx.fillStyle = "rgb(243, 243, 0)";//243,178,0
+						ctx.beginPath();
+						ctx.moveTo( playgroundOffsetX+part.pos_x+part.width/2, playgroundOffsetY+part.pos_y);
+						ctx.lineTo(fireX,fireY);
+						
+						ctx.lineTo( playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2);
+						ctx.closePath(); // automatically moves back to bottom left corner
+						ctx.fill();
+						
+					}
+				}
 			
 			}
 		});//
+		
+		
 		
 		
 		//step 1

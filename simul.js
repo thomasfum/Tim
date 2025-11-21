@@ -60,8 +60,7 @@ let
 		//console.log("beforeRender");
 		LevelJson.Parts.forEach(part => {
 			
-			//if(part.no==17)
-			//	console.log("bucket 17",part.MatterBody);
+			
 			
 		if(part.in_partsbin==0)
 		{
@@ -214,6 +213,13 @@ let
 						
 					}
 				}
+				if(part.TimType==18)//canon
+				{
+					if(part.animStep==7)
+					{
+						CanonFire(part);
+					}
+				}
 				if(part.TimType==27)//Gun (27)
 				{
 					if(part.anim!=true)
@@ -353,13 +359,14 @@ let
 								let dx=part1.pos_x- part.pos_x;
 								let dy=part1.pos_y- part.pos_y;
 								let distance=Math.sqrt((dx*dx)+(dy*dy));
+								
 								if(distance<50)
 								{
-									//console.log("light Magnifying glass at "+distance);
-									if((part1.pos_x<part.pos_x)&&(part1.flipH==0))
+									//console.log("light Magnifying glass at "+distance);	
+									if((part1.pos_x<part.pos_x)&&(part.flipH==0))
 										Magnifying(true,part);
 										
-									if((part1.pos_x>part.pos_x)&&(part1.flipH==1))
+									if((part1.pos_x>part.pos_x)&&(part.flipH==1))
 										Magnifying(false,part);
 								}
 							}
@@ -402,6 +409,54 @@ let
 		//	stop();
 	}
 	
+	
+	function CanonFire(part)
+	{
+		if(part.isfiring!=true)
+		{
+			
+			part.isfiring=true;
+			
+			let swap=1;
+			if(part.flipH==1)
+				swap=-1;
+			//console.log("LaunchGunBullet "+LevelJson.Parts.length );
+			let newPart={no:LevelJson.Parts.length,TimType: 20, width:0,height:0, is_moving: 1, in_partsbin: 0, is_scenery: 0,flipH:0, flipV:0,name:"bullet",pos_x:-100,pos_y:-100,selected:0};
+			//console.log("LaunchGunBullet "+LevelJson.Parts );
+			let x=0;
+			if(swap==-1)//no swap
+				x=part.pos_x-10;
+			if(swap==1)//swap
+				x=part.pos_x+part.Images[part.TimType+"-0"].width+10;
+			//console.log("flip "+x);
+			var MatterBody = Bodies.circle(playgroundOffsetX+x, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2-8,   Images["43-0"].height/2, {
+								TimNo:newPart.no,
+								isSleeping: false,
+								isStatic: false,
+								restitution: 0.1, 
+								mass:1,
+								mass2:1,
+								label:"bullet",
+								render: {
+									sprite: { texture: Images["43-0"].src, 
+										xOffset: 0,
+										yOffset: 0
+											}
+									},
+								//collisionFilter: { category:collisionCategory_bullet,mask: collisionCategory_general }
+								});
+						
+			console.log("Canon "+part.no+" fire ",newPart);
+			Composite.add(world, [MatterBody]);
+			newPart.MatterBody=MatterBody;
+			LevelJson.Parts.push(newPart);
+			if(swap==-1)
+				Body.rotate(MatterBody, 3.14);
+			Body.setVelocity(MatterBody, { x:10*swap, y: -3 });				
+			
+			
+		}
+	}
 	function LaunchGunBullet(GunBody)
 	{
 		if((LevelJson.Parts[GunBody.TimNo].animStep==3)&&(LevelJson.Parts[GunBody.TimNo].animDelay==0))
@@ -446,19 +501,20 @@ let
 			
 		}
 	}
-	
-	
 	function Magnifying(left, part)
 	{
 		//console.log("Magnifying glass "+part.no +" light left "+left);
 		LevelJson.Parts.forEach(part1 => {
 			if(isFiring(part1))//can be fired
 			{
+				//console.log("Magnifying glass "+part.no +" light left "+left, part);
 				if((part.anim!=true)&&(part.isfiring==undefined))//not firing and not have fired
 				{
+					
 					let fireX=getPosXFire(part1.no);
 					let fireY=getPosYFire(part1.no);
-					console.log("light Magnifying glass will fired "+fireX+";"+fireY);
+					console.log("Magnifying glass "+part.no +": "+fireX+";"+fireY);
+					//console.log("light Magnifying glass will fired "+fireX+";"+fireY);
 					let dx=fireX- part.pos_x;
 					let dy=fireY- part.pos_y;
 					let distance=Math.sqrt((dx*dx)+(dy*dy));
@@ -488,7 +544,8 @@ let
 							//part.animStep=0;
 							//part.animDelay=0;
 							part.anim=false;
-							console.log("light Magnifying glass fire "+part1.no);
+							console.log("light Magnifying glass fire "+part1.no );
+							AnimPart(part1.no,false,part1.flipH,part1.flipV,true,false);
 						}
 					}
 				}
@@ -1089,6 +1146,7 @@ let
 				part.animDirectionX=0;
 				part.animOnce=false;
 				part.animCleanAtEnd=false;
+				part.isfiring=undefined;
 
 			});
 		}
@@ -1167,10 +1225,13 @@ let
 			
 			if(part.in_partsbin==0)//not in bin
 			{
-							
+				
 				//console.log(part);
 				if(part.is_moving!=0)//moving
 				{
+					
+					
+							
 					if(part.TimType==10)//Rope (10)
 					{
 						
@@ -1189,6 +1250,17 @@ let
 							ox=PartDef[part.TimType].ox;
 						if(PartDef[part.TimType].oy!=undefined)
 							oy=PartDef[part.TimType].oy;
+						
+						let sub=0;
+						if(part.flipH==1)
+						{
+							if(part.TimType==19)//dynamite
+							{
+								console.log("dynamite Flip" );
+								sub=6;
+							}
+						}
+						
 						if(PartDef[part.TimType].phy_poly===undefined)
 						{
 							var MatterBody = Bodies.circle(playgroundOffsetX+part.pos_x+part.Images[part.TimType+"-0"].width/2, playgroundOffsetY+part.pos_y+part.Images[part.TimType+"-0"].height/2,  part.Images[part.TimType+"-0"].width/2, {
@@ -1201,7 +1273,7 @@ let
 								mass:Math.abs(mass),
 								mass2:mass,
 								render: {
-								  sprite: { texture: part.Images[part.TimType+"-0"].src, 
+								  sprite: { texture: part.Images[part.TimType+"-"+sub].src, 
 								  //xScale: ratio,
 								  //yScale: ratio,
 									xOffset: ox,
@@ -1211,12 +1283,13 @@ let
 								  },
 								  
 								  });
-							
+						
 							//MatterBody.friction=1;
 							MatterBody.frictionAir=0.02;
 							//MatterBody.frictionAir=0.1;
 							//MatterBody.sleepThreshold=2;
-
+							
+							
 							Composite.add(world, [MatterBody]);
 							part.MatterBody=MatterBody;
 						}
@@ -1275,6 +1348,10 @@ let
 								
 								//MatterBody.friction=1;
 								MatterBody.frictionAir=0.02;
+								
+								if(part.flipH==1)
+									Body.rotate(MatterBody, 3.14);
+			
 								//MatterBody.frictionAir=0.1;
 								//MatterBody.sleepThreshold=2;
 								//console.log("Poly move",MatterBody);
