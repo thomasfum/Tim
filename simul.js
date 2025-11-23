@@ -104,6 +104,20 @@ let
 						}
 					}
 				});
+				
+				if(part.TimType==19)//dynamite
+				{
+					if(part.animStep==6)
+						detroyDynamite(part);
+				}
+				if(part.TimType==36)//rocket
+				{
+					if(part.animStep>7)
+					{
+						Body.applyForce(part.MatterBody, part.MatterBody.position, { x: 0, y: -0.001 })
+					}
+					
+				}
 			}
 			else //staticobj
 			{
@@ -313,7 +327,9 @@ let
 										//console.log("found Light bulb otherExtremity "+otherX,part);	
 										if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10)&&(body.position.y>part.pos_y+part.height))//need to be below
 										{
-											if(body.speed>0.5)
+											console.log("light bulb "+body.speed,body );
+											//if(body.speed>0.5)
+											if(body.velocity.y<-0.025)
 											{
 												console.log("light bulb "+part.no);
 												AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
@@ -395,6 +411,8 @@ let
 					CheckGear(body);
 				if(LevelJson.Parts[body.TimNo].TimType==27)//Gun (27)
 					LaunchGunBullet(body);
+				if(LevelJson.Parts[body.TimNo].TimType==36)//rocket (36)
+					CheckRocket(body);
 			}
 		});
 		
@@ -409,6 +427,41 @@ let
 		//	stop();
 	}
 	
+	function CheckRocket(RocketBody)
+	{
+		if(LevelJson.Parts[RocketBody.TimNo].animStep>=6)//fired
+		{
+			engine.world.bodies.forEach((body)=>{
+				if(body.TimNo!=undefined)//rope
+				{
+					let rocketBottom={};
+					rocketBottom.x=RocketBody.position.x;
+					rocketBottom.y=RocketBody.position.y+60;
+					//console.log("rocketBottom",rocketBottom)
+					//rocketBottom.y+=30;
+					let dist= Matter.Vector.magnitude( Matter.Vector.sub(rocketBottom, body.position));
+					if(dist<60)
+					{
+						//console.log("rocket fire touch body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name,body);
+						if(LevelJson.Parts[body.TimNo].TimType==19)//dynamite
+						{
+							console.log("explode touch dynamite ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							AnimPart(body.TimNo,false,LevelJson.Parts[body.TimNo].flipH,LevelJson.Parts[body.TimNo].flipV,true,false);
+						}
+						if(LevelJson.Parts[body.TimNo].TimType==4)//ballon
+						{
+							console.log("explode touch ballon ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							if(LevelJson.Parts[body.TimNo].anim==undefined)//ballon is not yet exploding
+							{
+								destroy_ballon(body);
+							}
+						}
+						
+					}
+				}
+			});
+		}
+	}
 	
 	function CanonFire(part)
 	{
@@ -513,7 +566,7 @@ let
 					
 					let fireX=getPosXFire(part1.no);
 					let fireY=getPosYFire(part1.no);
-					console.log("Magnifying glass "+part.no +": "+fireX+";"+fireY);
+					//console.log("Magnifying glass "+part.no +": "+fireX+";"+fireY);
 					//console.log("light Magnifying glass will fired "+fireX+";"+fireY);
 					let dx=fireX- part.pos_x;
 					let dy=fireY- part.pos_y;
@@ -646,6 +699,47 @@ let
 		}
 
 	}
+	
+	function detroyDynamite(part)
+	{
+		if(part.MatterBody!=undefined)
+		{
+			let x=part.MatterBody.position.x;
+			let y=part.MatterBody.position.y;
+			console.log("detroyDynamite ");
+		
+			const BodyToDestroy= [];
+			engine.world.bodies.forEach((body)=>{
+				if(body.TimNo!=undefined)//rope
+				{
+					let dist= Matter.Vector.magnitude( Matter.Vector.sub(part.MatterBody.position, body.position));
+					if(dist<60)
+					{
+						//console.log("explode touch body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name,body);
+						if(LevelJson.Parts[body.TimNo].TimType==1)//brick wall
+						{
+							//console.log("explode destroy ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							BodyToDestroy.push(body);
+							LevelJson.Parts[body.TimNo].visible=false;
+							
+						}
+						if(body.isStatic==0)//moving Object
+						{
+							//console.log("explode move body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							let dx=x-body.position.x;
+							let dy=y-body.position.y;
+							Body.setVelocity(body, { x:dx*-0.1, y: dy*-0.05 });
+						}
+					}
+				}
+			});
+			
+			BodyToDestroy.push(part.MatterBody);
+			Composite.remove(world, BodyToDestroy);
+			part.MatterBody=undefined;
+		}
+	}
+	
 	function destroy_ballon(_boby)
 	{
 		
@@ -1141,6 +1235,7 @@ let
 					
 				}
 				part.anim=false;
+				part.visible=true;
 				part.animStep=0;
 				part.animDelay=0;
 				part.animDirectionX=0;
@@ -1229,9 +1324,6 @@ let
 				//console.log(part);
 				if(part.is_moving!=0)//moving
 				{
-					
-					
-							
 					if(part.TimType==10)//Rope (10)
 					{
 						

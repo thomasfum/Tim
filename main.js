@@ -1,9 +1,9 @@
 
 //0,162,162
+//https://classicreload.com/play/dosx-the-incredible-machine.html
 //https://www.vogons.org/viewtopic.php?p=1089143#p1089143
 //https://codeberg.org/knt47/timgres
 //https://moddingwiki.shikadi.net/wiki/The_Incredible_Machine_Level_Format
-//https://classicreload.com/play/dosx-the-incredible-machine.html
 //https://www.cursor.cc/?
 
 //rope
@@ -37,8 +37,8 @@
 //TRICK_13
 
 
-	var CurrentLevel=15;
-	const MaxLevel=14;
+	var CurrentLevel=16;
+	const MaxLevel=15;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 

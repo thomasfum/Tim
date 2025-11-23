@@ -517,7 +517,7 @@
 	
 	function isFiring(part)
 	{
-		if((part.TimType==18)||(part.TimType==19))//canon, dynamit
+		if((part.TimType==18)||(part.TimType==19)||(part.TimType==36))//canon, dynamit,rocket
 			return true;
 		else 
 			return false;

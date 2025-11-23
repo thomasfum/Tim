@@ -13,6 +13,7 @@ const WinCondition={
 	"12":{"Conditions":[{"t":"p","unitNo":12,"x1":378,"y1":290,"dx":50,"dy":50}]},
 	"13":{"Conditions":[{"t":"a","unitNo":15}]},
 	"14":{"Conditions":[{"t":"a","unitNo":7},{"t":"a","unitNo":8},{"t":"a","unitNo":9}]},
+	"15":{"Conditions":[{"t":"a","unitNo":18}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -30,6 +31,8 @@ const Solutions={
 	"12":{"Parts":[ {"unitNo":15,"x":592,"y":123,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":599,"y":125,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":21,"cp2":8},{"unitNo":17,"x":591,"y":131,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":7,"cp2":19},{"unitNo":18,"x":365,"y":29,"name":"Windmill (40)","FlipH":0,"FlipV":0},{"unitNo":19,"x":251,"y":300,"name":"Generator (26)","FlipH":0,"FlipV":0},{"unitNo":20,"x":253,"y":254,"name":"Electric fan (24)","FlipH":0,"FlipV":0},{"unitNo":21,"x":137,"y":81,"name":"Electric engine (50)","FlipH":0,"FlipV":0}]},
 	"13":{"Parts":[ {"unitNo":20,"x":600,"y":124,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":25,"cp2":7}, {"unitNo":21,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":10,"cp2":11},{"unitNo":22,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":0,"cp2":15},{"unitNo":23,"x":588,"y":122,"name":"Rope (10)","FlipH":0,"FlipV":1,"cp1":17,"cp2":14,"pls":[]},{"unitNo":24,"x":353,"y":200,"name":"Electric fan (24)","FlipH":1,"FlipV":0},{"unitNo":25,"x":168,"y":46,"name":"Electric engine (50)","FlipH":0,"FlipV":0},{"unitNo":26,"x":314,"y":159,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
 	"14":{"Parts":[ {"unitNo":13,"x":382,"y":197,"name":"Magnifying glass (30)","FlipH":1,"FlipV":0},{"unitNo":14,"x":105,"y":275,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":15,"x":405,"y":200,"name":"Flashlight (25)","FlipH":1,"FlipV":0},{"unitNo":16,"x":70,"y":279,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
+	"15":{"Parts":[ {"unitNo":23,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":22,"cp2":9,"pls":[]},{"unitNo":24,"x":426,"y":265,"name":"Magnifying glass (30)","FlipH":1,"FlipV":0},{"unitNo":25,"x":448,"y":273,"name":"Flashlight (25)","FlipH":1,"FlipV":0},{"unitNo":26,"x":286,"y":153,"name":"Dynamite (19)","FlipH":1,"FlipV":0}]},
+	"16":{"Parts":[ {"unitNo":19,"x":264,"y":279,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":21,"x":222,"y":282,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
 };
 
 /*
@@ -86,12 +89,12 @@ const Solutions={
 		
 		if(part.orientation!=undefined)
 		{
-			//console.log("orientation");
+			console.log("orientation",part.orientation);
 			//let start=part.orientation.indexOf('(');
 			//let end=part.orientation.indexOf(')');
 			//flipHs = part.orientation.substring(start+1, end);
 			//console.log("flipH="+flipH);
-			if(part.orientation.indexOf("left")>0)
+			if(part.orientation.indexOf("left")>=0)
 				flipHs="1";
 		}
 		if(flipHs=="0")
@@ -240,7 +243,12 @@ const Solutions={
 			Images["20-0"]=0;//bullet
 			loadImage("20-0",undefined,0);
 			
-			Images["43-0"]=0;//cannon ball
+			for(let i=0;i<6;i++)
+			{
+				Images["41-"+i]=0;//explosion
+				loadImage("41-"+i,undefined,0);
+			}
+			Images["43-0"]=0;//canon ball
 			loadImage("43-0",undefined,0);
 			
 			for (let index = 0; index < PartDef[result].count; ++index) 

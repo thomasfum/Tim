@@ -85,7 +85,7 @@
 
 	function drawImage(img,x,y,flipV,flipH)
 	{
-		
+		//console.log("draw image "+img.src);
 		if(wireframe==true)
 			return;
 		//console.log("flipH="+flipH+" flipV="+flipV);
@@ -166,7 +166,11 @@
 			return;
 		if((zIndex==1)&&((PartDef[part.TimType].nb_anim==undefined)||(PartDef[part.TimType].nb_anim==0)))
 			return;
-		
+		if((zIndex==3)&&(PartDef[part.TimType].zIndex!=3))
+			return;
+		if(part.visible==false)			
+			return;
+			
 		if((PartDef[part.TimType].zIndex==-1)&&(allObjects==false))
 		{
 			//console.log("zIndex -1 ",part.no);
@@ -184,7 +188,7 @@
 		if((allObjects==true)||((allObjects==false)&&(part.is_moving==0))	)
 		{
 			
-								
+			
 			//if(part.no==0)
 			//	console.log("refresh 2 -",part.no);
 			if((part.TimType!=8)&&(part.TimType!=10))//not belt & not rope
@@ -267,10 +271,16 @@
 							drawImage(Images[part.TimType+"-"+(2+part.animStep)], part.pos_x+8, part.pos_y+5,part.flipV,part.flipH);
 							//AdvanceAnimation(part);
 						}
-						else
+						else if(part.TimType==36)//rocket
 						{
-							//if(part.no==0)
-							//	console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
+							
+							drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y+0,part.flipV,part.flipH);
+							drawImage(Images[part.TimType+"-1"], part.pos_x-2, part.pos_y+Images[part.TimType+"-0"].height-7,part.flipV,part.flipH);
+							
+						}
+						else{
+							if(part.no==13)
+								console.log("refresh 4 -"+part.no+" "+part.height+"/"+Images[part.TimType+"-0"].height);
 							//console.log("h:"+part.height+" / "+Images[part.TimType+"-0"].height);
 							for (let index = 0; index < part.height/Images[part.TimType+"-0"].height; ++index) 
 							{
@@ -335,8 +345,8 @@
 							else
 							{
 								
-								if(part.no==21)
-									console.log("dynamite",part);
+								//if(part.no==21)
+								//	console.log("dynamite",part);
 								let x=part.pos_x;//
 								let y=part.pos_y+part.height/2-Images[part.TimType+"-"+size].height/2;
 								//console.log("refresh 4 s-"+part.no + x+","+y);
@@ -344,7 +354,7 @@
 								if(PartDef[part.TimType].fixed!=undefined)
 									part.fixed=PartDef[part.TimType].fixed;
 								part.nb_anim=PartDef[part.TimType].nb_anim;
-								
+								//console.log("draw "+part.TimType+"-"+size);
 								drawImage(Images[part.TimType+"-"+size], x, y,part.flipV,part.flipH);
 								if(part.fixed==1)//background
 									drawImage(Images[part.TimType+"-1"],x,y,part.flipV,part.flipH);
@@ -384,11 +394,6 @@
 							if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 							{
 								//console.log("1 no image for "+part.no+" : "+part.animStep);
-							}
-							else if(part.TimType==19)//dynamite
-							{
-								
-								drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
 							}
 							else if(part.TimType==18)//canon
 							{
@@ -586,6 +591,69 @@
 			}
 		}
 	
+		else//moving part
+		{
+
+			if(part.TimType==36)//rocket
+			{
+				if(part.anim==true)
+				{
+					if(part.animStep<8)
+					{
+						let x=part.MatterBody.position.x;
+						let y=part.MatterBody.position.y;	
+						part.pos_x=x;
+						part.pos_y=y;
+						if(part.animStep>=6)
+							x=x+2;
+						drawImage(Images[part.TimType+"-"+(part.animStep+1)], x-Images[part.TimType+"-0"].width/2-12, y+Images[part.TimType+"-0"].height/2-12,0,0);
+					}
+					else
+					{
+						
+						let anim=(part.animStep-7)%2;
+						//console.log("rocket "+anim);
+						
+						let x=part.MatterBody.position.x;
+						let y=part.MatterBody.position.y;	
+						part.pos_x=x;
+						part.pos_y=y;
+						drawImage(Images[part.TimType+"-"+(anim+9)], x-Images[part.TimType+"-0"].width/2-12+2, y+Images[part.TimType+"-0"].height/2-12,0,0);
+						
+					}
+				}
+				else
+					drawImage(Images[part.TimType+"-"+1], part.MatterBody.position.x-Images[part.TimType+"-0"].width-4, part.MatterBody.position.y+Images[part.TimType+"-0"].height/2-12,0,0);
+					
+			}			
+			if((part.TimType==19)&&(part.anim==true))//dynamite
+			{
+				if(part.animStep<6)
+				{
+					let x=part.MatterBody.position.x;
+					let y=part.MatterBody.position.y;	
+					part.pos_x=x;
+					part.pos_y=y;
+					
+					//console.log("dynamite anim"+part.animStep +" x="+x+", y="+y,PartDef[part.TimType].nb_anim);
+					//drawImage(Images[part.TimType+"-"+part.animStep], x, y,part.flipV,part.flipH);
+					if(part.flipH==1)
+					{
+						x=x-40+(part.animStep);
+						
+					}
+					y=y-10+(part.animStep*2);
+					drawImage(Images[part.TimType+"-"+part.animStep], x, y,0,0);
+				}
+				else if(part.animStep<12)
+				{
+					//console.log("dynamite explode 41-"+(part.animStep-6) +" x="+part.pos_x+", y="+part.pos_y,PartDef[part.TimType].nb_anim);
+					drawImage(Images["41-"+(part.animStep-6)], part.pos_x-Images["41-"+(part.animStep-6)].width/2, part.pos_y-Images["41-"+(part.animStep-6)].height/2,0,0);
+				}
+					
+				//drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
+			}
+		}
 		ctx.globalCompositeOperation = "source-over";
 	
 	}
@@ -858,24 +926,7 @@
 							drawImage(Images[part.TimType+"-1"], part.pos_x+20, part.pos_y+part.height/2,false,part.flipH);
 					}
 				}
-				if(part.TimType==30)//Magnifying glass (30)
-				{
-					if((part.isfiring!=undefined)&&(part.anim==true))
-					{
-						let fireX=getPosXFire(part.isfiring);
-						let fireY=getPosYFire(part.isfiring);
-						ctx.strokeStyle = "rgb(243, 243, 0)";//243,178,0
-						ctx.fillStyle = "rgb(243, 243, 0)";//243,178,0
-						ctx.beginPath();
-						ctx.moveTo( playgroundOffsetX+part.pos_x+part.width/2, playgroundOffsetY+part.pos_y);
-						ctx.lineTo(fireX,fireY);
-						
-						ctx.lineTo( playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2);
-						ctx.closePath(); // automatically moves back to bottom left corner
-						ctx.fill();
-						
-					}
-				}
+				
 			
 			}
 		});//
@@ -904,6 +955,26 @@
 		//----------------
 		//string here
 		LevelJson.Parts.forEach(part => {
+			
+			if(part.TimType==30)//Magnifying glass (30)
+				{
+					if((part.isfiring!=undefined)&&(part.anim==true))
+					{
+						let fireX=getPosXFire(part.isfiring);
+						let fireY=getPosYFire(part.isfiring);
+						ctx.strokeStyle = "rgb(243, 243, 0)";//243,178,0
+						ctx.fillStyle = "rgb(243, 243, 0)";//243,178,0
+						ctx.beginPath();
+						ctx.moveTo( playgroundOffsetX+part.pos_x+part.width/2, playgroundOffsetY+part.pos_y);
+						ctx.lineTo(fireX,fireY);
+						
+						ctx.lineTo( playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2);
+						ctx.closePath(); // automatically moves back to bottom left corner
+						ctx.fill();
+						
+					}
+				}
+				
 			if(part.TimType==10)//rope
 			{
 				
@@ -939,6 +1010,14 @@
 			}
 		});
 
+		//console.log("-------------- 3 -------------" );
+		//z index 1 (nb_anim>0)
+		LevelJson.Parts.forEach(part => {
+			if(part.in_partsbin==0)
+			{
+				RefreshPartially(allObjects,part,3,allObjects);
+			}
+		});//
 		
 		
 		
