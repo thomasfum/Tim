@@ -64,18 +64,42 @@
 	}
 	
 	
-	function PartRopetExtremity(part_no)
+	function PartRopetExtremity(part_no,stopAtPulley)
 	{
+		
+		
 		let OtherPart=-1;
+		/*
+		if((stopAtPulley==true)&&(LevelJson.Parts[part_no].TimPulleys.length>0))
+		{
+			console.log("stop at pulley");
+		}
+		else
+			*/
+		let ropeNo=-1;
+			
 		LevelJson.Parts.forEach(part => {
 			if(part.TimType==10)
 			{
 				if(part.connected_part_1==part_no)
+				{
+					ropeNo=part.no;
 					OtherPart=part.connected_part_2;
+				}
 				if(part.connected_part_2==part_no)
+				{
+					ropeNo=part.no;
 					OtherPart=part.connected_part_1;
+				}
 			}
 		});
+
+		if((stopAtPulley==true)&&(ropeNo!=-1)&&(LevelJson.Parts[ropeNo].TimPulleys.length>0))
+		{
+			//console.log("stop at pulley",LevelJson.Parts[ropeNo].TimPulleys);
+			return LevelJson.Parts[ropeNo].TimPulleys[0];//TODO manage if more than 1
+		}
+		
 		return OtherPart;
 	}
 	
@@ -517,7 +541,7 @@
 	
 	function isFiring(part)
 	{
-		if((part.TimType==18)||(part.TimType==19)||(part.TimType==36))//canon, dynamit,rocket
+		if((part.TimType==18)||(part.TimType==19)||(part.TimType==36)||(part.TimType==45))//canon, dynamit,rocket or Candle (45)
 			return true;
 		else 
 			return false;
@@ -539,7 +563,7 @@
 	}
 	function isLight(part)
 	{
-		if((part.TimType==29)||(part.TimType==25))//Light bulb (29) or Flashlight (25)
+		if((part.TimType==29)||(part.TimType==25))//Light bulb (29) or Flashlight (25) 
 			return true;
 		else 
 			return false;

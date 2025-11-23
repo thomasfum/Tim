@@ -13,6 +13,7 @@ let
 	let collisionCategory_general=1;
 	let collisionCategory_rope=2;
 	let collisionCategory_bullet=4;
+	let collisionCategory_TeeterTotter =8;
 	
 
 	//--------------------------------------------------
@@ -240,7 +241,7 @@ let
 					{
 						
 						
-						let otherExtremity=PartRopetExtremity(part.no);
+						let otherExtremity=PartRopetExtremity(part.no,false);
 						
 						if(otherExtremity>=0)
 						{
@@ -313,7 +314,17 @@ let
 				{
 					if(part.anim!=true)
 					{
-						let otherExtremity=PartRopetExtremity(part.no);
+						
+						let directionY = getRopeDirectionY(part.no)
+						console.log("directionY ("+part.no+")"+directionY);
+						
+						if(directionY==1)
+						{
+							console.log("light bulb "+part.no);
+							AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
+						}
+						/*
+						let otherExtremity=PartRopetExtremity(part.no,true);
 						
 						if(otherExtremity>=0)
 						{
@@ -324,7 +335,7 @@ let
 									{
 										//console.log("found Light bulb otherExtremity "+otherExtremity,body);		
 										let otherX=getPosXRopeBody(otherExtremity);
-										//console.log("found Light bulb otherExtremity "+otherX,part);	
+										console.log("found Light bulb otherExtremity "+otherX,part);	
 										if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10)&&(body.position.y>part.pos_y+part.height))//need to be below
 										{
 											console.log("light bulb "+body.speed,body );
@@ -339,6 +350,7 @@ let
 								});
 							}
 						}
+						*/
 					}
 				}
 				if(part.TimType==38)//Solar panels (38)
@@ -445,12 +457,12 @@ let
 						//console.log("rocket fire touch body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name,body);
 						if(LevelJson.Parts[body.TimNo].TimType==19)//dynamite
 						{
-							console.log("explode touch dynamite ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							//console.log("explode touch dynamite ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
 							AnimPart(body.TimNo,false,LevelJson.Parts[body.TimNo].flipH,LevelJson.Parts[body.TimNo].flipV,true,false);
 						}
 						if(LevelJson.Parts[body.TimNo].TimType==4)//ballon
 						{
-							console.log("explode touch ballon ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							//console.log("explode touch ballon ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
 							if(LevelJson.Parts[body.TimNo].anim==undefined)//ballon is not yet exploding
 							{
 								destroy_ballon(body);
@@ -541,7 +553,7 @@ let
 										yOffset: 0
 											}
 									},
-								collisionFilter: { category:collisionCategory_bullet,mask: collisionCategory_general }
+								collisionFilter: { category:collisionCategory_bullet,mask: collisionCategory_general}
 								});
 						
 
@@ -1373,15 +1385,15 @@ let
 								  
 								  }
 								  },
-								  
+								  collisionFilter: { category:collisionCategory_general,mask: -1&(~collisionCategory_TeeterTotter) }
 								  });
 						
 							//MatterBody.friction=1;
 							MatterBody.frictionAir=0.02;
 							//MatterBody.frictionAir=0.1;
 							//MatterBody.sleepThreshold=2;
-							
-							
+							//Matter.Body.setInertia(MatterBody, 150);
+							//Matter.Body.setInertia(MatterBody, Infinity);
 							Composite.add(world, [MatterBody]);
 							part.MatterBody=MatterBody;
 						}
@@ -1434,8 +1446,8 @@ let
 										//xOffset: ox,
 										//yOffset: oy//-0.18
 												}	
-									}		
-									
+									},		
+									 collisionFilter: { category:collisionCategory_general,mask: -1&(~collisionCategory_TeeterTotter) }
 									}, false, 0.0001, 100);
 								
 								//MatterBody.friction=1;
@@ -1449,6 +1461,9 @@ let
 								//console.log("Poly move",MatterBody);
 								Composite.add(world, [MatterBody]);
 								part.MatterBody=MatterBody;
+								console.log(MatterBody);
+								
+								Matter.Body.setInertia(MatterBody, Infinity);
 							}
 						}
 					}
@@ -1496,19 +1511,15 @@ let
 						var MatterBody = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height/2+2, part.width-4, 5, {
 							isStatic: _isStatic, 
 							TimNo:part.no,
-							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							render: { fillStyle: "rgba(0, 0, 255, 0)" },
+							//collisionFilter: { category:collisionCategory_bullet,mask: collisionCategory_general }
 							});
 						//console.log("IIIIIIIIIIIIIIIIIIIII  Teeter-totter "+part.flipH);
 						if(part.flipH==0)
 							Matter.Body.rotate(MatterBody,-0.3);
 						else
 							Matter.Body.rotate(MatterBody,0.3);
-						/*
-						if(part.flipH2==0)
-							Matter.Body.rotate(MatterBody,-0.3);
-						else
-							Matter.Body.rotate(MatterBody,0.3);
-						*/
+					
 						MatterBody.friction=1;
  						MatterBody.frictionAir=0.01*20;
 						MatterBody.frictionStatic=0.5*20;
@@ -1517,27 +1528,19 @@ let
 						part.MatterBody=MatterBody;
 						part.staticObjId=MatterBody.id;
 						//console.log("id=",part.staticObjId);
-						/*
-						var staticObjBloc1 = Bodies.rectangle(playgroundOffsetX+part.pos_x+12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
-							isStatic: true, 
-							render: { fillStyle: "rgba(0, 0, 255, 0)" }
-							});
-						var staticObjBloc2 = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width-12,playgroundOffsetY+part.pos_y+part.height-3, 5, 5, {
-							isStatic: true, 
-							render: { fillStyle: "rgba(0, 0, 255, 0)" }
-							});
-						Composite.add(world, [staticObjBloc1,staticObjBloc2]);	
-						*/
+			
 						 var staticObjBlocBottom = Bodies.rectangle(playgroundOffsetX+part.pos_x+part.width/2,playgroundOffsetY+part.pos_y+part.height-3, part.width-6, 5, {
 							isStatic: true, 
-							render: { fillStyle: "rgba(0, 0, 255, 0)" }
+							render: { fillStyle: "rgba(0, 0, 255, 0)" },
+							collisionFilter: { category:collisionCategory_TeeterTotter }
 							});
 						Composite.add(world, [staticObjBlocBottom]);	
 						 var constraint = Constraint.create({
 							pointA: { x: playgroundOffsetX+part.pos_x+part.width/2, y: playgroundOffsetY+part.pos_y+part.height/2 },
 							bodyB: MatterBody,
 							length: 0, 
-							render: { visible: false}
+							render: { visible: false},
+							
 						});
 						//console.log("constraint",constraint);
 						Composite.add(world, [constraint]);

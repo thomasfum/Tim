@@ -626,6 +626,14 @@
 					drawImage(Images[part.TimType+"-"+1], part.MatterBody.position.x-Images[part.TimType+"-0"].width-4, part.MatterBody.position.y+Images[part.TimType+"-0"].height/2-12,0,0);
 					
 			}			
+			if((part.TimType==45)&&(part.anim==true))//Candle (45)
+			{
+				part.animOnce=false;
+				part.fixed=1;
+				let x=part.MatterBody.position.x;
+				let y=part.MatterBody.position.y;	
+				drawImage(Images[part.TimType+"-"+part.animStep], x-18, y-24,0,0);
+			}
 			if((part.TimType==19)&&(part.anim==true))//dynamite
 			{
 				if(part.animStep<6)
@@ -822,7 +830,103 @@
 		
 	}
 	
-	
+	function getRopeDirectionY(partNoExtremity)
+	{
+		
+		let LastPartNo=-1;
+		let ropeNo=-1;
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)
+			{
+				if(part.connected_part_1==partNoExtremity)
+				{
+					ropeNo=part.no;
+					LastPartNo=part.connected_part_2;
+				}
+				if(part.connected_part_2==partNoExtremity)
+				{
+					ropeNo=part.no;
+					LastPartNo=part.connected_part_1;
+				}
+			}
+		});
+		if(LastPartNo==-1)
+			return 0;
+			
+		if(engine.timing.timestamp<250)//let rope stabilize
+		{
+			LevelJson.Parts[LastPartNo].MatterBody.refVelocityY=LevelJson.Parts[LastPartNo].MatterBody.velocity.y;
+			console.log("+++++++++++++++++++++++++++set ref"+LevelJson.Parts[LastPartNo].MatterBody.refVelocityY);
+		}
+		if(engine.timing.timestamp>250)//let rope stabilize
+		{
+			
+			let otherX=getPosXRopeBody(LastPartNo);
+			let otherY=getPosYRopeBody(LastPartNo);
+			let revert=1;
+			if((ropeNo!=-1)&&(LevelJson.Parts[ropeNo].TimPulleys.length>0))
+			{
+				console.log("through at pulley",LevelJson.Parts[ropeNo].TimPulleys);
+				//if(LevelJson.Parts[ropeNo].TimPulleys[0].pos_y>otherY)//revert direction
+					revert=-1;
+					
+					otherX=getPosXRopeBody(LevelJson.Parts[ropeNo].TimPulleys[0].no);
+					otherY=getPosYRopeBody(LevelJson.Parts[ropeNo].TimPulleys[0].no);
+					
+			}
+			
+				
+
+			let part=LevelJson.Parts[partNoExtremity];
+			//console.log("velocity.y:",LevelJson.Parts[LastPartNo].MatterBody.velocity.y);
+			if(part.no==22)
+				console.log("last="+otherX+", "+otherY+" v="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y,LevelJson.Parts[LastPartNo].MatterBody); 
+			if(part.no==22)
+				console.log("start=",part); 
+			if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10))
+			{
+				console.log("In X=",part); 
+				if(revert==1)//direct 
+				{
+					if(otherY>part.pos_y+part.height)//need to be below
+					{
+						if(part.no==22)
+							console.log("below="+(LevelJson.Parts[LastPartNo].MatterBody.velocity.y+" / "+ LevelJson.Parts[LastPartNo].MatterBody.refVelocityY)); 
+						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y>0.025)
+							return 1;						
+					}
+				
+					if(otherY<part.pos_y+part.height)//need to be upper
+					{
+						console.log("upper=",part); 
+						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.025*revert)
+							return -1;							
+					}
+					
+				}
+				else
+				{
+					if(otherY>part.pos_y+part.height)//need to be below
+					{
+						if((part.no==22)&&(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<0.2))
+							console.log("below inv="+(LevelJson.Parts[LastPartNo].MatterBody.velocity.y+" / "+ LevelJson.Parts[LastPartNo].MatterBody.refVelocityY)); 
+						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.015)
+							return 1;						
+					}
+					if(otherY<part.pos_y+part.height)//need to be upper
+					{
+						console.log("upper=",part); 
+						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.025*revert)
+							return -1;							
+					}
+				}
+				
+			}
+			
+		}
+		
+		return 0;
+	}
 	
 	function getPosXRopePulleySimul(partNo,to)
 	{
@@ -833,7 +937,7 @@
 		let ox=LevelJson.Parts[partNo].width*rx;
 		if(LevelJson.Parts[partNo].TimType==7)//pulley
 		{
-			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			if((LevelJson.Parts[partNo].appearance=="top (2)")||(LevelJson.Parts[partNo].appearance=="bottom (0)"))
 			{
 				if(to==false)
 					ox=ox+5;
@@ -877,7 +981,11 @@
 			}
 			if(LevelJson.Parts[partNo].appearance=="top (2)")
 			{
-					oy=oy-5;
+				oy=oy-5;
+			}
+			if(LevelJson.Parts[partNo].appearance=="bottom (0)")
+			{
+				oy=oy+5;
 			}
 		}
 		

@@ -14,6 +14,7 @@ const WinCondition={
 	"13":{"Conditions":[{"t":"a","unitNo":15}]},
 	"14":{"Conditions":[{"t":"a","unitNo":7},{"t":"a","unitNo":8},{"t":"a","unitNo":9}]},
 	"15":{"Conditions":[{"t":"a","unitNo":18}]},
+	"16":{"Conditions":[{"t":"a","unitNo":9}]},
 };	
 const Solutions={
 	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
@@ -32,7 +33,7 @@ const Solutions={
 	"13":{"Parts":[ {"unitNo":20,"x":600,"y":124,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":25,"cp2":7}, {"unitNo":21,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":10,"cp2":11},{"unitNo":22,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":0,"cp2":15},{"unitNo":23,"x":588,"y":122,"name":"Rope (10)","FlipH":0,"FlipV":1,"cp1":17,"cp2":14,"pls":[]},{"unitNo":24,"x":353,"y":200,"name":"Electric fan (24)","FlipH":1,"FlipV":0},{"unitNo":25,"x":168,"y":46,"name":"Electric engine (50)","FlipH":0,"FlipV":0},{"unitNo":26,"x":314,"y":159,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
 	"14":{"Parts":[ {"unitNo":13,"x":382,"y":197,"name":"Magnifying glass (30)","FlipH":1,"FlipV":0},{"unitNo":14,"x":105,"y":275,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":15,"x":405,"y":200,"name":"Flashlight (25)","FlipH":1,"FlipV":0},{"unitNo":16,"x":70,"y":279,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
 	"15":{"Parts":[ {"unitNo":23,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":22,"cp2":9,"pls":[]},{"unitNo":24,"x":426,"y":265,"name":"Magnifying glass (30)","FlipH":1,"FlipV":0},{"unitNo":25,"x":448,"y":273,"name":"Flashlight (25)","FlipH":1,"FlipV":0},{"unitNo":26,"x":286,"y":153,"name":"Dynamite (19)","FlipH":1,"FlipV":0}]},
-	"16":{"Parts":[ {"unitNo":19,"x":264,"y":279,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":21,"x":222,"y":282,"name":"Flashlight (25)","FlipH":0,"FlipV":0}]},
+	"16":{"Parts":[ {"unitNo":15,"x":296,"y":120,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":16,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":15,"cp2":22,"pls":[17]},{"unitNo":17,"x":436,"y":328,"name":"Pulley (7)","FlipH":0,"FlipV":0},{"unitNo":18,"x":589,"y":115,"name":"Pulley (7)","FlipH":0,"FlipV":0}, {"unitNo":19,"x":264,"y":279,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":20,"x":466,"y":243,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":21,"x":222,"y":282,"name":"Flashlight (25)","FlipH":0,"FlipV":0},{"unitNo":22,"x":429,"y":242,"name":"Light bulb (29)","FlipH":0,"FlipV":0}]},
 };
 
 /*
@@ -94,8 +95,9 @@ const Solutions={
 			//let end=part.orientation.indexOf(')');
 			//flipHs = part.orientation.substring(start+1, end);
 			//console.log("flipH="+flipH);
-			if(part.orientation.indexOf("left")>=0)
-				flipHs="1";
+			if(part.TimType!=35)//issue with glove
+				if(part.orientation.indexOf("left")>=0)
+					flipHs="1";
 		}
 		if(flipHs=="0")
 			return 0;

@@ -45,7 +45,7 @@ const PartDef={
 	"42":{"count":2},
 	"43":{"count":1,"restitution":0.0,"mass":1},//canon ball
 	"44":{"count":1,"restitution":0.8,"mass":0.5},//tenis ball
-	"45":{"count":6},
+	"45":{"count":6,"fx":0.5,"fy":0.05,"nb_anim":5},//Candle (45)
 	"46":{"count":8},//pipe wall
 	"47":{"count":4,"phy_poly":[{"p":"0 0  1 0  1 0.5  0 0.5  0 0","y":0.25},{"p":"0.5 0  1 0  1 1  0.5 1  0.5 0","x":-0.25}]},//curved pipe wall
 	"48":{"count":8},//wood wall
