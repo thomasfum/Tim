@@ -71,7 +71,8 @@ let
 				//apply gravity
 				if(part.MatterBody!=undefined)
 				{
-					Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 });
+					if(part.MatterBody.isStatic==false)
+						Body.applyForce(part.MatterBody, part.MatterBody.position, { x: part.MatterBody.force.x, y: part.MatterBody.mass2 * 0.0005 });
 				}
 				
 				//apply gravity to rope also
@@ -181,27 +182,7 @@ let
 									if(part1.TimType==15)//Aquarium (15)
 									{
 										//console.log("check Jack-in-the-box collide aquarium("+part1.no+")",part1);
-										if(part1.animOnce==false)
-										{
-											console.log("-----------------check Jack-in-the-box break aquarium ("+part1.no+") "+part1.name);
-											Composite.remove(world, [part1.MatterBody]);
-											part1.nb_anim=17;
-											part1.animStep=12;
-											part1.animOnce=true;
-											part1.fixed=0;
-											part1.pos_x=part1.pos_x-22;
-											part1.pos_y=part1.pos_y+7;
-
-											/*
-											LevelJson.Parts[_boby.TimNo].pos_x=_boby.position.x-40;
-											LevelJson.Parts[_boby.TimNo].pos_y=_boby.position.y-28;
-											Composite.remove(world, [_boby]);
-											
-											console.log("destroy ballon "+_boby.TimNo);
-											LevelJson.Parts[_boby.TimNo].is_moving=0;
-											AnimPart(_boby.TimNo,true,0,0,true,true);
-											*/
-										}
+										collision_Aquarium(part1.no,true);
 									}
 									else
 									{
@@ -233,6 +214,16 @@ let
 					if(part.animStep==7)
 					{
 						CanonFire(part);
+					}
+				}
+				if(part.TimType==22)//Dynamite with plunger (22)
+				{
+					if(part.anim==true)
+					{
+						if((part.animStep==1)&&(part.animDelay==0))
+						{
+							DynamiteWithPlungerExplode(part);
+						}
 					}
 				}
 				if(part.TimType==27)//Gun (27)
@@ -425,6 +416,10 @@ let
 					LaunchGunBullet(body);
 				if(LevelJson.Parts[body.TimNo].TimType==36)//rocket (36)
 					CheckRocket(body);
+				if(LevelJson.Parts[body.TimNo].TimType==12)//Pokey Cat (12)
+					CheckCat(body);
+				if(LevelJson.Parts[body.TimNo].TimType==42)//Pokey Cat (12)
+					CheckMouse(body);
 			}
 		});
 		
@@ -438,7 +433,97 @@ let
 		//if(engine.timing.timestamp>0)
 		//	stop();
 	}
-	
+	function CheckMouse(MouseBody)
+	{
+		let scaleX=-1;
+		if(LevelJson.Parts[MouseBody.TimNo].flipH==1)
+			scaleX=1;
+		
+		let startPoint = { x: MouseBody.position.x+playgroundOffsetX, y: MouseBody.position.y+playgroundOffsetY};
+		var collisions = [];
+        let  bodies = Composite.allBodies(engine.world);
+        let  endPoint = { x:  MouseBody.position.x+playgroundOffsetX+50*scaleX, y: MouseBody.position.y+playgroundOffsetY};
+		
+		drawRay( startPoint, endPoint);
+		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
+		//console.log("collisions Mouse",collisions);
+		collisions.forEach((collision) => {
+			if(collision.body!=undefined)
+			{
+				if(collision.body.TimNo!=undefined)
+				{
+					if(LevelJson.Parts[collision.body.TimNo].TimType==12)//Pokey Cat (12)
+					{
+						if(LevelJson.Parts[MouseBody.TimNo].anim!=true)
+						{
+							console.log("mouse ("+MouseBody.TimNo+") has seen a cat");	
+							if(LevelJson.Parts[MouseBody.TimNo].flipH==1)
+								LevelJson.Parts[MouseBody.TimNo].flipH=0;
+							else
+								LevelJson.Parts[MouseBody.TimNo].flipH=1;
+							AnimPart(MouseBody.TimNo,false,LevelJson.Parts[MouseBody.TimNo].flipH,LevelJson.Parts[MouseBody.TimNo].flipV,false,false);		
+							
+						}
+					}
+				}
+			}
+		});
+	}
+	function CheckCat(CatBody)
+	{
+		let scaleX=-1;
+		if(LevelJson.Parts[CatBody.TimNo].flipH==1)
+			scaleX=1;
+		
+		let startPoint = { x:  CatBody.position.x+playgroundOffsetX, y: CatBody.position.y+playgroundOffsetY};
+		var collisions = [];
+        let  bodies = Composite.allBodies(engine.world);
+        let  endPoint = { x: CatBody.position.x+playgroundOffsetX+700*scaleX, y: CatBody.position.y+playgroundOffsetY};
+		
+		drawRay( startPoint, endPoint);
+		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
+		//console.log("collisions",collisions);
+		var somethingInFronToMove=false;
+		collisions.forEach((collision) => {
+			if(collision.body!=undefined)
+			{
+				if(collision.body.TimNo!=undefined)
+				{
+					if(LevelJson.Parts[collision.body.TimNo].TimType==42)//Mort Mouse (42)
+					{
+						if(LevelJson.Parts[CatBody.TimNo].anim!=true)
+						{
+							console.log("Cat ("+CatBody.TimNo+") has seen a mouse");	
+							AnimPart(CatBody.TimNo,false,LevelJson.Parts[CatBody.TimNo].flipH,LevelJson.Parts[CatBody.TimNo].flipV,false,false);		
+						}
+						somethingInFronToMove=true;
+					}
+					
+					if(LevelJson.Parts[collision.body.TimNo].TimType==15)//aquarium
+					{
+						if(LevelJson.Parts[collision.body.TimNo].animStep>12)
+						{
+							if(LevelJson.Parts[CatBody.TimNo].anim!=true)
+							{
+								console.log("Cat ("+CatBody.TimNo+") has seen a broken aquarium");	
+								AnimPart(CatBody.TimNo,false,LevelJson.Parts[CatBody.TimNo].flipH,LevelJson.Parts[CatBody.TimNo].flipV,false,false);		
+								//if(LevelJson.Parts[CatBody.TimNo].flipH==1)								
+									//Body.applyForce(CatBody, CatBody.position, { x:0.01*scaleX, y: 0.000 });
+									//Body.setVelocity(CatBody, { x:6*scaleX, y: 0 });
+
+							}
+							
+						}
+						somethingInFronToMove=true;	
+					}
+					 
+				}
+			}
+		});
+		//if(somethingInFronToMove==false)
+		//	LevelJson.Parts[CatBody.TimNo].anim=false;
+		
+	}
 	function CheckRocket(RocketBody)
 	{
 		if(LevelJson.Parts[RocketBody.TimNo].animStep>=6)//fired
@@ -589,15 +674,7 @@ let
 						part.animStep=0;
 						part.isfiring=part1.no;
 						part.animDelay=0;
-						//part.animOnce=true;
 						part.anim=true;
-						/*
-						if((part1.pos_x<part.pos_x)&&(part1.flipH==0))
-							Magnifying(true,part);
-							
-						if((part1.pos_x>part.pos_x)&&(part1.flipH==1))
-							Magnifying(false,part);
-						*/
 					}
 				}
 				else
@@ -687,7 +764,7 @@ let
 	}
 	function collision_ballon(_ballonBoby,_impactorBody)
 	{
-			console.log("collision_ballon ");
+		console.log("collision_ballon ");
 		if(LevelJson.Parts[_impactorBody.TimNo].TimType==14)//gear
 		{
 			if(LevelJson.Parts[_impactorBody.TimNo].part!=undefined)
@@ -712,6 +789,53 @@ let
 
 	}
 	
+	function DynamiteWithPlungerExplode(part)
+	{
+		
+		let x=part.MatterBody.position.x-part.width/2+30;
+		let y=part.MatterBody.position.y-part.height/2;
+		if(part.flipH==1)
+			x=part.MatterBody.position.x+part.width/2-30;
+		let pos={};
+		pos.x=x;
+		pos.y=y;
+		//console.log("DynamiteWithPlungerExplode");
+	
+		const BodyToDestroy= [];
+		engine.world.bodies.forEach((body)=>{
+			if(body.TimNo!=undefined)//rope
+			{
+				let dist= Matter.Vector.magnitude( Matter.Vector.sub(pos, body.position));
+				//console.log("explode destroy ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name+" dist="+dist);
+				if(dist<80)
+				{
+					//console.log("explode touch body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name,body);
+					if(isDestructibleByExplosive(LevelJson.Parts[body.TimNo])==true)//brick wall, wood incline, wood wall
+					{
+						//console.log("explode destroy ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+						BodyToDestroy.push(body);
+						LevelJson.Parts[body.TimNo].visible=false;
+						
+					}
+					if(body.isStatic==0)//moving Object
+					{
+						//console.log("explode move body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+						let dx=x-body.position.x;
+						let dy=y-body.position.y;
+						Body.setVelocity(body, { x:dx*-0.1, y: dy*-0.05 });
+					}
+				}
+			}
+		});
+		
+		//BodyToDestroy.push(part.MatterBody);
+		Composite.remove(world, BodyToDestroy);
+		//part.MatterBody=undefined;
+		//if(part.flipH==1)
+		Matter.Body.scale(part.MatterBody, 0.7, 0.5);
+		Matter.Body.translate(part.MatterBody,{x:20,y:0});
+		
+	}
 	function detroyDynamite(part)
 	{
 		if(part.MatterBody!=undefined)
@@ -725,23 +849,41 @@ let
 				if(body.TimNo!=undefined)//rope
 				{
 					let dist= Matter.Vector.magnitude( Matter.Vector.sub(part.MatterBody.position, body.position));
-					if(dist<60)
+					if(dist<70)
 					{
 						//console.log("explode touch body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name,body);
-						if(LevelJson.Parts[body.TimNo].TimType==1)//brick wall
+						if(isDestructibleByExplosive(LevelJson.Parts[body.TimNo])==true)//brick wall, wood incline, wood wall
 						{
 							//console.log("explode destroy ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
+							setTimeout(function (){
 							BodyToDestroy.push(body);
+							Composite.remove(world, BodyToDestroy);
 							LevelJson.Parts[body.TimNo].visible=false;
+							}, 500);
+						}
+						
+						if(LevelJson.Parts[body.TimNo].TimType==19) //other dynamite
+						{
+							if(LevelJson.Parts[body.TimNo].no!=part.no)//ot myself
+							{
+								console.log("dynamite explode other dynamite", body);
+								body.isStatic=true;
+								body.force.y=0;
+								setTimeout(function (){
+									AnimPart(body.TimNo, false,LevelJson.Parts[body.TimNo].flipH,LevelJson.Parts[body.TimNo].flipV,true,false);			
+									LevelJson.Parts[body.TimNo].animStep=6;//jump to explosion
+								}, 500);
+							}
 							
 						}
-						if(body.isStatic==0)//moving Object
+						else if(body.isStatic==0)//moving Object
 						{
 							//console.log("explode move body ("+body.TimNo+") "+LevelJson.Parts[body.TimNo].name);
 							let dx=x-body.position.x;
 							let dy=y-body.position.y;
 							Body.setVelocity(body, { x:dx*-0.1, y: dy*-0.05 });
 						}
+						
 					}
 				}
 			});
@@ -1056,7 +1198,7 @@ let
         let  bodies = Composite.allBodies(engine.world);
         let  endPoint = { x: LevelJson.Parts[partno].pos_x+playgroundOffsetX+LevelJson.Parts[partno].width/2+150*scaleX, y: LevelJson.Parts[partno].pos_y+playgroundOffsetY+LevelJson.Parts[partno].height/2};
 		
-		
+		//drawRay( startPoint, endPoint);
 		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
 		console.log("collisions",collisions);
 		collisions.forEach((collision) => {
@@ -1141,7 +1283,7 @@ let
 		}
 	}
 	
-	function  collision_FlashLight(_flashLightBoby,_impactorBody)
+	function collision_FlashLight(_flashLightBoby,_impactorBody)
 	{
 		if((_impactorBody.velocity.y>0))
 		{
@@ -1149,6 +1291,63 @@ let
 			AnimPart(_flashLightBoby.TimNo,false,LevelJson.Parts[_flashLightBoby.TimNo].flipH,LevelJson.Parts[_flashLightBoby.TimNo].flipV,true,false);
 		}
 	}
+	
+	function collision_dynamite(_dynamiteBoby,_impactorBody)
+	{
+		if(LevelJson.Parts[_impactorBody.TimNo].TimType==20)//bullet
+		{
+			console.log("dynamite hitted by a bullet");
+			Composite.remove(world, [_impactorBody]);//delete bullet
+			
+			AnimPart(_dynamiteBoby.TimNo, false,LevelJson.Parts[_dynamiteBoby.TimNo].flipH,LevelJson.Parts[_dynamiteBoby.TimNo].flipV,true,false);			
+			LevelJson.Parts[_dynamiteBoby.TimNo].animStep=6;//jump to explosion
+		}
+	}
+	function collision_DynamiteWithPlunger(_PlungerBoby,_impactorBody)
+	{
+		if(LevelJson.Parts[_PlungerBoby.TimNo].anim!=true)
+		{
+			if((_impactorBody.velocity.y>0))
+			{
+				if(LevelJson.Parts[_PlungerBoby.TimNo].flipH==0)//should colide on right
+				{
+					if(_impactorBody.position.x>LevelJson.Parts[_PlungerBoby.TimNo].pos_x+LevelJson.Parts[_PlungerBoby.TimNo].width*3/4)
+					{
+						console.log("DynamiteWithPlunger collision >up right "+_PlungerBoby.TimNo,_impactorBody.velocity.y);
+						AnimPart(_PlungerBoby.TimNo,false,LevelJson.Parts[_PlungerBoby.TimNo].flipH,LevelJson.Parts[_PlungerBoby.TimNo].flipV,true,false);
+					}
+				}
+				else//should colide on left
+				{
+					if(_impactorBody.position.x<LevelJson.Parts[_PlungerBoby.TimNo].pos_x+LevelJson.Parts[_PlungerBoby.TimNo].width*1/4)
+					{
+						console.log("DynamiteWithPlunger collision >up left "+_PlungerBoby.TimNo,_impactorBody.velocity.y);
+						AnimPart(_PlungerBoby.TimNo,false,LevelJson.Parts[_PlungerBoby.TimNo].flipH,LevelJson.Parts[_PlungerBoby.TimNo].flipV,true,false);
+					}
+				}
+				
+			}
+		}
+	}
+	
+	function collision_Aquarium(partno,destroy)
+	{
+		let part1=LevelJson.Parts[partno];
+		if(part1.animOnce==false)
+		{
+			console.log("----------------- break aquarium ("+part1.no+") "+part1.name);
+			if(destroy==true)
+				Composite.remove(world, [part1.MatterBody]);
+			part1.nb_anim=17;
+			part1.animStep=12;
+			part1.animOnce=true;
+			part1.fixed=0;
+			part1.pos_x=part1.pos_x-22;
+			part1.pos_y=part1.pos_y+7;
+
+		}
+	}
+	
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
@@ -1175,16 +1374,34 @@ let
 					collision_mouse(collision.bodyA.TimNo);
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==6)//mouse (6)
 					collision_mouse(collision.bodyB.TimNo);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==15)//Aquarium (15)
+					collision_Aquarium(collision.bodyA.TimNo,false);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==15)//Aquarium (15)
+					collision_Aquarium(collision.bodyB.TimNo,false);
+
+				
 
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==16)//bellow (16)
 					collision_bellow(collision.bodyA);
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==16)//bellow (16)
 					collision_bellow(collision.bodyB);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==19)//Dynamite (19)
+					collision_dynamite(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==19)//Dynamite (19)
+					collision_dynamite(collision.bodyB,collision.bodyA);
 			
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==21)//Electric switch & outlet (21)
 					collision_ElectricSwitch(collision.bodyA,collision.bodyB);
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==21)//Electric switch & outlet (21)
 					collision_ElectricSwitch(collision.bodyB,collision.bodyA);
+				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==22)//Dynamite with plunger (22)
+					collision_DynamiteWithPlunger(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==22)//Dynamite with plunger (22) 
+					collision_DynamiteWithPlunger(collision.bodyB,collision.bodyA);
+				
 				
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==25)//Flashlight (25)
 					collision_FlashLight(collision.bodyA,collision.bodyB);

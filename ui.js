@@ -17,9 +17,6 @@
 
 	function GetNodeRopePos(part)
 	{
-		
-	
-		
 		var x=part.pos_x+(part.width*PartDef[part.TimType].rx);
 		let y=part.pos_y+(part.height*PartDef[part.TimType].ry);
 		//console.log("GetNodePos = "+x+":"+y);
@@ -123,6 +120,8 @@
 	{
 		let animSpeed=10;
 		
+		if(part.fixed==undefined)
+			part.fixed=0;
 		//if(part.megaloop==undefined)
 		//	part.megaloop=0;
 		if(PartDef[part.TimType].animSpeed!=undefined)
@@ -141,8 +140,8 @@
 						part.animStep2++;
 				if(part.animStep>=part.nb_anim)
 				{
-					if(part.fixed==1)
-						part.animStep=1;
+					if(part.fixed>0)
+						part.animStep=part.fixed;
 					else
 						part.animStep=0;
 					if(part.megaloop!=undefined)
@@ -158,7 +157,16 @@
 			}
 		}
 	}
-	
+	function drawRay( startPoint, endPoint)
+	{
+		return;
+		//console.log("startPoint",startPoint);
+		//console.log("endPoint",endPoint);
+		ctx.beginPath();
+		ctx.moveTo(startPoint.x,startPoint.y);
+		ctx.lineTo(endPoint.x,endPoint.y);
+		ctx.stroke();
+	}
 	function RefreshPartially(allObjects, part,zIndex,allObjects)
 	{
 		//console.log("RefreshPartially ",part.no);
@@ -197,7 +205,7 @@
 				{
 					//if(part.no==1)
 					//	console.log("refresh 3 -",part.no);
-					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18))//electrical fan, canon
+					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22))//electrical fan, canon ,Dynamite with plunger 
 					{
 						//console.log("refresh 3 -",part.no);
 						//dupliquer en width
@@ -216,7 +224,7 @@
 							}
 						}
 					}
-					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18))
+					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22))
 					{
 						
 						//dupliquer en height
@@ -309,8 +317,22 @@
 							
 						if((part.anim==undefined)||(part.anim==false))
 						{
-							
-							if(part.TimType==18)//canon
+							if(part.TimType==22)//Dynamite with plunger 
+							{
+								if(part.flipH==0)
+								{
+									drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y+20	,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+1], part.pos_x+Images[part.TimType+"-0"].width, part.pos_y+16	,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+2], part.pos_x+Images[part.TimType+"-0"].width+Images[part.TimType+"-1"].width-25, part.pos_y-2	,part.flipV,part.flipH);
+								}
+								else
+								{
+									drawImage(Images[part.TimType+"-"+0], part.pos_x+part.width-Images[part.TimType+"-0"].width, part.pos_y+20,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+1], part.pos_x+part.width-Images[part.TimType+"-0"].width-Images[part.TimType+"-1"].width, part.pos_y+16	,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+2], part.pos_x+part.width-Images[part.TimType+"-0"].width-Images[part.TimType+"-1"].width-7, part.pos_y-2	,part.flipV,part.flipH);
+								}
+							}
+							else if(part.TimType==18)//canon
 							{
 								drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);
 								if(part.flipH==0)
@@ -385,7 +407,7 @@
 							}
 							
 						}
-						else
+						else//anim
 						{
 							
 							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
@@ -394,6 +416,35 @@
 							if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 							{
 								//console.log("1 no image for "+part.no+" : "+part.animStep);
+							}
+							
+							if(part.TimType==22)//Dynamite with plunger 
+							{
+									if(part.flipH==0)
+									{
+										drawImage(Images[part.TimType+"-"+2], part.pos_x+Images[part.TimType+"-0"].width+Images[part.TimType+"-1"].width-25, part.pos_y-2+13	,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+1], part.pos_x+Images[part.TimType+"-0"].width, part.pos_y+16	,part.flipV,part.flipH);
+										if(part.animStep==1)
+											drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y+20	,part.flipV,part.flipH);
+										else if(part.animStep<7)
+										{
+											drawImage(Images["41-"+(part.animStep-1)], part.pos_x-Images["41-"+(part.animStep-1)].width/2+20, part.pos_y-Images["41-"+(part.animStep-1)].height/2+30,0,0);
+										}
+										
+											
+									}
+									else
+									{
+										drawImage(Images[part.TimType+"-"+2], part.pos_x+part.width-Images[part.TimType+"-0"].width-Images[part.TimType+"-1"].width-7, part.pos_y-2+13	,part.flipV,part.flipH);
+										drawImage(Images[part.TimType+"-"+1], part.pos_x+part.width-Images[part.TimType+"-0"].width-Images[part.TimType+"-1"].width, part.pos_y+16	,part.flipV,part.flipH);
+										if(part.animStep==1)
+											drawImage(Images[part.TimType+"-"+0], part.pos_x+part.width-Images[part.TimType+"-0"].width, part.pos_y+20,part.flipV,part.flipH);
+										else if(part.animStep<7)
+										{
+											drawImage(Images["41-"+(part.animStep-1)], part.pos_x-Images["41-"+(part.animStep-1)].width/2+120, part.pos_y-Images["41-"+(part.animStep-1)].height/2+30,0,0);
+										}
+										
+									}
 							}
 							else if(part.TimType==18)//canon
 							{
@@ -542,6 +593,7 @@
 					let end=part.appearance.indexOf(')');
 					let subResult = part.appearance.substring(start+1, end);
 					//console.log(part.TimType+"_"+subResult);
+					
 					if(part.TimType==29)//Light bulb (29)
 					{
 						if((part.anim==undefined)||(part.anim==false))
@@ -593,7 +645,103 @@
 	
 		else//moving part
 		{
+			if((part.TimType==42))//Mort Mouse (42)
+			{
+				if(part.anim==true)
+				{
+					let scaleX=-1;
+					if(part.flipH==1)
+						scaleX=1;
+			
+					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
+					let x=part.MatterBody.position.x;
+					let y=part.MatterBody.position.y;	
+					
+					let bodies = Composite.allBodies(engine.world);
+					let point={};
+					if(part.flipH==0)
+						point.x=x+part.width/2;
+					else
+						point.x=x+part.width/2;
+					point.y=y+part.height/2+15;
+					
+					var collisions = [];		
+					collisions =Matter.Query.point(bodies, point);
+					console.log("collisions bellow mouse",collisions.length);
+					
+					if(collisions.length==0)
+					{
+						console.log("mouse stoped!!!");
+						part.anim=false;
+						
+					}
+					else
+						Body.applyForce(part.MatterBody, part.MatterBody.position, { x:0.0015*scaleX, y: 0.000 });
+					drawImage(Images[part.TimType+"-"+part.animStep], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
+				}
+				else
+				{
+					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
+					if(part.MatterBody!=undefined)
+					{
+						let x=part.MatterBody.position.x;
+						let y=part.MatterBody.position.y;	
+						drawImage(Images[part.TimType+"-0"], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
+					}
+					else
+						drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,part.flipV,part.flipH);
+				}
+			}
+			
+			if((part.TimType==12))//Pokey Cat (12)
+			{
+				
+				if(part.anim==true)
+				{				
+					let x=part.MatterBody.position.x;
+					let y=part.MatterBody.position.y;	
+					let scaleX=-1;
+					if(part.flipH==1)
+						scaleX=1;
+			
+					let bodies = Composite.allBodies(engine.world);
+					let point={};
+					if(part.flipH==0)
+						point.x=x-2;
+					else
+						point.x=x+part.width+2;
+					
+					point.y=y+part.height/2+5;
+					var collisions = [];		
+					collisions =Matter.Query.point(bodies, point);
+					//console.log("collisions bellow cat",collisions.length);
+					if(collisions.length==0)
+					{
+						console.log("Cat stoped!!!");
+						part.anim=false;
+					}
+					else
+						Body.applyForce(part.MatterBody, part.MatterBody.position, { x:0.002*scaleX, y: 0.000 });
+					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
+					drawImage(Images[part.TimType+"-"+(part.animStep+1)], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
+					
+				}
+				else
+				{
+					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
+					if(part.MatterBody!=undefined)
+					{
+						let x=part.MatterBody.position.x;
+						let y=part.MatterBody.position.y;	
+						drawImage(Images[part.TimType+"-0"], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
+					}
+					else
+						drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,part.flipV,part.flipH);
+					
+				}
+			}
 
+			
 			if(part.TimType==36)//rocket
 			{
 				if(part.anim==true)
@@ -648,15 +796,18 @@
 					if(part.flipH==1)
 					{
 						x=x-40+(part.animStep);
-						
 					}
+					
 					y=y-10+(part.animStep*2);
 					drawImage(Images[part.TimType+"-"+part.animStep], x, y,0,0);
 				}
 				else if(part.animStep<12)
 				{
 					//console.log("dynamite explode 41-"+(part.animStep-6) +" x="+part.pos_x+", y="+part.pos_y,PartDef[part.TimType].nb_anim);
-					drawImage(Images["41-"+(part.animStep-6)], part.pos_x-Images["41-"+(part.animStep-6)].width/2, part.pos_y-Images["41-"+(part.animStep-6)].height/2,0,0);
+					if(part.flipH==1)
+						drawImage(Images["41-"+(part.animStep-6)], part.pos_x-Images["41-"+(part.animStep-6)].width/2, part.pos_y-Images["41-"+(part.animStep-6)].height/2,0,0);
+					else
+						drawImage(Images["41-"+(part.animStep-6)], part.pos_x+part.width/2-Images["41-"+(part.animStep-6)].width/2, part.pos_y-Images["41-"+(part.animStep-6)].height/2,0,0);
 				}
 					
 				//drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y,part.flipV,part.flipH);

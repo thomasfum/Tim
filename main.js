@@ -37,8 +37,8 @@
 //TRICK_13
 
 
-	var CurrentLevel=16;
-	const MaxLevel=15;
+	var CurrentLevel=18;
+	const MaxLevel=17;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 

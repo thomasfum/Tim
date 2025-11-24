@@ -568,7 +568,13 @@
 		else 
 			return false;
 	}
-	
+	function isDestructibleByExplosive(part)
+	{
+		if((part.TimType==1)||(part.TimType==2)||(part.TimType==48))//brick wall, wood incline, wood wall
+			return true;
+		else 
+			return false;
+	}
 	function connectPlugs()
 	{
 		LevelJson.Parts.forEach(part1 => {
