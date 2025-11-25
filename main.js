@@ -27,18 +27,21 @@
 // check all levels
 // animations
 // size 678x369
+// coonect trampolin manually other side
 
 //trempolin active only if contact on top
 // managing pos of tooter
 // noeud seau
 //---------------------------
 //bug
-//restrating simul speed is increasing... see level 6 run+run+run
-//TRICK_13
+//trempolin force
+//load allimages at start
+//finish getRopeDirectionY
+//create getRopeDirectionX for gun
 
 
-	var CurrentLevel=18;
-	const MaxLevel=17;
+	var CurrentLevel=20;
+	const MaxLevel=19;
 	var CurrentLanguage="FR";
 	//var CurrentLanguage="EN";
 
@@ -46,6 +49,7 @@
 	let Icons={};
 	let Boards={};
 	let partsbin={};
+	let partsInBinAtStart=[];
 	let NBImagesToLoad=0;
 	let NBImagesLoaded=0;
 	let NBIconsToLoad=0;
@@ -180,14 +184,17 @@
 	
 	function saveSolutionClicked()
 	{
-		console.log("solution",Solutions[CurrentLevel]);
-		Solutions[CurrentLevel].Parts.forEach((sPart) => {
-				
+		console.log("Save solution for "+CurrentLevel);
+		let tbs="\""+CurrentLevel+"\":{\"Parts\":[ ";
+		//Solutions[CurrentLevel].Parts.forEach((sPart) => {
+			partsInBinAtStart.forEach((sPart_unitNo) => {
 				
 				LevelJson.Parts.forEach(part => {
 					
-					if(part.no==sPart.unitNo)
+					if(part.no==sPart_unitNo)
 					{
+						let sPart={};
+						sPart.unitNo=sPart_unitNo;
 						sPart.x=part.pos_x;;
 						sPart.y=part.pos_y;
 						sPart.name=part.name;
@@ -209,16 +216,20 @@
 							sPart.size=part.size;
 							sPart.width=part.width;
 						}
-							
+						tbs+=JSON.stringify(sPart);
+						tbs+=",";
+						//console.log("solution part ->", JSON.stringify(sPart));			
 					}
 				});
-				console.log("solution part ->", JSON.stringify(sPart));
+				
 			});
+			tbs+="]},";
+		console.log( tbs);			
 	}
 	function runWireframeClicked()
 	{
 		wireframe=true;
-		render.options.wireframes=wireframe;
+		//render.options.wireframes=wireframe;
 		run();
 	}
 	function winClicked()
@@ -258,31 +269,7 @@
 		canvas.onmouseup = MouseClickUp;
 		canvas.onmousemove = MouseMove;
 		ctx = canvas.getContext("2d");
-		engine = Engine.create({
-			positionIterations: 6,//default 6
-			velocityIterations: 4,//12,//default 4
-			constraintIterations:2////default 2
-		});
-		runner=undefined;
-		render = Render.create({
-			  engine, 
-			  canvas: canvas,
-			  options: {
-				wireframes: wireframe,
-				background: "rgba(0,162,162,255)",
-				//background: 'transparent',
-				width: canvas.width,
-				height: canvas.height,
-				pixelRatio:  window.devicePixelRatio // here
-			  }
-			}); 
-
-		world = engine.world;
-		
-		Events.on(render, "beforeRender", (event) => {beforeRender();});
-		Events.on(render, "afterRender", (event) => {afterRender();});
-		Events.on(engine,"collisionStart", (event) => {collisionStart(event);});
-		
+	
 		document.addEventListener('keypress', e => {
 			console.log('show solutions:'+e.key);
 			if (e.key === 'q') {

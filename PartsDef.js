@@ -3,7 +3,7 @@ const PartDef={
 	"0":{"count":1,"restitution":0.2,"mass":8},//Bowling ball
 	"1":{"count":8},//wall brick
 	"2":{"count":4,"FlipH":1,"FlipV":1,"stick":1,"phy_poly":[{"p":"0 0  1 0.5  1 1  0 0.5  0 0"}] },//wood incline
-	"3":{"count":3,"FlipH":1,"stick":1,"specialTest":1,"mass":4,"nb_anim":3,"animSpeed":0,"rx":0.1,"ry":0.7,"rx2":0.1,"ry2":0.3},//Teeter-totter 
+	"3":{"count":3,"FlipH":1,"stick":1,"specialTest":1,"mass":4,"nb_anim":3,"animSpeed":0,"rx":0.1,"ry":0.7,"rx2":0.9,"ry2":0.3},//Teeter-totter 
 	"4":{"count":7,"mass":-1,"oy":-0.18,"nb_anim":7,"rx":0.5,"ry":1.1},//ballon
 	"5":{"count":35,"FlipH":1,"node_x":70,"node_y":50,"node_d":20,"nb_anim":7},//conveyor belt
 	"6":{"count":2,"FlipH":1,"stick":1,"node_x":75,"node_y":25,"node_d":20,"nb_anim":2},//mouse cage
@@ -11,7 +11,7 @@ const PartDef={
 	"8":{"count":1},//belt
 	"9":{"count":1,"restitution":0.2,"mass":15},//Basketball 
 	"10":{"count":1},//rope
-	"11":{"count":1},//bird cage
+	"11":{"count":1,"rx":0.5,"ry":0.1,"mass":2,"phy_poly":[{"p":"0.4 0  0.6 0  1 0.2 1 1  0 1  0 0.2"}]},//Cage (11)
 	"12":{"count":10,"FlipH":1,"phy_poly":[{"p":"0 0  1 0  1 1  0 1  0 0"}],"nb_anim":9,"fixed":2},//Pokey Cat (12)
 	"13":{"count":21,"FlipH":1,"node_x":50,"node_y":50,"node_d":20,"nb_anim":8,"animSpeed":5},//jack in the box
 	"14":{"count":4,"node_x":50,"node_y":50,"node_d":5,"nb_anim":4,"node_x":50,"node_y":50,"node_d":20},//gear
@@ -22,16 +22,16 @@ const PartDef={
 	"19":{"count":7,"FlipH":1,"fx":1,"fy":0.5,"nb_anim":13},					//Dynamite
 	"20":{"count":3},															//bullet
 	"21":{"count":4,"zIndex":-1},												//Electric switch & outlet 
-	"22":{"count":3,"nb_anim":7},								//Dynamite with plunger (22)
+	"22":{"count":3,"nb_anim":7},												//Dynamite with plunger (22)
 	"23":{"count":1,"rx":0.5,"ry":0.2},											//eye hook 
 	"24":{"count":5,"FlipH":1,"nb_anim":4,"fixed":1,"animSpeed":2},				//Electric fan
 	"25":{"count":2,"FlipH":1,"nb_anim":2,"at":"tl"},							//Flashlight (25)
 	"26":{"count":6,"fixed":1,"nb_anim":4,"node_x":70,"node_y":90,"node_d":20},	//Generator (26)
-	"27":{"count":6,"FlipH":1,"rx":0.35,"ry":0.85,"nb_anim":6,"animLeft":1},	//gun//0.35
+	"27":{"count":6,"FlipH":1,"rx":0.35,"ry":0.85,"nb_anim":6,"animLeft":1},	//gun
 	"28":{"count":1,"restitution":0.2,"mass":1},								//baseball
 	"29":{"count":6,"rx":0.8,"ry":1,"nb_anim":2,},								//Light bulb (29)
 	"30":{"count":1,"FlipH":1,"nb_anim":0,"animSpeed":100,"zIndex":3},			//Magnifying glass (30)
-	"31":{"count":10},//monkey
+	"31":{"count":10,"FlipH":1,"rx":0.80,"ry":0.5,"node_x":55,"node_y":65,"node_d":20,"nb_anim":4},//Monkey exercise bike (31)
 	"32":{"count":1},															//pumpkin
 	"33":{"count":1},															//heart ballon
 	"34":{"count":1},															//christmass tree

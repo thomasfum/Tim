@@ -17,10 +17,10 @@ const WinCondition={
 	"16":{"Conditions":[{"t":"a","unitNo":9}]},
 	"17":{"Conditions":[{"t":"a","unitNo":0}]},
 	"18":{"Conditions":[{"t":"p","unitNo":10,"x1":435,"y1":245,"dx":50,"dy":50}]},
+	"19":{"Conditions":[{"t":"a","unitNo":4},{"t":"a","unitNo":8}]},
 };	
 const Solutions={
-	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},
-	{"unitNo":18,"x":152,"y":280,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":19,"x":264,"y":200,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":20,"x":344,"y":72,"name":"Wood incline (2)","FlipH":0,"FlipV":0,"size":3,"width":64}]},
+	"1":{"Parts":[{"unitNo":14,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":17,"cp2":8},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":18,"cp2":9},{"unitNo":16,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":19,"cp2":2},{"unitNo":17,"x":8,"y":296,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},	{"unitNo":18,"x":152,"y":280,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":19,"x":264,"y":200,"name":"Mouse cage (6)","FlipH":0,"FlipV":0},{"unitNo":20,"x":344,"y":72,"name":"Wood incline (2)","FlipH":0,"FlipV":0,"size":3,"width":64}]},
 	"2":{"Parts":[{"unitNo":25,"x":472,"y":56,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":26,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":27,"cp2":7},{"unitNo":27,"x":456,"y":104,"name":"Mouse cage (6)","FlipH":1,"FlipV":0}]},
 	"3":{"Parts":[{"unitNo":13,"x":424,"y":24,"name":"Basketball (9)","FlipH":0,"FlipV":0},{"unitNo":14,"x":456,"y":232,"name":"Tennis ball (44)","FlipH":0,"FlipV":0},{"unitNo":15,"x":408,"y":264,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":16,"x":376,"y":72,"name":"Bellows (16)","FlipH":1,"FlipV":0},{"unitNo":17,"x":312,"y":264,"name":"Scrissors (37)","FlipH":0,"FlipV":0}]},
 	"4":{"Parts":[{"unitNo":30,"x":184,"y":88,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":31,"x":88,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":32,"x":200,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0},{"unitNo":33,"x":312,"y":264,"name":"Teeter-totter (3)","FlipH":1,"FlipV":0}]},
@@ -38,32 +38,10 @@ const Solutions={
 	"16":{"Parts":[ {"unitNo":15,"x":296,"y":120,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":16,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":15,"cp2":22,"pls":[17]},{"unitNo":17,"x":436,"y":328,"name":"Pulley (7)","FlipH":0,"FlipV":0},{"unitNo":18,"x":589,"y":115,"name":"Pulley (7)","FlipH":0,"FlipV":0}, {"unitNo":19,"x":264,"y":279,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":20,"x":466,"y":243,"name":"Magnifying glass (30)","FlipH":0,"FlipV":0},{"unitNo":21,"x":222,"y":282,"name":"Flashlight (25)","FlipH":0,"FlipV":0},{"unitNo":22,"x":429,"y":242,"name":"Light bulb (29)","FlipH":0,"FlipV":0}]},
 	"17":{"Parts":[ {"unitNo":21,"x":328,"y":216,"name":"Teeter-totter (3)","FlipH":0,"FlipV":0},{"unitNo":22,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":21,"cp2":9,"pls":[23]},{"unitNo":23,"x":504,"y":258,"name":"Pulley (7)","FlipH":0,"FlipV":0},{"unitNo":24,"x":41,"y":185,"name":"Dynamite (19)","FlipH":0,"FlipV":0},{"unitNo":25,"x":70,"y":139,"name":"Dynamite (19)","FlipH":0,"FlipV":0},{"unitNo":26,"x":41,"y":91,"name":"Dynamite (19)","FlipH":0,"FlipV":0}]},
 	"18":{"Parts":[ {"unitNo":14,"x":40,"y":296,"name":"Trampoline (39)","FlipH":0,"FlipV":0},{"unitNo":15,"x":577,"y":115,"name":"Belt (8)","FlipH":0,"FlipV":0,"cp1":6,"cp2":16},{"unitNo":16,"x":105,"y":136,"name":"Conveyor belt (5)","FlipH":0,"FlipV":0},{"unitNo":17,"x":107,"y":233,"name":"Pokey Cat (12)","FlipH":1,"FlipV":0}]},
+	"19":{"Parts":[ {"unitNo":15,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":19,"cp2":13,"pls":[]},{"unitNo":16,"x":577,"y":115,"name":"Rope (10)","FlipH":0,"FlipV":0,"cp1":9,"cp2":4,"pls":[18]},{"unitNo":17,"x":20,"y":257,"name":"Pulley (7)","FlipH":0,"FlipV":0},{"unitNo":18,"x":87,"y":237,"name":"Pulley (7)","FlipH":0,"FlipV":0},{"unitNo":19,"x":277,"y":209,"name":"Light bulb (29)","FlipH":0,"FlipV":0},{"unitNo":20,"x":209,"y":165,"name":"Rocket (36)","FlipH":0,"FlipV":0},]},
 };
 
-/*
-	function GetFlipH2(part)
-	{
-		let flipHs="0";
-		
-		if(part.appearance!=undefined)
-		{
-			//appearance="top-down (2)"
-			let start=part.appearance.indexOf('(');
-			let end=part.appearance.indexOf(')');
-			let _flipHs = part.appearance.substring(start+1, end);
-			console.log("flipHs appearance="+_flipHs);
-			if(_flipHs=="2")
-				flipHs="1";
-			//if(_flipHs=="3")
-			//	flipHs="1";
-		}
-		
-		if(flipHs=="0")
-			return 0;
-		else
-			return 1;
-	}
-	*/
+
 	function GetFlipH(part)
 	{
 		let flipHs="0";
@@ -224,7 +202,8 @@ const Solutions={
 		NBIconsToLoad=0;
 		NBIconsLoaded=0;
 		Images={};
-		partsbin={};
+		partsbin=[];
+		partsbinAtStart={};
 		LevelJson.Parts.forEach(part => {
 			let start=part.name.indexOf('(');
 			let end=part.name.indexOf(')');
@@ -263,6 +242,9 @@ const Solutions={
 			Images["43-0"]=0;//canon ball
 			loadImage("43-0",undefined,0);
 			
+			if(part.in_partsbin==1)
+				partsInBinAtStart.push(part.no);
+					
 			for (let index = 0; index < PartDef[result].count; ++index) 
 			{
 				let filename=result+"-"+index;
@@ -296,7 +278,7 @@ const Solutions={
 		CurrentLevelWinned=false;
 		wireframe=false;
 		stop();
-		cleanPhysics(true);
+		//cleanPhysics(true);
 		console.log("loading level "+level);
 		
 		ctx.fillStyle = "rgba(0,162,162,255)";

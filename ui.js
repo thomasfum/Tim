@@ -205,7 +205,7 @@
 				{
 					//if(part.no==1)
 					//	console.log("refresh 3 -",part.no);
-					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22))//electrical fan, canon ,Dynamite with plunger 
+					if((part.width>Images[part.TimType+"-0"].width)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22)&&(part.TimType!=31))//electrical fan, canon ,Dynamite with plunger , monkey
 					{
 						//console.log("refresh 3 -",part.no);
 						//dupliquer en width
@@ -224,7 +224,7 @@
 							}
 						}
 					}
-					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22))
+					else if((part.height>Images[part.TimType+"-0"].height)&&(part.size==undefined)&&(part.TimType!=24)&&(part.TimType!=26)&&(part.TimType!=18)&&(part.TimType!=22)&&(part.TimType!=31))
 					{
 						
 						//dupliquer en height
@@ -317,7 +317,24 @@
 							
 						if((part.anim==undefined)||(part.anim==false))
 						{
-							if(part.TimType==22)//Dynamite with plunger 
+							
+							if(part.TimType==31)//Monkey exercise bike 
+							{
+								part.nb_anim=PartDef[part.TimType].nb_anim;
+								if(part.flipH==0)
+								{
+									drawImage(Images[part.TimType+"-"+0], part.pos_x, part.pos_y	,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+4], part.pos_x+Images[part.TimType+"-0"].width-33, part.pos_y-13	,part.flipV,part.flipH);
+									//drawImage(Images[part.TimType+"-"+2], part.pos_x+Images[part.TimType+"-0"].width+Images[part.TimType+"-1"].width-25, part.pos_y-2	,part.flipV,part.flipH);
+								}
+								else
+								{
+									drawImage(Images[part.TimType+"-"+0], part.pos_x+part.width-Images[part.TimType+"-0"].width, part.pos_y,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+4], part.pos_x-3, part.pos_y-13	,part.flipV,part.flipH);
+									//drawImage(Images[part.TimType+"-"+2], part.pos_x+part.width-Images[part.TimType+"-0"].width-Images[part.TimType+"-1"].width-7, part.pos_y-2	,part.flipV,part.flipH);
+								}
+							}
+							else if(part.TimType==22)//Dynamite with plunger 
 							{
 								if(part.flipH==0)
 								{
@@ -407,18 +424,39 @@
 							}
 							
 						}
-						else//anim
+						else//anim =true
 						{
 							
-							//console.log("draw "+part.TimType+"-"+(size+part.animStep));
+							//console.log("draw "+part.no+"-"+(size+part.animStep));
 							//if(part.no==10)
 							//	console.log("anim1 "+part.no+ " "+part.name+", "+part.animOnce+", "+part.animStep+", "+part.animCleanAtEnd,+" "+part.fixed+" "+part.nb_anim);
 							if((part.animOnce==true)&&(part.animStep==PartDef[part.TimType].nb_anim-1)&&(part.animCleanAtEnd==true))
 							{
 								//console.log("1 no image for "+part.no+" : "+part.animStep);
 							}
-							
-							if(part.TimType==22)//Dynamite with plunger 
+							if(part.TimType==31)//Monkey exercise bike 
+							{
+								//console.log("draw "+part.no+"-"+(part.animStep),PartDef[part.TimType].nb_anim);
+								let anim=part.animStep;
+								if(part.animPause==true)
+									anim=0;
+									
+								if(part.flipH==0)
+								{
+									drawImage(Images[part.TimType+"-"+anim], part.pos_x, part.pos_y	,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+5], part.pos_x+Images[part.TimType+"-0"].width-33, part.pos_y-13	,part.flipV,part.flipH);
+									if(part.animPause==true)
+										drawImage(Images[part.TimType+"-"+(part.animStep+6)], part.pos_x+Images[part.TimType+"-0"].width/*+Images[part.TimType+"-1"].width*/+15, part.pos_y-7	,part.flipV,part.flipH);
+								}
+								else
+								{
+									drawImage(Images[part.TimType+"-"+anim], part.pos_x+part.width-Images[part.TimType+"-0"].width, part.pos_y,part.flipV,part.flipH);
+									drawImage(Images[part.TimType+"-"+5], part.pos_x-3, part.pos_y-13	,part.flipV,part.flipH);
+									if(part.animPause==true)
+										drawImage(Images[part.TimType+"-"+(part.animStep+6)], part.pos_x+part.width-Images[part.TimType+"-0"].width/*-Images[part.TimType+"-1"].width*/+17, part.pos_y-12	,part.flipV,part.flipH);
+								}
+							}
+							else if(part.TimType==22)//Dynamite with plunger 
 							{
 									if(part.flipH==0)
 									{
@@ -563,9 +601,29 @@
 									//drawImage(Images[part.TimType+"-0"],part.pos_x,part.pos_y,part.flipV,part.flipH);
 									drawImage(Images[part.TimType+"-0"],x,y,part.flipV,part.flipH);
 									
-								//if(part.no==10)
-								//		console.log("anim1 "+(size+part.animStep));
-								drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+								if(part.TimType!=15)//not Aquarium (15)
+								{
+									drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+								}
+								else
+								{
+									if(part.animStep>16)
+									{
+										drawImage(Images[part.TimType+"-16"],x, y,part.flipV,part.flipH);
+										
+										console.log("anim1 "+part.width+", "+Images[part.TimType+"-"+(size+part.animStep)].width);
+										
+										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x+Images[part.TimType+"-16"].width/2-Images[part.TimType+"-"+(size+part.animStep)].width/2, y-10,part.flipV,part.flipH);
+									}
+									else
+										drawImage(Images[part.TimType+"-"+(size+part.animStep)],x, y,part.flipV,part.flipH);
+									
+									if(part.animStep>=25)
+									{
+										part.anim=true;
+										part.animStep=17;
+									}
+								}
 								
 								if(part.TimType==26)//Generator (26)
 								{
@@ -649,34 +707,9 @@
 			{
 				if(part.anim==true)
 				{
-					let scaleX=-1;
-					if(part.flipH==1)
-						scaleX=1;
-			
-					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
 					let x=part.MatterBody.position.x;
 					let y=part.MatterBody.position.y;	
-					
-					let bodies = Composite.allBodies(engine.world);
-					let point={};
-					if(part.flipH==0)
-						point.x=x+part.width/2;
-					else
-						point.x=x+part.width/2;
-					point.y=y+part.height/2+15;
-					
-					var collisions = [];		
-					collisions =Matter.Query.point(bodies, point);
-					console.log("collisions bellow mouse",collisions.length);
-					
-					if(collisions.length==0)
-					{
-						console.log("mouse stoped!!!");
-						part.anim=false;
-						
-					}
-					else
-						Body.applyForce(part.MatterBody, part.MatterBody.position, { x:0.0015*scaleX, y: 0.000 });
+					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
 					drawImage(Images[part.TimType+"-"+part.animStep], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
 				}
 				else
@@ -697,34 +730,11 @@
 			{
 				
 				if(part.anim==true)
-				{				
+				{			
 					let x=part.MatterBody.position.x;
 					let y=part.MatterBody.position.y;	
-					let scaleX=-1;
-					if(part.flipH==1)
-						scaleX=1;
-			
-					let bodies = Composite.allBodies(engine.world);
-					let point={};
-					if(part.flipH==0)
-						point.x=x-2;
-					else
-						point.x=x+part.width+2;
-					
-					point.y=y+part.height/2+5;
-					var collisions = [];		
-					collisions =Matter.Query.point(bodies, point);
-					//console.log("collisions bellow cat",collisions.length);
-					if(collisions.length==0)
-					{
-						console.log("Cat stoped!!!");
-						part.anim=false;
-					}
-					else
-						Body.applyForce(part.MatterBody, part.MatterBody.position, { x:0.002*scaleX, y: 0.000 });
 					part.MatterBody.render= {fillStyle: "rgba(0, 0, 255, 0)" };
 					drawImage(Images[part.TimType+"-"+(part.animStep+1)], x-part.width/2-playgroundOffsetX, y-part.height/2-playgroundOffsetY,part.flipV,part.flipH);
-					
 				}
 				else
 				{
@@ -737,7 +747,6 @@
 					}
 					else
 						drawImage(Images[part.TimType+"-0"], part.pos_x, part.pos_y,part.flipV,part.flipH);
-					
 				}
 			}
 
@@ -897,88 +906,129 @@
 	}
 	function getPosXRope(partNo,to)
 	{
-		
-		
-		if((CurrentLevel==13)&&(partNo==6))//TRICK_13
+		let posx=0;
+		if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter
+		{
+			if(to==false)
+			{
+				//console.log("GetNodePosX Teeter-totter ("+partNo+")",to);
+				let rx=0.5;
+				//console.log("getPosXRope",partNo);
+				if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
+					rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+				let ox=LevelJson.Parts[partNo].width*rx;
+				if(LevelJson.Parts[partNo].flipH==0)
+					posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+				else
+					posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
+				//console.log("GetNodePosX Teeter-totter ("+partNo+")",posx);
+			}
+			if(to==true)
+			{
+				//console.log("GetNodePosX Teeter-totter ("+partNo+")",to);
+				let rx2=0.5;
+				//console.log("getPosXRope",partNo);
+				if(PartDef[LevelJson.Parts[partNo].TimType].rx2!=undefined)
+					rx2=PartDef[LevelJson.Parts[partNo].TimType].rx2;
+				let ox=LevelJson.Parts[partNo].width*rx2;
+				if(LevelJson.Parts[partNo].flipH==0)
+					posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+				else
+					posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
+				//console.log("GetNodePosX Teeter-totter ("+partNo+")",posx);
+			}
+		}
+		else
 		{
 			
-			let rx2=0.5;
-			if(PartDef[LevelJson.Parts[partNo].TimType].rx2!=undefined)
-				rx2=PartDef[LevelJson.Parts[partNo].TimType].rx2;
-			//console.log("GetNodePosX level 13 ",rx2);
-			let ox=LevelJson.Parts[partNo].width*rx2;
-			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
-		}
-		
-		
-		let rx=0.5;
-		//console.log("getPosXRope",partNo);
-		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
-			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
-		let ox=LevelJson.Parts[partNo].width*rx;
-		
-		if(LevelJson.Parts[partNo].TimType==7)//pulley
-		{
-			if(LevelJson.Parts[partNo].appearance=="top (2)")
+			let rx=0.5;
+			//console.log("getPosXRope",partNo);
+			if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
+				rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+			let ox=LevelJson.Parts[partNo].width*rx;
+			
+			if(LevelJson.Parts[partNo].TimType==7)//pulley
 			{
-				if(to==false)
-					ox=ox+7;
-				else
-					ox=ox-7;
+				if(LevelJson.Parts[partNo].appearance=="top (2)")
+				{
+					if(to==false)
+						ox=ox+7;
+					else
+						ox=ox-7;
+				}
+				if(LevelJson.Parts[partNo].appearance=="right (3)")
+				{
+					ox=ox+3;
+				}
 			}
-			if(LevelJson.Parts[partNo].appearance=="right (3)")
-			{
-				ox=ox+3;
-			}
+			if(LevelJson.Parts[partNo].flipH==0)
+				posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+			else
+				posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
 		}
-		if(LevelJson.Parts[partNo].flipH==0)
-			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
-		else
-			return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
+		return posx;
 	}
 	function getPosYRope(partNo,to)
 	{
-		
-		if((CurrentLevel==13)&&(partNo==6))//TRICK_13
+		let posy=0;
+		if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter
 		{
-			
-			let ry2=0.5;
-			if(PartDef[LevelJson.Parts[partNo].TimType].ry2!=undefined)
-				ry2=PartDef[LevelJson.Parts[partNo].TimType].ry2;
-			//console.log("GetNodePosY level 13 ",ry2);
-			let oy=LevelJson.Parts[partNo].height*ry2;
-			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
-		}
-		
-		let ry=0.5;
-		if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
-			ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
-		let oy=LevelJson.Parts[partNo].height*ry;
-		
-		if(LevelJson.Parts[partNo].TimType==7)//pulley
-		{
-			if(LevelJson.Parts[partNo].appearance=="right (3)")
+			if(to==false)
 			{
-				if(to==false)
-					oy=oy+7;
+				let ry=0.5;
+				if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
+					ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
+				let oy=LevelJson.Parts[partNo].height*ry;
+				if(LevelJson.Parts[partNo].flipV==0)
+					posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
 				else
-					oy=oy-7;
+					posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
 			}
-			if(LevelJson.Parts[partNo].appearance=="left (1)")
+			if(to==true)
 			{
-				
-				if(to==false)
-					oy=oy+7;
+				let ry2=0.5;
+				if(PartDef[LevelJson.Parts[partNo].TimType].ry2!=undefined)
+					ry2=PartDef[LevelJson.Parts[partNo].TimType].ry2;
+				let oy=LevelJson.Parts[partNo].height*ry2;
+				if(LevelJson.Parts[partNo].flipV==0)
+					posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
 				else
-					oy=oy-7;
+					posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
 			}
 		}
-		
-		if(LevelJson.Parts[partNo].flipV==0)
-			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
 		else
-			return playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
+		{
 		
+			let ry=0.5;
+			if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
+				ry=PartDef[LevelJson.Parts[partNo].TimType].ry;
+			let oy=LevelJson.Parts[partNo].height*ry;
+			
+			if(LevelJson.Parts[partNo].TimType==7)//pulley
+			{
+				if(LevelJson.Parts[partNo].appearance=="right (3)")
+				{
+					if(to==false)
+						oy=oy+7;
+					else
+						oy=oy-7;
+				}
+				if(LevelJson.Parts[partNo].appearance=="left (1)")
+				{
+					
+					if(to==false)
+						oy=oy+7;
+					else
+						oy=oy-7;
+				}
+			}
+			
+			if(LevelJson.Parts[partNo].flipV==0)
+				posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+oy;
+			else
+				posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
+		}
+		return posy;
 	}
 	
 	function getRopeDirectionY(partNoExtremity)
@@ -987,7 +1037,7 @@
 		let LastPartNo=-1;
 		let ropeNo=-1;
 		LevelJson.Parts.forEach(part => {
-			if(part.TimType==10)
+			if(part.TimType==10)//rope
 			{
 				if(part.connected_part_1==partNoExtremity)
 				{
@@ -1004,11 +1054,7 @@
 		if(LastPartNo==-1)
 			return 0;
 			
-		if(engine.timing.timestamp<250)//let rope stabilize
-		{
-			LevelJson.Parts[LastPartNo].MatterBody.refVelocityY=LevelJson.Parts[LastPartNo].MatterBody.velocity.y;
-			console.log("+++++++++++++++++++++++++++set ref"+LevelJson.Parts[LastPartNo].MatterBody.refVelocityY);
-		}
+		
 		if(engine.timing.timestamp>250)//let rope stabilize
 		{
 			
@@ -1017,32 +1063,43 @@
 			let revert=1;
 			if((ropeNo!=-1)&&(LevelJson.Parts[ropeNo].TimPulleys.length>0))
 			{
-				console.log("through at pulley",LevelJson.Parts[ropeNo].TimPulleys);
+				//console.log("through at pulley",LevelJson.Parts[ropeNo].TimPulleys);
 				//if(LevelJson.Parts[ropeNo].TimPulleys[0].pos_y>otherY)//revert direction
 					revert=-1;
 					
-					otherX=getPosXRopeBody(LevelJson.Parts[ropeNo].TimPulleys[0].no);
-					otherY=getPosYRopeBody(LevelJson.Parts[ropeNo].TimPulleys[0].no);
+					let pulleyPartNo=LevelJson.Parts[ropeNo].TimPulleys[0];
+					//console.log("through at pulley 0",pulleyPartNo);
 					
+					otherX=getPosXRopePulleySimul(pulleyPartNo,false);
+					otherY=getPosYRopePulleySimul(pulleyPartNo,true);
+					//
+					//console.log("through at pulley",LevelJson.Parts[ropeNo].TimPulleys[0]);
+					//otherX=getPosXRopePulleySimul(LevelJson.Parts[ropeNo].TimPulleys[0],true);
 			}
 			
-				
-
+			let extremityX=getPosXRopeBody(partNoExtremity);
+			let extremityY=getPosYRopeBody(partNoExtremity);
+			let p1={};
+			let p2={};
+			p1.x=extremityX;
+			p1.y=extremityY;
+			p2.x=otherX;
+			p2.y=otherY;
+		
 			let part=LevelJson.Parts[partNoExtremity];
 			//console.log("velocity.y:",LevelJson.Parts[LastPartNo].MatterBody.velocity.y);
-			if(part.no==22)
-				console.log("last="+otherX+", "+otherY+" v="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y,LevelJson.Parts[LastPartNo].MatterBody); 
-			if(part.no==22)
-				console.log("start=",part); 
-			if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10))
+			//if(part.no==8)
+			//	console.log("------------ last="+extremityX+", "+otherX);//+" v="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y,LevelJson.Parts[LastPartNo].MatterBody); 
+			//if(part.no==8)
+			//	console.log("start=",part); 
+			if((otherX>extremityX-50)&&(otherX<extremityX+50))
 			{
-				console.log("In X=",part); 
+				//console.log("In X=",part); 
 				if(revert==1)//direct 
 				{
 					if(otherY>part.pos_y+part.height)//need to be below
 					{
-						if(part.no==22)
-							console.log("below="+(LevelJson.Parts[LastPartNo].MatterBody.velocity.y+" / "+ LevelJson.Parts[LastPartNo].MatterBody.refVelocityY)); 
+						console.log("lower direct ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
 						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y>0.025)
 							return 1;						
 					}
@@ -1059,9 +1116,8 @@
 				{
 					if(otherY>part.pos_y+part.height)//need to be below
 					{
-						if((part.no==22)&&(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<0.2))
-							console.log("below inv="+(LevelJson.Parts[LastPartNo].MatterBody.velocity.y+" / "+ LevelJson.Parts[LastPartNo].MatterBody.refVelocityY)); 
-						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.015)
+						console.log("lower INdirect ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
+						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.15)
 							return 1;						
 					}
 					if(otherY<part.pos_y+part.height)//need to be upper
@@ -1079,12 +1135,14 @@
 		return 0;
 	}
 	
-	function getPosXRopePulleySimul(partNo,to)
+	function getPosXRopePulleySimul(partNo,to, from_x)
 	{
 		let rx=0.5;
-		//console.log("getPosXRope",partNo);
+		
 		if(PartDef[LevelJson.Parts[partNo].TimType].rx!=undefined)
 			rx=PartDef[LevelJson.Parts[partNo].TimType].rx;
+		
+		//console.log("getPosXRope="+rx,LevelJson.Parts[partNo]);
 		let ox=LevelJson.Parts[partNo].width*rx;
 		if(LevelJson.Parts[partNo].TimType==7)//pulley
 		{
@@ -1094,6 +1152,10 @@
 					ox=ox+5;
 				else
 					ox=ox-5;
+				if(from_x<LevelJson.Parts[partNo].pos_x+20)
+					return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+				else
+					return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
 			}
 			if(LevelJson.Parts[partNo].appearance=="right (3)")
 			{
@@ -1102,10 +1164,13 @@
 			if(LevelJson.Parts[partNo].appearance=="left (1)")
 			{
 				//console.log("getPosXRopePulleySimul -5");
-				ox=ox-5;
+				ox=ox-10;
 			}
-		}	
+		}
+		
+		
 		return playgroundOffsetX+LevelJson.Parts[partNo].pos_x+ox;
+
 	}
 	function getPosYRopePulleySimul(partNo,to)
 	{
@@ -1136,7 +1201,7 @@
 			}
 			if(LevelJson.Parts[partNo].appearance=="bottom (0)")
 			{
-				oy=oy+5;
+				oy=oy+10;
 			}
 		}
 		
@@ -1254,8 +1319,8 @@
 						ctx.stroke();
 						//part8-0
 						
-							drawImage(Images["8-0"], getPosXRope(part.connected_part_1)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_1)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
-							drawImage(Images["8-0"], getPosXRope(part.connected_part_2)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_2)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+						drawImage(Images["8-0"], getPosXRope(part.connected_part_1,false)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_1,false)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+						drawImage(Images["8-0"], getPosXRope(part.connected_part_2,true)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_2,true)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
 						
 					}
 					else

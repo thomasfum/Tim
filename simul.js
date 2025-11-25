@@ -226,12 +226,27 @@ let
 						}
 					}
 				}
+				if(part.TimType==31)//Monkey exercise bike (31)
+				{
+					if(part.anim!=true)
+					{
+						let directionY = getRopeDirectionY(part.no);
+						//console.log("Monkey directionY ("+part.no+")"+directionY);
+						if(directionY==1)
+						{
+							if(part.anim!=true)
+							{
+								console.log("Monkey ("+part.no+") start");
+								AnimPart(part.no, true,part.flipH,part.flipV,false,false);	
+							}
+						}
+							
+					}
+				}
 				if(part.TimType==27)//Gun (27)
 				{
 					if(part.anim!=true)
 					{
-						
-						
 						let otherExtremity=PartRopetExtremity(part.no,false);
 						
 						if(otherExtremity>=0)
@@ -306,42 +321,14 @@ let
 					if(part.anim!=true)
 					{
 						
-						let directionY = getRopeDirectionY(part.no)
-						console.log("directionY ("+part.no+")"+directionY);
+						let directionY = getRopeDirectionY(part.no);
+						//console.log("Light bulb directionY ("+part.no+")"+directionY);
 						
 						if(directionY==1)
 						{
 							console.log("light bulb "+part.no);
 							AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
 						}
-						/*
-						let otherExtremity=PartRopetExtremity(part.no,true);
-						
-						if(otherExtremity>=0)
-						{
-							if(engine.timing.timestamp>100)
-							{
-								engine.world.bodies.forEach((body)=>{
-									if(body.TimNo==otherExtremity)
-									{
-										//console.log("found Light bulb otherExtremity "+otherExtremity,body);		
-										let otherX=getPosXRopeBody(otherExtremity);
-										console.log("found Light bulb otherExtremity "+otherX,part);	
-										if((otherX>part.pos_x-10)&&(otherX<part.pos_x+part.width+10)&&(body.position.y>part.pos_y+part.height))//need to be below
-										{
-											console.log("light bulb "+body.speed,body );
-											//if(body.speed>0.5)
-											if(body.velocity.y<-0.025)
-											{
-												console.log("light bulb "+part.no);
-												AnimPart(part.no, false,part.flipH,part.flipV,true,false);									
-											}
-										}
-									}
-								});
-							}
-						}
-						*/
 					}
 				}
 				if(part.TimType==38)//Solar panels (38)
@@ -468,6 +455,49 @@ let
 				}
 			}
 		});
+		if(LevelJson.Parts[MouseBody.TimNo].anim==true)
+		{
+			let stopMouse=false;
+			let x=MouseBody.position.x;
+			let y=MouseBody.position.y;	
+			let scaleX=-1;
+			if(LevelJson.Parts[MouseBody.TimNo].flipH==1)
+				scaleX=1;
+			let bodies = Composite.allBodies(engine.world);
+			let point={};
+			if(LevelJson.Parts[MouseBody.TimNo].flipH==0)
+				point.x=x+LevelJson.Parts[MouseBody.TimNo].width/2;
+			else
+				point.x=x+LevelJson.Parts[MouseBody.TimNo].width/2;
+			point.y=y+LevelJson.Parts[MouseBody.TimNo].height/2+15;
+			
+			var collisions = [];		
+			collisions =Matter.Query.point(bodies, point);
+			console.log("collisions bellow mouse",collisions.length);
+			if(collisions.length==0)
+			{
+				stopMouse=true;
+			}
+		
+			//check in front
+			let startPoint = { x: MouseBody.position.x+(LevelJson.Parts[MouseBody.TimNo].width/2+2)*scaleX, y: MouseBody.position.y };
+			let  endPoint = { x: MouseBody.position.x+(LevelJson.Parts[MouseBody.TimNo].width/2+12)*scaleX, y: MouseBody.position.y};
+			drawRay( startPoint, endPoint);
+			collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[MouseBody.TimNo].height-5) ;
+			if(collisions.length>0)
+			{
+				console.log("collisions mouse in front",collisions);
+				stopMouse=true;
+			}
+			if(stopMouse==true)
+			{
+				console.log("mouse stoped!!!");
+				LevelJson.Parts[MouseBody.TimNo].anim=false;
+				
+			}
+			else
+				Body.applyForce(MouseBody, MouseBody.position, { x:0.0015*scaleX, y: 0.000 });
+		}
 	}
 	function CheckCat(CatBody)
 	{
@@ -475,10 +505,10 @@ let
 		if(LevelJson.Parts[CatBody.TimNo].flipH==1)
 			scaleX=1;
 		
-		let startPoint = { x:  CatBody.position.x+playgroundOffsetX, y: CatBody.position.y+playgroundOffsetY};
+		let startPoint = { x:  CatBody.position.x/*+playgroundOffsetX*/, y: CatBody.position.y/*+playgroundOffsetY*/+LevelJson.Parts[CatBody.TimNo].height/2-5};
 		var collisions = [];
         let  bodies = Composite.allBodies(engine.world);
-        let  endPoint = { x: CatBody.position.x+playgroundOffsetX+700*scaleX, y: CatBody.position.y+playgroundOffsetY};
+        let  endPoint = { x: CatBody.position.x/*+playgroundOffsetX*/+700*scaleX, y: CatBody.position.y/*+playgroundOffsetY*/+LevelJson.Parts[CatBody.TimNo].height/2-5};
 		
 		drawRay( startPoint, endPoint);
 		collisions= Matter.Query.ray(bodies, startPoint, endPoint) ;
@@ -496,6 +526,7 @@ let
 							console.log("Cat ("+CatBody.TimNo+") has seen a mouse");	
 							AnimPart(CatBody.TimNo,false,LevelJson.Parts[CatBody.TimNo].flipH,LevelJson.Parts[CatBody.TimNo].flipV,false,false);		
 						}
+						//console.log("Cat ("+CatBody.TimNo+") still seen a mouse");
 						somethingInFronToMove=true;
 					}
 					
@@ -512,16 +543,63 @@ let
 									//Body.setVelocity(CatBody, { x:6*scaleX, y: 0 });
 
 							}
-							
+							//console.log("Cat ("+CatBody.TimNo+") still seen a broken aquarium");
+							somethingInFronToMove=true;		
 						}
-						somethingInFronToMove=true;	
+						
 					}
 					 
 				}
 			}
 		});
-		//if(somethingInFronToMove==false)
-		//	LevelJson.Parts[CatBody.TimNo].anim=false;
+		if(somethingInFronToMove==false)
+			LevelJson.Parts[CatBody.TimNo].anim=false;
+		
+		
+		if(LevelJson.Parts[CatBody.TimNo].anim==true)
+		{				
+			let stopCat=false;
+			let x=CatBody.position.x;
+			let y=CatBody.position.y;	
+			
+			let scaleX=-1;
+			if(LevelJson.Parts[CatBody.TimNo].flipH==1)
+				scaleX=1;
+	
+	
+			let bodies = Composite.allBodies(engine.world);
+			//check bellow
+			let point={};
+			if(LevelJson.Parts[CatBody.TimNo].flipH==0)
+				point.x=x-2;
+			else
+				point.x=x+LevelJson.Parts[CatBody.TimNo].width+2;
+			point.y=y+LevelJson.Parts[CatBody.TimNo].height/2+5;
+			var collisions = [];		
+			collisions =Matter.Query.point(bodies, point);
+			//console.log("collisions bellow cat",collisions.length);
+			if(collisions.length==0)
+				stopCat=true;
+			
+			//check in front
+			let startPoint = { x: CatBody.position.x+(LevelJson.Parts[CatBody.TimNo].width/2+2)*scaleX, y: CatBody.position.y };
+			let  endPoint = { x: CatBody.position.x+(LevelJson.Parts[CatBody.TimNo].width/2+12)*scaleX, y: CatBody.position.y};
+			drawRay( startPoint, endPoint);
+			collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[CatBody.TimNo].height-5) ;
+			if(collisions.length>0)
+			{
+				console.log("collisions cat in front",collisions);
+				stopCat=true;
+			}
+			if(stopCat==true)
+			{
+				console.log("Cat ("+LevelJson.Parts[CatBody.TimNo].no+") stoped!!!");
+				LevelJson.Parts[CatBody.TimNo].anim=false;
+				LevelJson.Parts[CatBody.TimNo].animStep=0;
+			}
+			else
+				Body.applyForce(CatBody, CatBody.position, { x:0.002*scaleX, y: 0.000 });
+		}
 		
 	}
 	function CheckRocket(RocketBody)
@@ -1338,7 +1416,7 @@ let
 			console.log("----------------- break aquarium ("+part1.no+") "+part1.name);
 			if(destroy==true)
 				Composite.remove(world, [part1.MatterBody]);
-			part1.nb_anim=17;
+			part1.nb_anim=26;
 			part1.animStep=12;
 			part1.animOnce=true;
 			part1.fixed=0;
@@ -1348,6 +1426,27 @@ let
 		}
 	}
 	
+	
+	function collision_Monkey(_MonkeyBoby,_impactorBody)
+	{
+		if((_impactorBody.velocity.y>0))
+		{
+			console.log("Monkey collision >up ");
+			LevelJson.Parts[_MonkeyBoby.TimNo].animPause=true;
+			let otherExtremity=PartBeltExtremity(_MonkeyBoby.TimNo);
+			if(otherExtremity!=-1)
+			{
+				console.log("from Part "+_MonkeyBoby.TimNo+" stop action on "+otherExtremity);
+				LevelJson.Parts[otherExtremity].anim=false;
+				setTimeout(function (){
+							console.log("from Part "+_MonkeyBoby.TimNo+" restart action on "+otherExtremity);
+							if(LevelJson.Parts[_MonkeyBoby.TimNo].anim==true)
+								AnimPart(otherExtremity,false,LevelJson.Parts[_MonkeyBoby.TimNo].flipH,LevelJson.Parts[_MonkeyBoby.TimNo].flipV,false,false);	
+							LevelJson.Parts[_MonkeyBoby.TimNo].animPause=false;
+							}, 2000);
+			}
+		}
+	}
 	//--------------------------------------------------
 	// collisionStart
 	//--------------------------------------------------
@@ -1408,7 +1507,11 @@ let
 				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==25)//Flashlight (25)
 					collision_FlashLight(collision.bodyB,collision.bodyA);
 				
-				
+				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==31)//Monkey exercise bike (31)
+					collision_Monkey(collision.bodyA,collision.bodyB);
+				if(LevelJson.Parts[collision.bodyB.TimNo].TimType==31)//Monkey exercise bike (31)
+					collision_Monkey(collision.bodyB,collision.bodyA);
+			
 				
 				
 				if(LevelJson.Parts[collision.bodyA.TimNo].TimType==35)//Boxing glove (35)
@@ -1438,12 +1541,31 @@ let
 	function stop()
 	{
 		clearInterval(myTimer);
+		
 		CurrentLevelRunning=false;
-		Render.stop(render)
+		if(world!=undefined)
+		{
+			World.clear(world);
+			World.clear(engine.world);
+		}
+		if(engine!=undefined)
+		{
+			cleanPhysics(true);
+			Engine.clear(engine);
+			engine.events = {};
+		}
+		if(render!=undefined)
+		{
+			render.events = {};
+			Render.stop(render);
+		}
+					
 		if(runner!=undefined)
 		{
 			console.log("Runner.stop");
+			//Runner.clear(runner);	
 			Runner.stop(runner);
+			
 		}
 		
 		if(LevelJson!=undefined)
@@ -1475,6 +1597,33 @@ let
 			});
 		}
 	}
+	function initMatterJS()
+	{
+		engine = Engine.create({
+			positionIterations: 6,//default 6
+			velocityIterations: 4,//12,//default 4
+			constraintIterations:2////default 2
+		});
+		runner=undefined;
+		render = Render.create({
+			  engine, 
+			  canvas: canvas,
+			  options: {
+				wireframes: wireframe,
+				background: "rgba(0,162,162,255)",
+				//background: 'transparent',
+				width: canvas.width,
+				height: canvas.height,
+				pixelRatio:  window.devicePixelRatio // here
+			  }
+			}); 
+		world = engine.world;
+		
+		Events.on(render, "beforeRender", (event) => {beforeRender();});
+		Events.on(render, "afterRender", (event) => {afterRender();});
+		Events.on(engine,"collisionStart", (event) => {collisionStart(event);});
+	}
+	
 	
 	
 	function addRopeSegment(start_x,start_y,next_x,next_y, rope)
@@ -1522,12 +1671,16 @@ let
 			rope.push(RopeBody)
 		}
 	}
+	
+	
+	
+	
 	//--------------------------------------------------
 	// run
 	//--------------------------------------------------
 	function run()
 	{
-
+		initMatterJS();
 		//remove the link with physics
 		LevelJson.Parts.forEach(part => {
 			part.MatterBody=undefined;
@@ -1542,7 +1695,7 @@ let
 		selectPart(-1);
 		
 		//clean the World
-		cleanPhysics(false);
+		//cleanPhysics(false);
 		engine.world.gravity.y = 0;
 		LevelJson.Parts.forEach(part => {
 					
@@ -1855,64 +2008,18 @@ let
 				//console.log("rope: "+part.no);
 				if((part.connected_part_1!=undefined)&&(part.connected_part_2!=undefined))
 				{
-					/*
-					console.log("rope: from " + getPosXRope(part.connected_part_1,false)+","+getPosYRope(part.connected_part_1,false));
-					
-					for(var key in part.TimPulleys)
-					{
-						console.log("rope: to pulley " + getPosXRope(part.TimPulleys[key],true)+","+getPosYRope(part.TimPulleys[key],true));
-						console.log("rope: from pulley " + getPosXRope(part.TimPulleys[key],false)+","+getPosYRope(part.TimPulleys[key],false));
-					}
-					console.log("rope: to " + getPosXRope(part.connected_part_2,true)+","+getPosYRope(part.connected_part_2,true));
-					*/
-					var startboxType = LevelJson.Parts[part.connected_part_1].TimType;
-					var lastboxType = LevelJson.Parts[part.connected_part_2].TimType;
-					
-					var s_rx=PartDef[LevelJson.Parts[part.connected_part_1].TimType].rx;
-					var s_ry=PartDef[LevelJson.Parts[part.connected_part_1].TimType].ry;
-					
-					var startboxRx = s_rx*LevelJson.Parts[part.connected_part_1].width-LevelJson.Parts[part.connected_part_1].width/2;
-					var startboxRy = s_ry*LevelJson.Parts[part.connected_part_1].height-LevelJson.Parts[part.connected_part_1].height/2;
-				
-					if(LevelJson.Parts[part.connected_part_1].flipH==1)
-						startboxRx=startboxRx*-1;
-					if(LevelJson.Parts[part.connected_part_1].flipV==1)
-						startboxRy=startboxRy*-1;
-				
-					//console.log("s_rx:",s_rx);
-					
-					var l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx;
-					var l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry;
-					
-					if((CurrentLevel==13)&&(part.connected_part_2==6))//TRICK_13
-					{
-						l_rx=PartDef[LevelJson.Parts[part.connected_part_2].TimType].rx2;
-						l_ry=PartDef[LevelJson.Parts[part.connected_part_2].TimType].ry2;
-					}
 					
 					
+					var startboxRx=getPosXRope(part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_x+LevelJson.Parts[part.connected_part_1].width/2+playgroundOffsetX);
+					var startboxRy=getPosYRope(part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_y+LevelJson.Parts[part.connected_part_1].height/2+playgroundOffsetY);
 					
-					var lastboxRx = l_rx*LevelJson.Parts[part.connected_part_2].width-LevelJson.Parts[part.connected_part_2].width/2;
-					var lastboxRy = l_ry*LevelJson.Parts[part.connected_part_2].height-LevelJson.Parts[part.connected_part_2].height/2;
-					if(CurrentLevel!=13)//TRICK_13
-					{
-						if(LevelJson.Parts[part.connected_part_2].flipH==1)
-							lastboxRx=lastboxRx*-1;
-						if(LevelJson.Parts[part.connected_part_2].flipV==1)
-							lastboxRy=lastboxRy*-1;
-					}
-					else
-					{
-						console.log("flipH",LevelJson.Parts[part.connected_part_2].flipH);
-						console.log("flipV",LevelJson.Parts[part.connected_part_2].flipV);
-					}
-					
-					//console.log("sb ry:",startboxRy);
-					//console.log("eb ry:",lastboxRy);
-					
+					var lastboxRx=getPosXRope(part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_x+LevelJson.Parts[part.connected_part_2].width/2+playgroundOffsetX);
+					var lastboxRy=getPosYRope(part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_y+LevelJson.Parts[part.connected_part_2].height/2+playgroundOffsetY);
+										
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
-					//console.log("part.connected_part_2",LevelJson.Parts[part.connected_part_2]);
+					
+					
 					var rope = [];
 					let start_x=getPosXRope(part.connected_part_1,false);
 					let start_y=getPosYRope(part.connected_part_1,false);
@@ -1920,11 +2027,11 @@ let
 					{
 						//console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
 						//console.log("rope: from pulley " + getPosXRopePulleySimul(part.TimPulleys[key],false)+","+getPosYRopePulleySimul(part.TimPulleys[key],false));
-						let next_x=getPosXRopePulleySimul(part.TimPulleys[key],true);
+						let next_x=getPosXRopePulleySimul(part.TimPulleys[key],true,start_x);
 						let next_y=getPosYRopePulleySimul(part.TimPulleys[key],true);
 						addRopeSegment(start_x,start_y,next_x,next_y, rope);
 						
-						start_x= getPosXRopePulleySimul(part.TimPulleys[key],false);
+						start_x= getPosXRopePulleySimul(part.TimPulleys[key],false,start_x);
 						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
 					}					
 					
@@ -1936,27 +2043,38 @@ let
 					// add all of the bodies and constraits to the world
 					Composite.add(engine.world, [ ...rope]);
 
+					let stiffnessLast=1;
+					if(LevelJson.Parts[part.connected_part_2].TimType==31)//Monkey exercise bike
+					{
+						console.log("connected to Monkey E");
+						stiffnessLast=0.01;
+					}
 
-					//connect to first part
+					//connect to last part
 					let consS = Constraint.create({
 						bodyA: lastbox,
 						bodyB: rope[rope.length-1],
 						pointA:{ x: lastboxRx, y: lastboxRy },
-						stiffness: 1,
-						TimNode:1,
+						stiffness: stiffnessLast,
+						//TimNode:1,
 						render: {anchors: false, lineWidth: 1,type: 'line',	strokeStyle:"rgb(243, 178, 0)"}
 						
 					})
 					
 					
-					
-					//connect to last part
+					let stiffnessStart=1;
+					if(LevelJson.Parts[part.connected_part_1].TimType==31)//Monkey exercise bike
+					{
+						console.log("connected to Monkey S");
+						stiffnessStart=0.01;
+					}
+					//connect to first part
 					let consE = Constraint.create({
 						bodyA: startbox,
 						bodyB: rope[0],
 						pointA:{ x: startboxRx, y: startboxRy },
-						stiffness: 1,
-						TimNode:2,
+						stiffness: stiffnessStart,
+						//TimNode:2,
 						render: { anchors: false, lineWidth: 1, type: 'line', strokeStyle:"rgb(243, 178, 0)"}
 					})
 					Composite.add(engine.world, [ consE,consS]);
@@ -1979,6 +2097,7 @@ let
 		Runner.run(runner, engine);
 		
 	}
+	
 	
 	//--------------------------------------------------
 	// cleanPhysics
