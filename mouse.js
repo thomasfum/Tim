@@ -431,7 +431,11 @@
 				else if(RopeMode==2)
 				{
 					let retNo=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
-					if(retNo==-1)
+					let dx=Mouse_pos_x- LevelJson.Parts[RopeStart].pos_x;
+					let dy=Mouse_pos_y- LevelJson.Parts[RopeStart].pos_y;
+					let distance=Math.sqrt((dx*dx)+(dy*dy));
+					console.log("rope distance ",distance);
+					if((retNo==-1)||(distance>250))
 					{
 						endConnection=true;
 						RopeMode=0;
@@ -446,8 +450,6 @@
 					}
 					else
 					{
-						
-						
 						if(LevelJson.Parts[retNo].TimType!=7)
 						{
 							//console.log("end connection rope ",LevelJson.Parts[RopeNoConnecting]);
@@ -501,9 +503,12 @@
 				}
 				else if(BeltMode==2)
 				{
-					
 					let retNo=checkConnection(Mouse_pos_x,Mouse_pos_y);
-					if(retNo==-1)
+					let dx=Mouse_pos_x- LevelJson.Parts[beltStart].pos_x;
+					let dy=Mouse_pos_y- LevelJson.Parts[beltStart].pos_y;
+					let distance=Math.sqrt((dx*dx)+(dy*dy));
+					console.log("belt distance ",distance);
+					if((retNo==-1)||(distance>250))
 					{
 						endConnection=true;
 						BeltMode=0;
@@ -539,76 +544,7 @@
 		DraggingObject=undefined;
 	}
 	
-	function isFiring(part)
-	{
-		if((part.TimType==18)||(part.TimType==19)||(part.TimType==36)||(part.TimType==45))//canon, dynamit,rocket or Candle (45)
-			return true;
-		else 
-			return false;
-	}
-	
-	function needPower(part)
-	{
-		if((part.TimType==24)||(part.TimType==50))//Electric fan or engine
-			return true;
-		else 
-			return false;
-	}
-	function isGenerator(part)
-	{
-		if((part.TimType==21)||(part.TimType==26)||(part.TimType==38))//Electric switch & outlet (21) or generator or Solar panels
-			return true;
-		else 
-			return false;
-	}
-	function isLight(part)
-	{
-		if((part.TimType==29)||(part.TimType==25))//Light bulb (29) or Flashlight (25) 
-			return true;
-		else 
-			return false;
-	}
-	function isDestructibleByExplosive(part)
-	{
-		if((part.TimType==1)||(part.TimType==2)||(part.TimType==48))//brick wall, wood incline, wood wall
-			return true;
-		else 
-			return false;
-	}
-	function connectPlugs()
-	{
-		LevelJson.Parts.forEach(part1 => {
-			if(needPower(part1)==true)//Electric fan or engine
-			{
-				LevelJson.Parts.forEach(part => {
-					
-					if(isGenerator(part)==true)//Electric switch & outlet (21) or generator
-					{
-						let dx=part1.pos_x-part.pos_x;
-						let dy=part1.pos_y-part.pos_y;
-						let dst=Math.sqrt((dx*dx)+(dy*dy));
-						//console.log("fan moving",dst);
-						if(dst<100)
-							connected=part.no;
-					}
-				});
-				//connect
-				if(connected!=undefined)
-				{
-					if(LevelJson.Parts[connected].connected_part_1==undefined)
-					{
-						if(LevelJson.Parts[connected].connected_part_2!=part1.no)
-							LevelJson.Parts[connected].connected_part_1=part1.no;
-					}
-					else if(LevelJson.Parts[connected].connected_part_2==undefined)
-					{
-						if(LevelJson.Parts[connected].connected_part_1!=part1.no)
-							LevelJson.Parts[connected].connected_part_2=part1.no;
-					}
-				}
-			}
-		});
-	}
+
 	function MouseClickDown(e)
 	{
 		if((loadingLevel==true)&&(Test==false))

@@ -27,18 +27,18 @@
 // check all levels
 // animations
 // size 678x369
-// coonect trampolin manually other side
 
-//trempolin active only if contact on top
+// conect totter manually other side
+// trempolin active only if contact on top
 // managing pos of tooter
-// noeud seau
+// noeud
 //---------------------------
 //bug
 //trempolin force
 //load allimages at start
 //finish getRopeDirectionY
 //create getRopeDirectionX for gun
-
+//level 15 le seau frotte
 
 	var CurrentLevel=20;
 	const MaxLevel=19;
