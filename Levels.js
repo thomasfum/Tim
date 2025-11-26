@@ -186,7 +186,7 @@ const Solutions={
 	}
 	function ReadJson(json)
 	{
-		//LevelJsonOrigin = structuredClone(LevelJson);
+		
 		LevelJson=json;
 		//console.log(LevelJson.Puzzle_info);
 		if(document.getElementById("title")!=undefined)
@@ -263,6 +263,38 @@ const Solutions={
 					{
 						Icons[result]=0;
 						loadIcon(result);
+					}
+				}
+			}
+		});
+		
+		//affect Teeter-totter rope
+		LevelJson.Parts.forEach(part => {
+			if(part.TimType==10)//rope
+			{
+				if(part.connected_part_1!=undefined)
+				{
+					if(LevelJson.Parts[part.connected_part_1].TimType==3)//Teeter-totter
+					{
+						if(LevelJson.Parts[part.connected_part_1].ropeNoSide1==undefined)
+							LevelJson.Parts[part.connected_part_1].ropeNoSide1=part.no;
+						else if(LevelJson.Parts[part.connected_part_1].ropeNoSide2==undefined)
+							LevelJson.Parts[part.connected_part_1].ropeNoSide2=part.no;
+						else
+							console.log(">2 ropes on Teeter-totter "+LevelJson.Parts[part.connected_part_1].no);
+							
+					}
+				}
+				if(part.connected_part_2!=undefined)
+				{
+					if(LevelJson.Parts[part.connected_part_2].TimType==3)//Teeter-totter
+					{
+						if(LevelJson.Parts[part.connected_part_2].ropeNoSide2==undefined)
+							LevelJson.Parts[part.connected_part_2].ropeNoSide2=part.no;
+						else if(LevelJson.Parts[part.connected_part_2].ropeNoSide1==undefined)
+							LevelJson.Parts[part.connected_part_2].ropeNoSide1=part.no;
+						else
+							console.log(">2 ropes on Teeter-totter "+LevelJson.Parts[part.connected_part_2].no);
 					}
 				}
 			}

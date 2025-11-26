@@ -98,6 +98,19 @@ function GetNodePos(part)
 		}
 		return [x, y];
 	}
+	function GetNodeRopePos2(part)
+	{
+		var x=part.pos_x+(part.width*PartDef[part.TimType].rx2);
+		let y=part.pos_y+(part.height*PartDef[part.TimType].ry2);
+		//console.log("GetNodePos = "+x+":"+y);
+		
+		if(part.flipH!=0)
+		{
+			let nx=(part.width-(part.width*PartDef[part.TimType].rx2));
+			x=part.pos_x+nx;
+		}
+		return [x, y];
+	}
 	
 	function getPosXRopeBody(partNo)
 	{

@@ -25,25 +25,41 @@
 	}
 	
 	
-	function PartConnectionFreeRope(part_no)
+	function PartConnectionFreeRope(part_no,TeeterTotterSide)
 	{
 		let partFree=true;
-		LevelJson.Parts.forEach(part => {
-			if(part.TimType==10)//rope
-			{
-				if(part.connected_part_1==part_no)
+		let side=0;
+		let partConnectedRopeNo1=-1;
+		if(LevelJson.Parts[part_no].TimType==!3)//not aTeeter-totter 
+		{
+			LevelJson.Parts.forEach(part => {
+				if(part.TimType==10)//rope
 				{
-					partFree=false;
-					console.log("PartConnectionto rope "+part.no);
+					if(part.connected_part_1==part_no)
+					{
+						partFree=false;
+						console.log("PartConnectionto rope "+part.no);
+						partConnectedRopeNo1=part.no;
+					}
+					if(part.connected_part_2==part_no)
+					{
+						console.log("PartConnectionto rope "+part.no);
+						partFree=false;
+						partConnectedRopeNo1=part.no;
+					}
 				}
-				if(part.connected_part_2==part_no)
-				{
-					console.log("PartConnectionto rope "+part.no);
-					partFree=false;
-				}
-			}
-		});
+			});
+		}
+		else //for Teeter-totter check other side
+		{
+			if((LevelJson.Parts[part_no].ropeNoSide1==undefined)&&(TeeterTotterSide==1))
+				partFree=true;
+			else if((LevelJson.Parts[part_no].ropeNoSide2==undefined)&&(TeeterTotterSide==-1))
+				partFree= true;
+			else partFree= false;
+		}
 		//console.log("PartConnectionFree "+partFree,part_no);
+		
 		return partFree;
 	}
 	
@@ -149,15 +165,21 @@
 	{
 		//console.log("checkConnectionRope "+pos_x+","+pos_y);
 		let no=-1;
+		let side=0;
 		LevelJson.Parts.forEach(part => {
-			if(doPartsOverlapMouseForRope(part,pos_x,pos_y))
+			let [overlap,TeeterTotterSide]=doPartsOverlapMouseForRope(part,pos_x,pos_y);
+			if(overlap)
 			{
-				//console.log("isConnectionRope free "+pos_x+","+pos_y);
-				if(PartConnectionFreeRope(part.no))
+				console.log("overlap a rope node; isConnectionRope free "+pos_x+","+pos_y);
+				let isFree=PartConnectionFreeRope(part.no,TeeterTotterSide);
+				if(isFree==true)
+				{
 					no= part.no;
+					side=TeeterTotterSide;
+				}
 			}
 		});
-		return no;
+		return [no,side];
 	}
 
 	function doPartsOverlapsPoint(part1, x,y)
@@ -255,6 +277,22 @@
 	function doPartsOverlapMouseForRope(part1, x,y)
 	{
 		
+		let ret1=doPartsOverlapMouseForRopeSide1(part1, x,y);
+		if(part1.TimType!=3)//not Teeter-totter 
+			return [ret1,0]; 
+		else//Teeter-totter 
+		{
+			let ret2=doPartsOverlapMouseForRopeSide2(part1, x,y);
+			if(ret1==true)
+				return [true,1];
+			if(ret2==true)
+				return [true,-1];
+		}
+		return [false,0];
+	}
+	function doPartsOverlapMouseForRopeSide1(part1, x,y)
+	{
+		
 		if(PartDef[part1.TimType].rx==undefined)
 			return false;
 		
@@ -285,7 +323,38 @@
 	  
 	}
 	
-	
+	function doPartsOverlapMouseForRopeSide2(part1, x,y)
+	{
+		
+		if(PartDef[part1.TimType].rx2==undefined)
+			return false;
+		
+		const  [xn,yn]=GetNodeRopePos2(part1)
+		
+		//console.log("doPartsOverlapMouseForRope: rx exist:"+xn+","+yn);
+	/*
+		let max1x=part1.pos_x+((PartDef[part1.TimType].node_x+PartDef[part1.TimType].node_d)*+part1.width)/100;
+		let min1x=part1.pos_x+((PartDef[part1.TimType].node_x-PartDef[part1.TimType].node_d)*+part1.width)/100;
+				
+		let max1y=part1.pos_y+((PartDef[part1.TimType].node_y+PartDef[part1.TimType].node_d)*+part1.height)/100;
+		let min1y=part1.pos_y+((PartDef[part1.TimType].node_y-PartDef[part1.TimType].node_d)*+part1.height)/100;
+		*/
+		let diam=20;
+		let max1x=xn+diam;
+		let min1x=xn-diam;
+				
+		let max1y=yn+diam;
+		let min1y=yn-diam;
+		
+		let aLeftOfB = max1x < x;
+		let aRightOfB = min1x > x;
+		let aAboveB = min1y > y;
+		let aBelowB = max1y < y;
+		
+		//console.log("test overlap1:"+aLeftOfB+"/"+aRightOfB+"/"+aAboveB+"/"+aBelowB);
+		return !( aLeftOfB || aRightOfB || aAboveB || aBelowB );
+	  
+	}	
 
 
 	function selectPart(part_no)
@@ -406,7 +475,7 @@
 				}
 				else if(RopeMode==1)
 				{
-					let retNo=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
+					let [retNo, TeeterTotterSide ]=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
 					if(retNo==-1)
 					{
 						endConnection=true;
@@ -423,14 +492,15 @@
 					else
 					{
 						RopeMode=2;
-						//console.log("Start con rope:"+retNo);
+						console.log("Start con rope:"+retNo+" TT="+TeeterTotterSide);
 						RopeStart=retNo
+						RopeStart_TeeterTotterSide=TeeterTotterSide;
 					}
 						
 				}	
 				else if(RopeMode==2)
 				{
-					let retNo=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
+					let [retNo, TeeterTotterSide ]=checkConnectionRope(Mouse_pos_x,Mouse_pos_y);
 					let dx=Mouse_pos_x- LevelJson.Parts[RopeStart].pos_x;
 					let dy=Mouse_pos_y- LevelJson.Parts[RopeStart].pos_y;
 					let distance=Math.sqrt((dx*dx)+(dy*dy));
@@ -460,7 +530,7 @@
 							LevelJson.Parts[RopeNoConnecting].in_partsbin=0;
 							LevelJson.Parts[RopeNoConnecting].TimPulleys=RopeIntermdiatePulley;
 
-							//console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]);
+							console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]+" TT="+TeeterTotterSide);
 							RopeMode=0;
 							RopeIntermdiatePulley=[];
 							RopeNoConnecting=-1;
@@ -654,10 +724,12 @@
 					
 				}
 				//console.log("connect rope",part);
-				if(doPartsOverlapMouseForRope(part,Xclick,Yclick))
+				let [overlap,TeeterTotterSide]=doPartsOverlapMouseForRope(part,Xclick,Yclick)
+				if(overlap)
 				{
 					//console.log("does mouse overlap rope to",part);
-					if(!PartConnectionFreeRope(part.no))
+					let isFree=PartConnectionFreeRope(part.no,TeeterTotterSide);
+					if(!isFree)
 					{
 						console.log("connect rope to",part);
 						let RopeNo=PartConnectionRope(part.no);
