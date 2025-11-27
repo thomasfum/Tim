@@ -588,12 +588,12 @@ let
 			collisions= Matter.Query.ray(bodies, startPoint, endPoint,LevelJson.Parts[CatBody.TimNo].height-5) ;
 			if(collisions.length>0)
 			{
-				console.log("collisions cat in front",collisions);
+				//console.log("collisions cat in front",collisions);
 				stopCat=true;
 			}
 			if(stopCat==true)
 			{
-				console.log("Cat ("+LevelJson.Parts[CatBody.TimNo].no+") stoped!!!");
+				//console.log("Cat ("+LevelJson.Parts[CatBody.TimNo].no+") stoped!!!");
 				LevelJson.Parts[CatBody.TimNo].anim=false;
 				LevelJson.Parts[CatBody.TimNo].animStep=0;
 			}
@@ -1011,8 +1011,8 @@ let
 		let  bodies = Composite.allBodies(engine.world);
 		const collisions = Matter.Query.collides(_TeeterTotterBoby, bodies);
 		//console.log("collisions",collisions);
-		let vx=1.8;//1.8
-		let vy=-6.5;//7.2
+		let vx=0.7;//1.8
+		let vy=-5.5;//6.5
 		collisions.forEach((collision) => {
 			if((LevelJson.Parts[collision.bodyA.TimNo]!=undefined)&&(LevelJson.Parts[collision.bodyA.TimNo].TimType!=3)&&(collision.bodyA.id!=_impactorBody.id))
 			{
@@ -1197,7 +1197,7 @@ let
 				//collision.body.isSleeping=true;
 				//Body.applyForce(collision.body, collision.body.position, { x:33, y: 0.0010 });
 				//Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });//for ball
-				Body.setVelocity(collision.body, { x:10*scaleX, y: 0 });
+				Body.setVelocity(collision.body, { x:5*scaleX, y: 0 });
 				collision.body.TimDirectionX=scaleX;
 				//console.log("collisions ->",collision.body);
 				}
@@ -1216,7 +1216,7 @@ let
 	function collision_Trampoline(_TrampolineBoby,_impactorBody)
 	{
 		console.log("collision_Trampoline ->"+_impactorBody.id,_impactorBody.velocity.x);
-		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*4.9, y: -10 });
+		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*1.0, y: -1.4 *_impactorBody.velocity.y });//4.9 -10
 		AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
 	}
 	
@@ -1758,8 +1758,8 @@ let
 								  collisionFilter: { category:collisionCategory_general,mask: -1&(~collisionCategory_TeeterTotter) }
 								  });
 						
-							//MatterBody.friction=1;
-							MatterBody.frictionAir=0.02;
+							//MatterBody.friction=0.001;
+							MatterBody.frictionAir=0.001;
 							//MatterBody.frictionAir=0.1;
 							//MatterBody.sleepThreshold=2;
 							//Matter.Body.setInertia(MatterBody, 150);
@@ -1831,7 +1831,7 @@ let
 								//console.log("Poly move",MatterBody);
 								Composite.add(world, [MatterBody]);
 								part.MatterBody=MatterBody;
-								console.log(MatterBody);
+								//console.log(MatterBody);
 								
 								Matter.Body.setInertia(MatterBody, Infinity);
 							}
@@ -2010,19 +2010,19 @@ let
 				{
 					
 					
-					var startboxRx=getPosXRope(part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_x+LevelJson.Parts[part.connected_part_1].width/2+playgroundOffsetX);
-					var startboxRy=getPosYRope(part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_y+LevelJson.Parts[part.connected_part_1].height/2+playgroundOffsetY);
+					var startboxRx=getPosXRope(part,part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_x+LevelJson.Parts[part.connected_part_1].width/2+playgroundOffsetX);
+					var startboxRy=getPosYRope(part,part.connected_part_1,false)-(LevelJson.Parts[part.connected_part_1].pos_y+LevelJson.Parts[part.connected_part_1].height/2+playgroundOffsetY);
 					
-					var lastboxRx=getPosXRope(part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_x+LevelJson.Parts[part.connected_part_2].width/2+playgroundOffsetX);
-					var lastboxRy=getPosYRope(part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_y+LevelJson.Parts[part.connected_part_2].height/2+playgroundOffsetY);
+					var lastboxRx=getPosXRope(part,part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_x+LevelJson.Parts[part.connected_part_2].width/2+playgroundOffsetX);
+					var lastboxRy=getPosYRope(part,part.connected_part_2,true)-(LevelJson.Parts[part.connected_part_2].pos_y+LevelJson.Parts[part.connected_part_2].height/2+playgroundOffsetY);
 										
 					var startbox = LevelJson.Parts[part.connected_part_1].MatterBody;
 					var lastbox = LevelJson.Parts[part.connected_part_2].MatterBody;
 					
 					
 					var rope = [];
-					let start_x=getPosXRope(part.connected_part_1,false);
-					let start_y=getPosYRope(part.connected_part_1,false);
+					let start_x=getPosXRope(part,part.connected_part_1,false);
+					let start_y=getPosYRope(part,part.connected_part_1,false);
 					for(var key in part.TimPulleys)
 					{
 						//console.log("rope: to pulley " + getPosXRopePulleySimul(part.TimPulleys[key],true)+","+getPosYRopePulleySimul(part.TimPulleys[key],true));
@@ -2035,8 +2035,8 @@ let
 						start_y= getPosYRopePulleySimul(part.TimPulleys[key],false);
 					}					
 					
-					let next_x=getPosXRope(part.connected_part_2,true);
-					let next_y=getPosYRope(part.connected_part_2,true);
+					let next_x=getPosXRope(part,part.connected_part_2,true);
+					let next_y=getPosYRope(part,part.connected_part_2,true);
 					addRopeSegment(start_x,start_y,next_x,next_y, rope);
 					
 				

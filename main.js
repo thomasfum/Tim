@@ -28,13 +28,11 @@
 // animations
 // size 678x369
 
-// conect totter manually other side
 // trempolin active only if contact on top
 // managing pos of tooter
 // noeud
 //---------------------------
 //bug
-//trempolin force
 //load allimages at start
 //finish getRopeDirectionY
 //create getRopeDirectionX for gun
@@ -90,6 +88,7 @@
 	
 	var RopeMode=0;
 	var RopeStart=-1;
+	var RopeStart_TeeterTotterSide=0;
 	var RopeIntermdiatePulley=[];
 	var RopeNoConnecting=-1;
 	
@@ -172,6 +171,11 @@
 							part.size=sPart.size;
 							part.width=sPart.width;
 						}
+						if(part.TimType==3)//Teeter-totter 
+						{
+							part.ropeNoSide1=sPart.ropeNoSide1;
+							part.ropeNoSide2=sPart.ropeNoSide2;
+						}
 						
 						
 					}
@@ -216,6 +220,14 @@
 							sPart.size=part.size;
 							sPart.width=part.width;
 						}
+						if(part.TimType==3)//Teeter-totter 
+						{
+							sPart.ropeNoSide1=part.ropeNoSide1;
+							console.log("ropeNoSide2",part.ropeNoSide2);
+							sPart.ropeNoSide2=part.ropeNoSide2;
+						}
+						
+						
 						tbs+=JSON.stringify(sPart);
 						tbs+=",";
 						//console.log("solution part ->", JSON.stringify(sPart));			
@@ -270,13 +282,23 @@
 		canvas.onmousemove = MouseMove;
 		ctx = canvas.getContext("2d");
 	
+		console.log("-- press 'q' key for solution");
 		document.addEventListener('keypress', e => {
 			console.log('show solutions:'+e.key);
 			if (e.key === 'q') {
 				showSolutionClicked();
 			}
 		});
-
+		let l=document.getElementById("levelInput");
+		if(l!=undefined)
+		{
+			l.addEventListener("keyup", ({key}) => {
+				if (key === "Enter") {
+					LoadLevel(l.value);
+					l.blur();//remove focus
+				}
+			});
+		}
 		
 		LoadBoard();
 		document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor

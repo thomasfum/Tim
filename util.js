@@ -201,12 +201,39 @@ function GetNodePos(part)
 		else
 			return LevelJson.Parts[partNo].MatterBody.position.y+oy-LevelJson.Parts[partNo].height/2;
 	}
-	function getPosXRope(partNo,to)
+	function getPosXRope(ropePart,partNo,to)
 	{
+		
 		let posx=0;
 		if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter
 		{
-			if(to==false)
+			
+			let side=RopeStart_TeeterTotterSide;
+			
+			//console.log("getPosXRope ropePart",ropePart);
+			//console.log("getPosXRope partNo",partNo);
+	
+			if(ropePart!=undefined)
+			{
+				if(LevelJson.Parts[partNo].ropeNoSide1==ropePart.no)
+					side=1;
+				else if(LevelJson.Parts[partNo].ropeNoSide2==ropePart.no)
+					side=-1;
+				else
+				{
+					console.log("Teeter-totter getPosXRope no side")
+					if(LevelJson.Parts[partNo].ropeNoSide1==undefined)
+						side=1;	
+					else
+						if(LevelJson.Parts[partNo].ropeNoSide2==undefined)
+							side=-1;	
+						
+				}
+			}	
+			
+			
+			//if(to==false)
+			if(side==1)
 			{
 				//console.log("GetNodePosX Teeter-totter ("+partNo+")",to);
 				let rx=0.5;
@@ -220,7 +247,8 @@ function GetNodePos(part)
 					posx= playgroundOffsetX+LevelJson.Parts[partNo].pos_x+LevelJson.Parts[partNo].width-ox;
 				//console.log("GetNodePosX Teeter-totter ("+partNo+")",posx);
 			}
-			if(to==true)
+			//if(to==true)
+			if(side==-1)
 			{
 				//console.log("GetNodePosX Teeter-totter ("+partNo+")",to);
 				let rx2=0.5;
@@ -265,12 +293,31 @@ function GetNodePos(part)
 		}
 		return posx;
 	}
-	function getPosYRope(partNo,to)
+	function getPosYRope(ropePart,partNo,to)
 	{
 		let posy=0;
 		if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter
 		{
-			if(to==false)
+			let side=RopeStart_TeeterTotterSide;
+			if(ropePart!=undefined)
+			{
+				if(LevelJson.Parts[partNo].ropeNoSide1==ropePart.no)
+					side=1;
+				else if(LevelJson.Parts[partNo].ropeNoSide2==ropePart.no)
+					side=-1;
+				else
+				{
+					console.log("Teeter-totter getPosXRope no side")
+					if(LevelJson.Parts[partNo].ropeNoSide1==undefined)
+						side=1;	
+					else
+						if(LevelJson.Parts[partNo].ropeNoSide2==undefined)
+							side=-1;	
+						
+				}
+			}	
+			//if(to==false)
+			if(side==1)
 			{
 				let ry=0.5;
 				if(PartDef[LevelJson.Parts[partNo].TimType].ry!=undefined)
@@ -281,7 +328,8 @@ function GetNodePos(part)
 				else
 					posy= playgroundOffsetY+LevelJson.Parts[partNo].pos_y+LevelJson.Parts[partNo].height-oy;
 			}
-			if(to==true)
+			//(to==true)
+			if(side==-1)
 			{
 				let ry2=0.5;
 				if(PartDef[LevelJson.Parts[partNo].TimType].ry2!=undefined)
@@ -327,7 +375,48 @@ function GetNodePos(part)
 		}
 		return posy;
 	}
+	function DisconnectTeeterTooter(RopeNo,partNo)
+	{
+		if(partNo!=undefined)
+		{
+			if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter 
+			{
+				console.log("diconnect Teeter-totter ("+partNo+")");
+				if(LevelJson.Parts[partNo].ropeNoSide1==RopeNo)
+				{
+					LevelJson.Parts[partNo].ropeNoSide1=undefined;
+					console.log("diconnect Teeter-totter ("+partNo+") side 1");
+				}
+				if(LevelJson.Parts[partNo].ropeNoSide2==RopeNo)
+				{
+					LevelJson.Parts[partNo].ropeNoSide2=undefined;
+					console.log("diconnect Teeter-totter ("+partNo+") side 2");
+				}
+			}
+		}
+	}
 	
+	function GetTeeterTotterSide(partNo,RopeNo)
+	{
+		if(partNo!=undefined)
+		{
+			if(LevelJson.Parts[partNo].TimType==3)//Teeter-totter 
+			{
+				console.log("GetTeeterTotterSide ("+partNo+")");
+				if(LevelJson.Parts[partNo].ropeNoSide1==RopeNo)
+				{
+					console.log("GetTeeterTotterSide ("+partNo+") side 1");
+					return 1;
+				}
+				if(LevelJson.Parts[partNo].ropeNoSide2==RopeNo)
+				{
+					console.log("GetTeeterTotterSide ("+partNo+") side 2");
+					return -1;
+				}
+			}
+		}
+		return 0;
+	}
 	function getRopeDirectionY(partNoExtremity)
 	{
 		
@@ -396,14 +485,14 @@ function GetNodePos(part)
 				{
 					if(otherY>part.pos_y+part.height)//need to be below
 					{
-						console.log("lower direct ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
+						//console.log("lower direct ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
 						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y>0.025)
 							return 1;						
 					}
 				
 					if(otherY<part.pos_y+part.height)//need to be upper
 					{
-						console.log("upper=",part); 
+						//console.log("upper=",part); 
 						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.025*revert)
 							return -1;							
 					}
@@ -413,13 +502,13 @@ function GetNodePos(part)
 				{
 					if(otherY>part.pos_y+part.height)//need to be below
 					{
-						console.log("lower INdirect ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
+						//console.log("lower INdirect ("+part.no+")="+LevelJson.Parts[LastPartNo].MatterBody.velocity.y); 
 						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.15)
 							return 1;						
 					}
 					if(otherY<part.pos_y+part.height)//need to be upper
 					{
-						console.log("upper=",part); 
+						//console.log("upper=",part); 
 						if(LevelJson.Parts[LastPartNo].MatterBody.velocity.y<-0.025*revert)
 							return -1;							
 					}

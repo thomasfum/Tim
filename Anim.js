@@ -134,7 +134,7 @@
 	}
 	function RefreshPartially(allObjects, part,zIndex,allObjects)
 	{
-		//console.log("RefreshPartially ",part.no);
+		//console.log("RefreshPartially ",part);
 		if((zIndex==0)&&((PartDef[part.TimType].nb_anim!=undefined)&&(PartDef[part.TimType].nb_anim!=0)))
 			return;
 		if((zIndex==1)&&((PartDef[part.TimType].nb_anim==undefined)||(PartDef[part.TimType].nb_anim==0)))
@@ -887,21 +887,22 @@
 				{
 					if(CurrentLevelRunning==false)
 					{
+						//console.log("rope from "+part.connected_part_1+" to "+part.connected_part_2);
 						ctx.strokeStyle = "rgb(243, 178, 0)";//243,178,0
 						//console.log("rope("+part.no+"): ",part);
 						ctx.beginPath();
-						ctx.moveTo(getPosXRope(part.connected_part_1,false),getPosYRope(part.connected_part_1,false));
+						ctx.moveTo(getPosXRope(part,part.connected_part_1,false),getPosYRope(part,part.connected_part_1,false));
 						for(var key in part.TimPulleys)
 						{
-							ctx.lineTo(getPosXRope(part.TimPulleys[key],true), getPosYRope(part.TimPulleys[key],true));
-							ctx.moveTo(getPosXRope(part.TimPulleys[key],false), getPosYRope(part.TimPulleys[key],false));
+							ctx.lineTo(getPosXRope(part,part.TimPulleys[key],true), getPosYRope(part,part.TimPulleys[key],true));
+							ctx.moveTo(getPosXRope(part,part.TimPulleys[key],false), getPosYRope(part,part.TimPulleys[key],false));
 						}
-						ctx.lineTo(getPosXRope(part.connected_part_2,true),getPosYRope(part.connected_part_2,true));
+						ctx.lineTo(getPosXRope(part,part.connected_part_2,true),getPosYRope(part,part.connected_part_2,true));
 						ctx.stroke();
 						//part8-0
 						
-						drawImage(Images["8-0"], getPosXRope(part.connected_part_1,false)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_1,false)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
-						drawImage(Images["8-0"], getPosXRope(part.connected_part_2,true)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part.connected_part_2,true)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+						drawImage(Images["8-0"], getPosXRope(part,part.connected_part_1,false)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part,part.connected_part_1,false)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
+						drawImage(Images["8-0"], getPosXRope(part,part.connected_part_2,true)-playgroundOffsetX-Images["8-0"].width/2, getPosYRope(part,part.connected_part_2,true)-playgroundOffsetY-Images["8-0"].height/2-5,false,false);
 						
 					}
 					else
@@ -1083,24 +1084,25 @@
 		//draw drag rope
 		if(RopeMode==2)
 		{
+			
 			//console.log("BeltMode = 2 "+MouseOnPart);
 			ctx.strokeStyle = 'red';
-			if((MouseOnPart!=-1)&&(PartConnectionFreeRope(MouseOnPart)==true))
+			if((MouseOnPart!=-1)&&(PartConnectionFreeRope(MouseOnPart,undefined)==true))
 			{
 				//console.log("MouseOnPart = ",LevelJson.Parts[MouseOnPart].TimType);
 				if(PartDef[LevelJson.Parts[MouseOnPart].TimType].rx!=undefined)
 					ctx.strokeStyle = 'lightgreen';
 			}
 		
-			const  [x,y]=GetNodeRopePos(LevelJson.Parts[RopeStart]);
-			
+			//const  [x,y]=GetNodeRopePos(LevelJson.Parts[RopeStart]);
+			//console.log("Rope Draging:"+x+","+y);
 			ctx.beginPath();
-			ctx.moveTo(getPosXRope(RopeStart,false),getPosYRope(RopeStart,false));
+			ctx.moveTo(getPosXRope(undefined,RopeStart,false),getPosYRope(undefined,RopeStart,false));
 			for(var key in RopeIntermdiatePulley)
 			{
 				
-				ctx.lineTo(getPosXRope(RopeIntermdiatePulley[key],true), getPosYRope(RopeIntermdiatePulley[key],true));
-				ctx.moveTo(getPosXRope(RopeIntermdiatePulley[key],false), getPosYRope(RopeIntermdiatePulley[key],false));
+				ctx.lineTo(getPosXRope(BeltNoConnecting,RopeIntermdiatePulley[key],true), getPosYRope(BeltNoConnecting,RopeIntermdiatePulley[key],true));
+				ctx.moveTo(getPosXRope(BeltNoConnecting,RopeIntermdiatePulley[key],false), getPosYRope(BeltNoConnecting,RopeIntermdiatePulley[key],false));
 			}
 			ctx.lineTo(Mouse_pos_x+playgroundOffsetX, Mouse_pos_y+playgroundOffsetY);
 			ctx.stroke();

@@ -30,33 +30,46 @@
 		let partFree=true;
 		let side=0;
 		let partConnectedRopeNo1=-1;
-		if(LevelJson.Parts[part_no].TimType==!3)//not aTeeter-totter 
+		console.log("PartConnectionto rope type "+LevelJson.Parts[part_no].TimType);
+		if(LevelJson.Parts[part_no].TimType!=3)//not aTeeter-totter 
 		{
+			console.log("PartConnectionto rope free ?"+part_no);
 			LevelJson.Parts.forEach(part => {
 				if(part.TimType==10)//rope
 				{
 					if(part.connected_part_1==part_no)
 					{
 						partFree=false;
-						console.log("PartConnectionto rope "+part.no);
+						console.log("PartConnectionto rope "+part_no);
 						partConnectedRopeNo1=part.no;
 					}
 					if(part.connected_part_2==part_no)
 					{
-						console.log("PartConnectionto rope "+part.no);
+						console.log("PartConnectionto rope "+part_no);
 						partFree=false;
-						partConnectedRopeNo1=part.no;
+						partConnectedRopeNo1=part_no;
 					}
 				}
 			});
 		}
 		else //for Teeter-totter check other side
 		{
-			if((LevelJson.Parts[part_no].ropeNoSide1==undefined)&&(TeeterTotterSide==1))
-				partFree=true;
-			else if((LevelJson.Parts[part_no].ropeNoSide2==undefined)&&(TeeterTotterSide==-1))
-				partFree= true;
-			else partFree= false;
+			if(TeeterTotterSide==undefined)//draging mode
+			{
+				if((LevelJson.Parts[part_no].ropeNoSide1==undefined)||(LevelJson.Parts[part_no].ropeNoSide2==undefined))
+					partFree= true;
+				else 
+					partFree= false;
+			}
+			else
+			{
+				if((LevelJson.Parts[part_no].ropeNoSide1==undefined)&&(TeeterTotterSide==1))
+					partFree=true;
+				else if((LevelJson.Parts[part_no].ropeNoSide2==undefined)&&(TeeterTotterSide==-1))
+					partFree= true;
+				else 
+					partFree= false;
+			}
 		}
 		//console.log("PartConnectionFree "+partFree,part_no);
 		
@@ -170,8 +183,9 @@
 			let [overlap,TeeterTotterSide]=doPartsOverlapMouseForRope(part,pos_x,pos_y);
 			if(overlap)
 			{
-				console.log("overlap a rope node; isConnectionRope free "+pos_x+","+pos_y);
+				
 				let isFree=PartConnectionFreeRope(part.no,TeeterTotterSide);
+				console.log("overlap a rope node; isConnectionRope free "+pos_x+","+pos_y+" is free="+isFree);
 				if(isFree==true)
 				{
 					no= part.no;
@@ -279,7 +293,10 @@
 		
 		let ret1=doPartsOverlapMouseForRopeSide1(part1, x,y);
 		if(part1.TimType!=3)//not Teeter-totter 
+		{
+			//console.log("****doPartsOverlapMouseForRope :"+ret1);
 			return [ret1,0]; 
+		}
 		else//Teeter-totter 
 		{
 			let ret2=doPartsOverlapMouseForRopeSide2(part1, x,y);
@@ -390,7 +407,7 @@
 		if(CurrentLevelWinned==true)
 		{
 			if(CurrentLevel<MaxLevel)
-				LoadLevel(CurrentLevel+1);
+				LoadLevel(++CurrentLevel);
 			return;
 		}
 		if(CurrentLevelRunning==true)
@@ -480,13 +497,16 @@
 					{
 						endConnection=true;
 						RopeMode=0;
+						RopeStart_TeeterTotterSide=0;
 						RopeIntermdiatePulley=[];
+						DisconnectTeeterTooter(RopeNoConnecting,LevelJson.Parts[RopeNoConnecting].connected_part_1);
 						LevelJson.Parts[RopeNoConnecting].connected_part_1=undefined;
+						DisconnectTeeterTooter(RopeNoConnecting,LevelJson.Parts[RopeNoConnecting].connected_part_2);
 						LevelJson.Parts[RopeNoConnecting].connected_part_2=undefined;
 						LevelJson.Parts[RopeNoConnecting].pos_x=-1;
 						LevelJson.Parts[RopeNoConnecting].pos_y=-1;
 						LevelJson.Parts[RopeNoConnecting].in_partsbin=1;
-						//console.log("disco ",LevelJson.Parts[RopeNoConnecting]);
+						console.log("disco 1",LevelJson.Parts[RopeNoConnecting]);
 						refresh(true);
 					}
 					else
@@ -504,18 +524,21 @@
 					let dx=Mouse_pos_x- LevelJson.Parts[RopeStart].pos_x;
 					let dy=Mouse_pos_y- LevelJson.Parts[RopeStart].pos_y;
 					let distance=Math.sqrt((dx*dx)+(dy*dy));
-					console.log("rope distance ",distance);
+					console.log("rope distance "+retNo,distance);
 					if((retNo==-1)||(distance>250))
 					{
 						endConnection=true;
 						RopeMode=0;
+						RopeStart_TeeterTotterSide=0;
 						RopeIntermdiatePulley=[];
+						DisconnectTeeterTooter(RopeNoConnecting,LevelJson.Parts[RopeNoConnecting].connected_part_1);
 						LevelJson.Parts[RopeNoConnecting].connected_part_1=undefined;
+						DisconnectTeeterTooter(RopeNoConnecting,LevelJson.Parts[RopeNoConnecting].connected_part_1);
 						LevelJson.Parts[RopeNoConnecting].connected_part_2=undefined;
 						LevelJson.Parts[RopeNoConnecting].pos_x=-1;
 						LevelJson.Parts[RopeNoConnecting].pos_y=-1;
 						LevelJson.Parts[RopeNoConnecting].in_partsbin=1;
-						//console.log("disco ",LevelJson.Parts[RopeNoConnecting]);
+						console.log("disco  2",LevelJson.Parts[RopeNoConnecting]);
 						refresh(true);
 					}
 					else
@@ -529,9 +552,27 @@
 							LevelJson.Parts[RopeNoConnecting].connected_part_2=retNo;
 							LevelJson.Parts[RopeNoConnecting].in_partsbin=0;
 							LevelJson.Parts[RopeNoConnecting].TimPulleys=RopeIntermdiatePulley;
-
-							console.log("End con:"+retNo+" on belt"+BeltNoConnecting,LevelJson.Parts[BeltNoConnecting]+" TT="+TeeterTotterSide);
+							console.log("End con:"+retNo+" on belt"+RopeNoConnecting,LevelJson.Parts[RopeNoConnecting]+" TT_S="+RopeStart_TeeterTotterSide+" TT_E="+TeeterTotterSide);
+							if(RopeStart_TeeterTotterSide!=0)//at start on a TeeterTotter
+							{
+								if(RopeStart_TeeterTotterSide==1)
+									LevelJson.Parts[RopeStart].ropeNoSide1=RopeNoConnecting;
+								if(RopeStart_TeeterTotterSide==-1)
+									LevelJson.Parts[RopeStart].ropeNoSide2=RopeNoConnecting;
+								console.log("Start con on TT:"+retNo+" TT=",LevelJson.Parts[RopeStart]);
+								
+							}
+							if(TeeterTotterSide!=0)//at start on a TeeterTotter
+							{
+								if(TeeterTotterSide==1)
+									LevelJson.Parts[retNo].ropeNoSide1=RopeNoConnecting;
+								if(TeeterTotterSide==-1)
+									LevelJson.Parts[retNo].ropeNoSide2=RopeNoConnecting;
+								console.log("End con on TT:"+RopeStart+" TT=",LevelJson.Parts[retNo]);
+							}
+							
 							RopeMode=0;
+							RopeStart_TeeterTotterSide=0;
 							RopeIntermdiatePulley=[];
 							RopeNoConnecting=-1;
 							refresh(true);
@@ -706,7 +747,7 @@
 						
 						if(LevelJson.Parts[beltNo].connected_part_1==part.no)
 						{
-							//console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 1");
+							console.log("on fixed with connection "+part.no+" on belt " + beltNo+ " 1");
 							LevelJson.Parts[beltNo].connected_part_1=undefined;
 							beltStart=LevelJson.Parts[beltNo].connected_part_2;
 							BeltNoConnecting=beltNo;
@@ -727,8 +768,9 @@
 				let [overlap,TeeterTotterSide]=doPartsOverlapMouseForRope(part,Xclick,Yclick)
 				if(overlap)
 				{
-					//console.log("does mouse overlap rope to",part);
+					
 					let isFree=PartConnectionFreeRope(part.no,TeeterTotterSide);
+					console.log("!!!!!does mouse overlap rope to "+part+" is free"+isFree);
 					if(!isFree)
 					{
 						console.log("connect rope to",part);
@@ -737,16 +779,20 @@
 						if(LevelJson.Parts[RopeNo].connected_part_1==part.no)
 						{
 							console.log("on fixed with connection "+part.no+" on rope " + RopeNo+ " 1");
+							DisconnectTeeterTooter(RopeNo,LevelJson.Parts[RopeNo].connected_part_1);
 							LevelJson.Parts[RopeNo].connected_part_1=undefined;
 							RopeStart=LevelJson.Parts[RopeNo].connected_part_2;
+							RopeStart_TeeterTotterSide=GetTeeterTotterSide(LevelJson.Parts[RopeNo].connected_part_2,RopeNo);
 							RopeNoConnecting=RopeNo;
 							RopeMode=2;
 						}
 						if(LevelJson.Parts[RopeNo].connected_part_2==part.no)
 						{
 							console.log("on fixed with connection "+part.no+" on belt " + RopeNo+ " 2");
+							DisconnectTeeterTooter(RopeNo,LevelJson.Parts[RopeNo].connected_part_2);
 							LevelJson.Parts[RopeNo].connected_part_2=undefined;
 							RopeStart=LevelJson.Parts[RopeNo].connected_part_1;
+							RopeStart_TeeterTotterSide=GetTeeterTotterSide(LevelJson.Parts[RopeNo].connected_part_1,RopeNo);
 							RopeNoConnecting=RopeNo;
 							RopeMode=2;
 						}
