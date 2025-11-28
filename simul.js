@@ -1216,8 +1216,11 @@ let
 	function collision_Trampoline(_TrampolineBoby,_impactorBody)
 	{
 		console.log("collision_Trampoline ->"+_impactorBody.id,_impactorBody.velocity.x);
-		Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*1.0, y: -1.4 *_impactorBody.velocity.y });//4.9 -10
-		AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
+		if((_impactorBody.velocity.y>0))
+		{
+			Body.setVelocity(_impactorBody, { x:_impactorBody.velocity.x*1.0, y: -1.4 *_impactorBody.velocity.y });//4.9 -10
+			AnimPart(_TrampolineBoby.TimNo,false,LevelJson.Parts[_TrampolineBoby.TimNo].flipH,LevelJson.Parts[_TrampolineBoby.TimNo].flipV,true,false);
+		}
 	}
 	
 	function collision_cisor(_cisorBoby,_impactorBody)//cisor

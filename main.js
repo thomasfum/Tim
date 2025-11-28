@@ -28,12 +28,10 @@
 // animations
 // size 678x369
 
-// trempolin active only if contact on top
-// managing pos of tooter
+
 // noeud
 //---------------------------
 //bug
-//load allimages at start
 //finish getRopeDirectionY
 //create getRopeDirectionX for gun
 //level 15 le seau frotte
