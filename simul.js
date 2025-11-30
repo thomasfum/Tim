@@ -1608,18 +1608,11 @@ let
 			constraintIterations:2////default 2
 		});
 		runner=undefined;
-		render = Render.create({
-			  engine, 
-			  canvas: canvas,
-			  options: {
-				wireframes: wireframe,
-				background: "rgba(0,162,162,255)",
-				//background: 'transparent',
-				width: canvas.width,
-				height: canvas.height,
-				pixelRatio:  window.devicePixelRatio // here
-			  }
-			}); 
+		//
+		
+		
+		////width="644" height="445"
+		render.engine=engine;
 		world = engine.world;
 		
 		Events.on(render, "beforeRender", (event) => {beforeRender();});
@@ -2096,7 +2089,7 @@ let
 		clearInterval(myTimer);
 		Render.run(render);
 		if(runner==undefined)
-			runner=Runner.create()
+			runner=Runner.create( /*isFixed: true*/)
 		Runner.run(runner, engine);
 		
 	}

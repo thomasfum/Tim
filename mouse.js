@@ -433,14 +433,14 @@
 			//console.log("MouseClickUp:2",DraggingObject);
 			if(DraggingObject.TimType==8)//belt
 			{
-				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+				canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
 				BeltMode=1;
 				Dragging=false;
 				BeltNoConnecting=DraggingObject.no;
 			}
 			else if(DraggingObject.TimType==10)//rope
 			{
-				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
+				canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
 				RopeMode=1;
 				Dragging=false;
 				RopeNoConnecting=DraggingObject.no;
@@ -448,7 +448,7 @@
 			}
 			else
 			{
-				document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+				canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 				BeltMode=0;
 				RopeMode=0;
 				if(LevelJson.Parts[DraggingObject.no].pos_x+LevelJson.Parts[DraggingObject.no].width>playgroundWidth)//on the bin
@@ -646,7 +646,7 @@
 				}
 				if(endConnection==true)
 				{
-					document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+					canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 					BeltMode=0;
 				}
 			}
@@ -819,7 +819,7 @@
 					}
 					if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 					{
-						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+						canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 						
 						Dragging=true;
 						//console.log("Drag "+part.no);
@@ -1023,11 +1023,11 @@
 						if((Xclick>part.pos_x)&&(Xclick<part.pos_x+dx)&&(Yclick>part.pos_y)&&(Yclick<part.pos_y+dy))
 						{
 							if(BeltMode==1)
-								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+								canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
 							else if(RopeMode==1)
-								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
+								canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
 							else
-								document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-2.cur'), auto";//drag cursor
+								canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-2.cur'), auto";//drag cursor
 							onPartNo=part.no;
 							selectPart(part.no);
 							refresh(true);
@@ -1053,11 +1053,11 @@
 					//selectPart(-1);
 					//console.log("not over");
 					if((BeltMode==0)&&(RopeMode==0))
-						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+						canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 					if(BeltMode!=0)
-						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
+						canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-8.cur'), auto";//belt cursor
 					if(RopeMode!=0)
-						document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
+						canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-9.cur'), auto";//rope cursor
 				}
 			}
 			MouseOnPart=onPartNo;

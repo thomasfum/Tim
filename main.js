@@ -267,7 +267,8 @@
 		//import { poly-decomp } from './decomp.js';
 		//Common.setDecomp('poly-decomp');
 		//Common.setDecomp(require('poly-decomp'));
-		canvas = document.getElementById("myCanvas");
+		
+		
 		wireframeCheckbox =  document.getElementById("wireframe");
 		if(wireframeCheckbox!=undefined)
 			wireframeCheckbox.addEventListener('change', function(){console.log("render.options:",render.options);if(wireframe==true) wireframe=false; else wireframe=true;render.options.wireframes=wireframe;refresh(true);})
@@ -275,10 +276,28 @@
 		if(winConditionCheckbox!=undefined)
 			winConditionCheckbox.addEventListener('change', function(){if(ShowWinConditions==true) ShowWinConditions=false; else ShowWinConditions=true;refresh(true);})
 
+		
+		render = Render.create({
+			engine, 
+			element: document.body,
+		options: {
+				
+				wireframes: wireframe,
+				background: "rgba(0,162,162,255)",
+				//background: 'transparent',
+				width: 644,//canvas.width,
+				height: 445,//canvas.height,
+				pixelRatio:1// window.devicePixelRatio//1//'auto'// window.devicePixelRatio // here
+			  }
+			}); 
+
+		canvas = render.canvas;
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;
 		canvas.onmousemove = MouseMove;
 		ctx = canvas.getContext("2d");
+		
+		
 	
 		console.log("-- press 'q' key for solution");
 		document.addEventListener('keypress', e => {
@@ -299,6 +318,6 @@
 		}
 		
 		LoadBoard();
-		document.getElementById("myCanvas").style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
+		canvas.style.cursor =  "url('./images/MOUSE-BMP/MOUSE-0.cur'), auto";//standatd cursor
 	}
 	
