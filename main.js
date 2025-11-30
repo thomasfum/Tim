@@ -292,9 +292,77 @@
 			}); 
 
 		canvas = render.canvas;
+		/*
 		canvas.onmousedown = MouseClickDown;
 		canvas.onmouseup = MouseClickUp;
 		canvas.onmousemove = MouseMove;
+		*/
+//		document.ontouchstart = MouseClickDown;
+		//document.ontouchend = MouseClickUp;
+		//document.ontouchmove  = MouseMove;
+		
+		canvas.onmousedown= function (e) {
+		  // Will prevent default action
+		  console.log("onmousedown",e);
+		  MouseClickDown(e.pageX,e.pageY);
+		 // e.preventDefault();
+		};
+		
+		canvas.onmouseup= function (e) {
+		  // Will prevent default action
+		  console.log("onmouseup");
+		  MouseClickUp(e.pageX,e.pageY);
+		  //e.preventDefault();
+		};
+		canvas.onmousemove= function (e) {
+		  // Will prevent default action
+		  console.log("onmousemove");
+		  MouseMove(e.pageX,e.pageY);
+		  //e.preventDefault();
+		};
+		
+		/*
+		document.ontouchstart= function (e) {
+		  // Will prevent default action
+		  console.log("ontouchstart",e.changedTouches[0].pageX);
+		  MouseClickDown(e.touches[0]);
+		 // e.preventDefault();
+		};
+		*/
+		
+		document.addEventListener('touchstart', function (e) {
+		  // Will prevent default action
+		  console.log("ontouchstart",e);
+		  MouseClickDown(e.touches[0].clientX,e.touches[0].clientY);
+		  //alert("touchstart "+e.touches.length);
+		  //e.preventDefault();
+		});
+		
+		document.addEventListener('touchend', function (e) {
+		  // Will prevent default action
+		  console.log("ontouchend",e);
+		 // alert("touchend "+e.changedTouches.length);
+		  MouseClickUp(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+		  //e.preventDefault();
+		});
+		document.addEventListener('touchmove', function (e) {
+		  // Will prevent default action
+		  console.log("ontouchmove");
+		 // alert("touchmove "+e.touches[0].pageX+"; "+e.touches[0].pageY);
+		  MouseMove(e.touches[0].clientX,e.touches[0].clientY);
+		  
+		  //e.preventDefault();
+		});
+		/*
+		document.ontouchmove= function (e) {
+		  // Will prevent default action
+		  console.log("ontouchmove");
+		  MouseMove(e.changedTouches[0]);
+		  //e.preventDefault();
+		};
+		*/
+		
+		
 		ctx = canvas.getContext("2d");
 		
 		

@@ -394,7 +394,7 @@
 		});
 	}
 	
-	function MouseClickUp(e)
+	function MouseClickUp(pageX,pageY)
 	{
 		
 		if((loadingLevel==true)&&(Test==false))
@@ -417,10 +417,10 @@
 			refresh(true);
 			return;
 		}
-		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
-		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
-		Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
-		Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+		let Xclick=pageX-canvas.offsetLeft-playgroundOffsetX;
+		let Yclick=pageY-canvas.offsetTop-playgroundOffsetY;
+		Mouse_pos_x=pageX-playgroundOffsetX-canvas.offsetLeft;
+		Mouse_pos_y=pageY-playgroundOffsetY-canvas.offsetTop;
 		ExpandUnit=0;
 		
 		if((Mouse_pos_x>playgroundWidth+5)&&(Mouse_pos_x<playgroundWidth+65)&&(Mouse_pos_y>5)&&(Mouse_pos_y<70))
@@ -656,7 +656,7 @@
 	}
 	
 
-	function MouseClickDown(e)
+	function MouseClickDown(pageX,pageY)
 	{
 		if((loadingLevel==true)&&(Test==false))
 			return;
@@ -665,15 +665,15 @@
 		if(CurrentLevelRunning==true)
 			return;
 		
-		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
-		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
+		let Xclick=pageX-canvas.offsetLeft-playgroundOffsetX;
+		let Yclick=pageY-canvas.offsetTop-playgroundOffsetY;
 		if((BeltMode==0)&&(RopeMode==0))
 		{
 			if((SelectedPart!=undefined)&&(SelectedPart!=-1))
 			{
 				//console.log("SelectedPart",SelectedPart);
-				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
-				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+				Mouse_pos_x=pageX-playgroundOffsetX-canvas.offsetLeft;
+				Mouse_pos_y=pageY-playgroundOffsetY-canvas.offsetTop;
 				//left side
 				if((Mouse_pos_x>LevelJson.Parts[SelectedPart].pos_x-14) && (Mouse_pos_x<LevelJson.Parts[SelectedPart].pos_x))
 				{
@@ -840,7 +840,7 @@
 			});	
 		}
 	}
-	function MouseMove(e)
+	function MouseMove(pageX,pageY)
 	{
 		if((loadingLevel==true)&&(Test==false))
 			return;
@@ -849,12 +849,12 @@
 		if(CurrentLevelRunning==true)
 			return;
 		
-		let Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
-		let Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
+		let Xclick=pageX-canvas.offsetLeft-playgroundOffsetX;
+		let Yclick=pageY-canvas.offsetTop-playgroundOffsetY;
 		if(ExpandUnit!=0)
 		{
-			//let newPos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft)/16)*16+8;
-			let newPos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
+			//let newPos_x=Math.round((pageX-playgroundOffsetX-canvas.offsetLeft)/16)*16+8;
+			let newPos_x=pageX-playgroundOffsetX-canvas.offsetLeft;
 			//console.log("expand part "+SelectedPart + " direction "+ExpandUnit);
 			if(ExpandUnit==-1) //expand left
 			{
@@ -919,18 +919,18 @@
 		if(Dragging==true)
 		{
 			//	  console.log(DraggingObject);
-			//DraggingObject.pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
-			//DraggingObject.pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
+			//DraggingObject.pos_x=pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2;
+			//DraggingObject.pos_y=pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2;
 			
 			if(PartDef[DraggingObject.TimType].stick==1)
 			{
-				DraggingObject.pos_x=Math.round((e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2)/16)*16+8;
-				DraggingObject.pos_y=Math.round((e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2)/16)*16+8;
+				DraggingObject.pos_x=Math.round((pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2)/16)*16+8;
+				DraggingObject.pos_y=Math.round((pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2)/16)*16+8;
 			}
 			else
 			{
-				DraggingObject.pos_x=Math.round(e.pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2);
-				DraggingObject.pos_y=Math.round(e.pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2);
+				DraggingObject.pos_x=Math.round(pageX-playgroundOffsetX-canvas.offsetLeft-DraggingObject.width/2);
+				DraggingObject.pos_y=Math.round(pageY-playgroundOffsetY-canvas.offsetTop-DraggingObject.height/2);
 			}
 			selectPart(DraggingObject.no);
 			let overlap=false;
@@ -1003,8 +1003,8 @@
 		else//over
 		{
 			let onPartNo=-1;
-			Xclick=e.pageX-canvas.offsetLeft-playgroundOffsetX;
-			Yclick=e.pageY-canvas.offsetTop-playgroundOffsetY;
+			Xclick=pageX-canvas.offsetLeft-playgroundOffsetX;
+			Yclick=pageY-canvas.offsetTop-playgroundOffsetY;
 			if(LevelJson!=undefined)
 			{
 				let onFixed=false;
@@ -1063,8 +1063,8 @@
 			MouseOnPart=onPartNo;
 			if((BeltMode==2)||(RopeMode==2))
 			{
-				Mouse_pos_x=e.pageX-playgroundOffsetX-canvas.offsetLeft;
-				Mouse_pos_y=e.pageY-playgroundOffsetY-canvas.offsetTop;
+				Mouse_pos_x=pageX-playgroundOffsetX-canvas.offsetLeft;
+				Mouse_pos_y=pageY-playgroundOffsetY-canvas.offsetTop;
 				refresh(true);
 			}
 			
