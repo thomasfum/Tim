@@ -658,6 +658,7 @@
 
 	function MouseClickDown(pageX,pageY)
 	{
+		console.log("moue Down pos="pageX+"; "+pageY);
 		if((loadingLevel==true)&&(Test==false))
 			return;
 		if(CurrentLevelWinned==true)
