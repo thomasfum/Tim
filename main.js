@@ -279,7 +279,7 @@
 		
 		render = Render.create({
 			engine, 
-			element: document.body,
+			element: document.getElementById("game"),/*document.body,*/
 		options: {
 				
 				wireframes: wireframe,
