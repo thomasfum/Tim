@@ -300,67 +300,55 @@
 //		document.ontouchstart = MouseClickDown;
 		//document.ontouchend = MouseClickUp;
 		//document.ontouchmove  = MouseMove;
-		
+		 var rect = canvas.getBoundingClientRect();
 		canvas.onmousedown= function (e) {
 		  // Will prevent default action
-		  console.log("onmousedown",e);
-		  MouseClickDown(e.pageX,e.pageY);
+		  //console.log("onmousedown",e);
+		  //console.log("onmousedown",canvas);
+		  MouseClickDown(e.clientX - rect.left,e.clientY - rect.top);
 		 // e.preventDefault();
 		};
 		
 		canvas.onmouseup= function (e) {
 		  // Will prevent default action
-		  console.log("onmouseup");
-		  MouseClickUp(e.pageX,e.pageY);
+		  //console.log("onmouseup");
+		  MouseClickUp(e.clientX - rect.left,e.clientY - rect.top);
 		  //e.preventDefault();
 		};
 		canvas.onmousemove= function (e) {
 		  // Will prevent default action
-		  console.log("onmousemove");
-		  MouseMove(e.pageX,e.pageY);
+		  //console.log("onmousemove");
+		  MouseMove(e.clientX - rect.left,e.clientY - rect.top);
 		  //e.preventDefault();
 		};
 		
-		/*
-		document.ontouchstart= function (e) {
-		  // Will prevent default action
-		  console.log("ontouchstart",e.changedTouches[0].pageX);
-		  MouseClickDown(e.touches[0]);
-		 // e.preventDefault();
-		};
-		*/
+
 		
-		document.addEventListener('touchstart', function (e) {
+		canvas.ontouchstart= function (e) {
 		  // Will prevent default action
 		  console.log("ontouchstart",e);
-		  MouseClickDown(e.touches[0].clientX,e.touches[0].clientY);
+		  MouseClickDown(e.touches[0].clientX - rect.left,e.touches[0].clientY - rect.top);
 		  //alert("touchstart "+e.touches.length);
 		  //e.preventDefault();
-		});
+		};
 		
-		document.addEventListener('touchend', function (e) {
+		canvas.ontouchend= function (e) {
 		  // Will prevent default action
 		  console.log("ontouchend",e);
 		 // alert("touchend "+e.changedTouches.length);
-		  MouseClickUp(e.changedTouches[0].clientX,e.changedTouches[0].clientY);
+		  MouseClickUp(e.changedTouches[0].clientX - rect.left,e.changedTouches[0].clientY - rect.top);
 		  //e.preventDefault();
-		});
-		document.addEventListener('touchmove', function (e) {
+		};
+		canvas.ontouchmove=  function (e) {
 		  // Will prevent default action
 		  console.log("ontouchmove");
 		 // alert("touchmove "+e.touches[0].pageX+"; "+e.touches[0].pageY);
-		  MouseMove(e.touches[0].clientX,e.touches[0].clientY);
+		  MouseMove(e.touches[0].clientX - rect.left,e.touches[0].clientY - rect.top);
 		  
 		  //e.preventDefault();
-		});
-		/*
-		document.ontouchmove= function (e) {
-		  // Will prevent default action
-		  console.log("ontouchmove");
-		  MouseMove(e.changedTouches[0]);
-		  //e.preventDefault();
 		};
-		*/
+		
+
 		
 		
 		ctx = canvas.getContext("2d");
